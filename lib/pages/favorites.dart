@@ -1,23 +1,17 @@
 import 'package:flutter/material.dart';
 
-
-class AddRecipe extends StatefulWidget {
-  @override
-  _AddRecipeState createState() => _AddRecipeState();
-}
-
-class _AddRecipeState extends State<AddRecipe> {
+class FavoritesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           title: Center(
-              child: Text('Add a recipe'),
+            child: Text('Favorites'),
           ),
         ),
         body: Center(
-          child: Text('Add a recipe page'),
+          child: Text('These are your favorites'),
         ),
       ),
     );
