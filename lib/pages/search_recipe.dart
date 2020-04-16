@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
 
-
-class AddRecipe extends StatefulWidget {
+class SearchRecipe extends StatefulWidget {
   @override
-  _AddRecipeState createState() => _AddRecipeState();
+  _SearchRecipeState createState() => _SearchRecipeState();
 }
 
-class _AddRecipeState extends State<AddRecipe> {
+class _SearchRecipeState extends State<SearchRecipe> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           title: Center(
-              child: Text('Add a recipe'),
+            child: Text('Search recipe'),
           ),
         ),
         body: Center(
-          child: Text('Add a recipe page'),
+          child: Text('Search for recipes'),
         ),
       ),
     );
