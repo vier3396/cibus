@@ -1,12 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:independentproject/services/colors.dart';
 
+
+
 class Profile extends StatefulWidget {
   @override
   _ProfileState createState() => _ProfileState();
 }
 
 class _ProfileState extends State<Profile> {
+
+  List<bool> _boldButtons = [false, true, false];
+
+  int _currentOption = 1;
+  List<Widget> _profileOptions = [
+    MyRecipes(),
+    MyNotification(),
+    MyFavorites()
+  ];
+
+  void onPressed () {
+    setState(() {
+
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +38,59 @@ class _ProfileState extends State<Profile> {
             Container(
               color: darkerBackgroundColor,
               child: Row(
-
+                children: <Widget>[
+                  Expanded(
+                      child: FlatButton(
+                        child: Center(
+                            child: Text('Your recipes',
+                            style: TextStyle(
+                              fontWeight: _boldButtons[0] ? FontWeight.bold : FontWeight.normal,
+                            ),
+                            ),
+                        ),
+                        onPressed: (){
+                          print('your recipes pressed');
+                          setState(() {
+                            _boldButtons = [true, false, false];
+                          });
+                        },
+                      ),
+                  ),
+                  Expanded(
+                      child: FlatButton(
+                        child: Center(
+                          child: Text('Notifictions',
+                            style: TextStyle(
+                              fontWeight: _boldButtons[1] ? FontWeight.bold : FontWeight.normal,
+                            ),
+                          ),
+                      ),
+                        onPressed: (){
+                          print('notifications pressed');
+                          setState(() {
+                            _boldButtons = [false, true, false];
+                          });
+                        },
+                      ),
+                  ),
+                  Expanded(
+                      child: FlatButton(
+                        child: Center(
+                          child: Text('Favorite recipes',
+                          style: TextStyle(
+                            fontWeight: _boldButtons[2] ? FontWeight.bold : FontWeight.normal,
+                          ),
+                          ),
+                        ),
+                        onPressed: (){
+                          print('favorites pressed');
+                          setState(() {
+                            _boldButtons = [false, false, true];
+                          });
+                        },
+                      ),
+                  ),
+              ],
               ),
             ), // det här ä början på en ny metod
           ],
@@ -72,3 +142,26 @@ class _ProfileState extends State<Profile> {
     );
   }
 }
+
+
+class MyFavorites extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+class MyNotification extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+class MyRecipes extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
