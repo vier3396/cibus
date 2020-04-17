@@ -7,10 +7,16 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  List<bool> _boldButtons = [false, true, false];
+
+  int _currentOption = 1;
+  List<Widget> _profileOptions = [MyRecipes(), MyNotification(), MyFavorites()];
+
+  void onPressed() {
+    setState(() {});
+  }
+
   @override
-
-  List<bool> boldButtons = [true, false, false];
-
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgroundColor,
@@ -29,11 +35,14 @@ class _ProfileState extends State<Profile> {
                       child: Text(
                         "Notifications",
                         style: TextStyle(
-                          fontWeight: boldButtons[0] ? FontWeight.bold : FontWeight.normal
-                        ),
+                            fontWeight: _boldButtons[0]
+                                ? FontWeight.bold
+                                : FontWeight.normal),
                       ),
                       onPressed: () {
-                        setState(() { boldButtons = [true, false, false]; });
+                        setState(() {
+                          _boldButtons = [true, false, false];
+                        });
                         // call function to display right kind of text
                       },
                     ),
@@ -43,11 +52,14 @@ class _ProfileState extends State<Profile> {
                       child: Text(
                         "Your recipes",
                         style: TextStyle(
-                            fontWeight: boldButtons[1] ? FontWeight.bold : FontWeight.normal
-                        ),
+                            fontWeight: _boldButtons[1]
+                                ? FontWeight.bold
+                                : FontWeight.normal),
                       ),
                       onPressed: () {
-                        setState(() { boldButtons = [false, true, false]; });
+                        setState(() {
+                          _boldButtons = [false, true, false];
+                        });
                         // call function to display right kind of text
                       },
                     ),
@@ -57,20 +69,24 @@ class _ProfileState extends State<Profile> {
                       child: Text(
                         "Favorites",
                         style: TextStyle(
-                            fontWeight: boldButtons[2] ? FontWeight.bold : FontWeight.normal
-                        ),
+                            fontWeight: _boldButtons[2]
+                                ? FontWeight.bold
+                                : FontWeight.normal),
                       ),
                       onPressed: () {
-                        setState(() { boldButtons = [false, false, true]; });
+                        setState(() {
+                          _boldButtons = [false, false, true];
+                        });
                         // call function to display right kind of text
                       },
                     ),
                   ),
                 ],
               ),
-            ), // det här är början på en ny metod
+            ),
           ],
         ),
+        // det här är början på en ny metod
       ),
     );
   }
@@ -116,5 +132,26 @@ class _ProfileState extends State<Profile> {
         ],
       ),
     );
+  }
+}
+
+class MyFavorites extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+class MyNotification extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+class MyRecipes extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
   }
 }
