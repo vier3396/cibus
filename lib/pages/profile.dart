@@ -8,6 +8,9 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   @override
+
+  List<bool> boldButtons = [true, false, false];
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: backgroundColor,
@@ -20,9 +23,52 @@ class _ProfileState extends State<Profile> {
             Container(
               color: darkerBackgroundColor,
               child: Row(
-
+                children: <Widget>[
+                  Expanded(
+                    child: FlatButton(
+                      child: Text(
+                        "Notifications",
+                        style: TextStyle(
+                          fontWeight: boldButtons[0] ? FontWeight.bold : FontWeight.normal
+                        ),
+                      ),
+                      onPressed: () {
+                        setState(() { boldButtons = [true, false, false]; });
+                        // call function to display right kind of text
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: FlatButton(
+                      child: Text(
+                        "Your recipes",
+                        style: TextStyle(
+                            fontWeight: boldButtons[1] ? FontWeight.bold : FontWeight.normal
+                        ),
+                      ),
+                      onPressed: () {
+                        setState(() { boldButtons = [false, true, false]; });
+                        // call function to display right kind of text
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: FlatButton(
+                      child: Text(
+                        "Favorites",
+                        style: TextStyle(
+                            fontWeight: boldButtons[2] ? FontWeight.bold : FontWeight.normal
+                        ),
+                      ),
+                      onPressed: () {
+                        setState(() { boldButtons = [false, false, true]; });
+                        // call function to display right kind of text
+                      },
+                    ),
+                  ),
+                ],
               ),
-            ), // det här ä början på en ny metod
+            ), // det här är början på en ny metod
           ],
         ),
       ),
