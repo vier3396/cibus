@@ -1,7 +1,10 @@
+import 'package:cibus/services/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cibus/services/sign_in.dart';
 import 'package:cibus/pages/firstScreen.dart';
+
+SignIn signIn = SignIn();
 
 class LoginPage extends StatefulWidget {
   @override
@@ -30,12 +33,12 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-
   Widget _signInButtonGoogle() {
     return OutlineButton(
       splashColor: Colors.grey,
       onPressed: () {
-        signInWithGoogle().whenComplete(() {
+        signIn.whatLogin = loginType.google;
+        signIn.signInWithGoogle().whenComplete(() {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) {
@@ -75,7 +78,8 @@ class _LoginPageState extends State<LoginPage> {
     return OutlineButton(
       splashColor: Colors.grey,
       onPressed: () {
-        signInWithFacebook().whenComplete(() {
+        signIn.whatLogin = loginType.facebook;
+        signIn.signInWithFacebook().whenComplete(() {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) {
@@ -110,5 +114,4 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-
 }
