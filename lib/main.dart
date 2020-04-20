@@ -8,14 +8,14 @@ import 'package:cibus/pages/test.dart';
 
 void main() {
   runApp(MaterialApp(
-    initialRoute: '/authtest',
+    initialRoute: '/loginPage',
     routes: {
       '/': (context) => LoadingScreen(),
       '/cook': (context) => CookRecipe(),
       '/add': (context) => AddRecipe(),
       '/profile': (context) => Profile(),
       '/test': (context) => Test(),
-      '/authtest': (context) => LoginPage(),
+      '/loginPage': (context) => LoginPage(),
     },
   ));
 }
