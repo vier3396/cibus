@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:independentproject/services/colors.dart';
-
+import 'package:cibus/services/colors.dart';
 class Profile extends StatefulWidget {
   @override
   _ProfileState createState() => _ProfileState();
@@ -8,86 +7,106 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   List<bool> _boldButtons = [false, true, false];
-
-  int _currentOption = 1;
-  List<Widget> _profileOptions = [MyRecipes(), MyNotification(), MyFavorites()];
-
-  void onPressed() {
-    setState(() {});
-  }
+  Container wallOfText = yourRecipes();
+  int karma;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: kBackgroundColor,
       body: SafeArea(
         child: Column(
           children: <Widget>[
             buildProfileHeader(),
-            Divider(color: cibusTextColor),
+            Divider(color: kCibusTextColor),
             SizedBox(height: 40.0),
-            Container(
-              color: darkerBackgroundColor,
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: FlatButton(
-                      child: Text(
-                        "Notifications",
-                        style: TextStyle(
-                            fontWeight: _boldButtons[0]
-                                ? FontWeight.bold
-                                : FontWeight.normal),
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _boldButtons = [true, false, false];
-                        });
-                        // call function to display right kind of text
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: FlatButton(
-                      child: Text(
-                        "Your recipes",
-                        style: TextStyle(
-                            fontWeight: _boldButtons[1]
-                                ? FontWeight.bold
-                                : FontWeight.normal),
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _boldButtons = [false, true, false];
-                        });
-                        // call function to display right kind of text
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: FlatButton(
-                      child: Text(
-                        "Favorites",
-                        style: TextStyle(
-                            fontWeight: _boldButtons[2]
-                                ? FontWeight.bold
-                                : FontWeight.normal),
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _boldButtons = [false, false, true];
-                        });
-                        // call function to display right kind of text
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            buildProfileButtons(),
+            SizedBox(height: 20.0),
+            wallOfText,
           ],
         ),
         // det här är början på en ny metod
       ),
+    );
+  }
+
+  Container buildProfileButtons() {
+    return Container(
+      color: kDarkerkBackgroundColor,
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: FlatButton(
+              child: Text(
+                "Notifications",
+                style: TextStyle(
+                    fontWeight:
+                        _boldButtons[0] ? FontWeight.bold : FontWeight.normal),
+              ),
+              onPressed: () {
+                wallOfText = _boldButtons[0] ? wallOfText : notifications();
+                setState(() {
+                  _boldButtons = [true, false, false];
+                });
+                // call function to display right kind of text
+              },
+            ),
+          ),
+          Expanded(
+            child: FlatButton(
+              child: Text(
+                "Your recipes",
+                style: TextStyle(
+                    fontWeight:
+                        _boldButtons[1] ? FontWeight.bold : FontWeight.normal),
+              ),
+              onPressed: () {
+                wallOfText = _boldButtons[1] ? wallOfText : yourRecipes();
+                setState(() {
+                  _boldButtons = [false, true, false];
+                });
+                // call function to display right kind of text
+              },
+            ),
+          ),
+          Expanded(
+            child: FlatButton(
+              child: Text(
+                "Favorites",
+                style: TextStyle(
+                    fontWeight:
+                        _boldButtons[2] ? FontWeight.bold : FontWeight.normal),
+              ),
+              onPressed: () {
+                wallOfText = _boldButtons[0] ? wallOfText : favorites();
+                setState(() {
+                  _boldButtons = [false, false, true];
+                });
+                // call function to display right kind of text
+                // wallOfText = Favorites();
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Container notifications() {
+    return Container(
+      child: Text("notifications"),
+    );
+  }
+
+  static Container yourRecipes() {
+    return Container(
+      child: Text("your recipes"),
+    );
+  }
+
+  Container favorites() {
+    return Container(
+      child: Text("favorites"),
     );
   }
 
@@ -108,15 +127,15 @@ class _ProfileState extends State<Profile> {
               Text(
                 'YOUR NAME',
                 style: TextStyle(
-                  color: cibusTextColor,
+                  color: kCibusTextColor,
                   fontSize: 20.0,
                 ),
               ),
               SizedBox(height: 5.0),
               Text(
-                'Karma points',
+                'Karma points: $karma',
                 style: TextStyle(
-                  color: cibusTextColor,
+                  color: kCibusTextColor,
                 ),
               ),
             ],

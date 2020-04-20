@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:independentproject/services/colors.dart';
+import 'package:cibus/services/colors.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class LoadingScreen extends StatefulWidget {
@@ -11,7 +11,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: kBackgroundColor,
       body: SafeArea(
         child: SizedBox.expand(
           child: Column(
@@ -25,7 +25,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
                 style: TextStyle(
                   fontSize: 50.0,
                   letterSpacing: 3.0,
-                  color: cibusTextColor,
+                  color: kCibusTextColor,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -37,7 +37,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
                 height: 80.0,
               ),
               SpinKitRipple(
-                color: darkerBackgroundColor,
+                color: kDarkerkBackgroundColor,
                 size: 90.0,
                 duration: Duration(milliseconds: 2000),
               ),

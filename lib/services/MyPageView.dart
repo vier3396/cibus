@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:independentproject/pages/add_recipe.dart';
-import 'package:independentproject/pages/search_recipe.dart';
-import 'package:independentproject/pages/profile.dart';
-import 'package:independentproject/pages/home.dart';
-import 'package:independentproject/pages/favorites.dart';
+import 'package:cibus/pages/add_recipe.dart';
+import 'package:cibus/pages/search_recipe.dart';
+import 'package:cibus/pages/profile.dart';
+import 'package:cibus/pages/home.dart';
+import 'package:cibus/pages/favorites.dart';
 import '../pages/add_recipe.dart';
 
 const TextStyle bottomBarTextStyle = TextStyle(

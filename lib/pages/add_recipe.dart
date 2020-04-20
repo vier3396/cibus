@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:cibus/services/colors.dart';
+import '../services/add_recipe_form.dart';
 
 class AddRecipe extends StatefulWidget {
   @override
@@ -11,15 +12,20 @@ class _AddRecipeState extends State<AddRecipe> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+        resizeToAvoidBottomPadding: false, // solves keyboard problems
         appBar: AppBar(
+          backgroundColor: kDarkerkBackgroundColor,
           title: Center(
-              child: Text('Add a recipe'),
+            child: Text(
+              'Add a recipe',
+              style: TextStyle(
+                color: kCibusTextColor,
+              ),
+            ),
           ),
         ),
-        body: Center(
-          child: Text('Add a recipe page'),
-        ),
-      ),
+        body: AddRecipeForm(),
+    ),
     );
   }
 }
