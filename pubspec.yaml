@@ -1,4 +1,4 @@
-name: independentproject
+name: cibus
 description: Independent project for STS
 
 # The following defines the version and build number for your application.
@@ -28,6 +28,11 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_spinkit: ^4.1.2+1
+  cloud_firestore: ^0.13.5
+  firebase_auth: ^0.16.0
+  google_sign_in: ^4.4.1
+  flutter_facebook_login: ^3.0.0
+
 
 
 # For information on the generic Dart part of this file, see the

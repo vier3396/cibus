@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:independentproject/services/colors.dart';
+import 'package:cibus/services/colors.dart';
 
 class Profile extends StatefulWidget {
   @override

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:independentproject/services/colors.dart';
+import 'package:cibus/services/colors.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class LoadingScreen extends StatefulWidget {
