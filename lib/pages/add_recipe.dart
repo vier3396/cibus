@@ -24,7 +24,11 @@ class _AddRecipeState extends State<AddRecipe> {
             ),
           ),
         ),
-        body: AddRecipeForm(),
+        body: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).requestFocus(new FocusNode());
+          },
+            child: AddRecipeForm()),
     ),
     );
   }

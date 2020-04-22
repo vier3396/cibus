@@ -1,7 +1,11 @@
+import 'package:cibus/pages/popup_add_ingredient.dart';
+import 'package:cibus/services/popup_content_add_ingredient.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/services/colors.dart';
 import 'package:validators/validators.dart' as validator;
 import 'recipe_form_data.dart';
+import 'my_text_form_field.dart';
+//import 'upload_image.dart';
 
 
 class AddRecipeForm extends StatefulWidget {
@@ -12,6 +16,36 @@ class AddRecipeForm extends StatefulWidget {
 class _AddRecipeFormState extends State<AddRecipeForm> {
   final _formKey = GlobalKey<FormState>();
   RecipeFormData recipeFormData = RecipeFormData();
+
+  void openGallery(){}
+  void openCamera(){}
+
+  Future<void> showChoiceDialog(BuildContext context) {
+    return showDialog(context: context, builder: (BuildContext context) {
+      return AlertDialog(
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: [
+              GestureDetector(
+                child: Text("Gallery"),
+                onTap: () {
+                  openGallery();
+                },
+              ),
+              GestureDetector(
+                child: Text("Camera"),
+                onTap: () {
+                  openCamera();
+                },
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -66,25 +100,47 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget> [
-                MyTextFormField(
-                  maxLength: 20,
-                  labelText: "Ingredient",
-                ),
-                Text("QT"),
-                MyTextFormField(
-                  maxLength: 6,
-                  labelText: "amount",
+                Expanded(
+                  child: MyTextFormField(
+                    maxLength: 20,
+                    labelText: "Add ingredient",
+                    onTap: () {
+                      showPopup(context, _popupBody(), 'Add Ingredient');
+                    },
+                  ),
                 ),
               ],
             ),
           ),
-          MyTextFormField(),
+          //Steps
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: MyTextFormField(
+              labelText: "Step 1",
+            ),
+          ),
+          Center(
+              child: RaisedButton(
+                child: Text("Add step"),
+                onPressed: () {
+                  //Add new text input field
+                },
+              ),
+          ),
           //TODO: Add picture
           RaisedButton(
+            child: Icon(Icons.add_a_photo),
+            onPressed: () {
+              showChoiceDialog(context);
+            },
+          ),
+          //Submit form
+          RaisedButton(
+              child: Text("Submit"),
             onPressed: () {
               if (_formKey.currentState.validate()) {
-
               }
             }
           ),
@@ -92,39 +148,57 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
       ),
     );
   }
-}
 
-
-class MyTextFormField extends StatelessWidget {
-  final String labelText;
-  final Function validator;
-  final Function onSaved;
-  final int maxLines;
-  final int maxLength;
-
-  MyTextFormField({
-    this.labelText,
-    this.validator,
-    this.onSaved,
-    this.maxLines = 1,
-    this.maxLength = 30,
-});
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: TextFormField(
-        maxLines: maxLines,
-        maxLength: maxLength,
-        validator: validator,
-        onSaved: onSaved,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(25.0),
+  showPopup(BuildContext context, Widget widget, String title,
+      {BuildContext popupContext}) {
+    Navigator.push(
+      context,
+      PopupLayout(
+        top: 40,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        child: PopupContent(
+          content: Scaffold(
+            appBar: AppBar(
+              title: Text(title),
+              leading: new Builder(builder: (context) {
+                return IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () {
+                    try {
+                      Navigator.pop(context); //close the popup
+                    } catch (e) {}
+                  },
+                );
+              }),
+              brightness: Brightness.light,
+            ),
+            resizeToAvoidBottomPadding: false,
+            body: widget,
           ),
-          labelText: labelText,
         ),
       ),
     );
   }
+
+  Widget _popupBody() {
+    return Container(
+      child: ListView(
+        padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
+        children: <Widget>[
+          MyTextFormField(
+
+            labelText: "Search",
+          ),
+        ],
+
+      ),
+    );
+  }
+
 }
+
+
+
+
