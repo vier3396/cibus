@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'add_recipe_form.dart';
-import 'recipe_form_data.dart';
+import 'recipe.dart';
 
 class AddRecipeResult extends StatelessWidget {
-  RecipeFormData recipeFormData;
+  Recipe recipe;
 
-  AddRecipeResult({this.recipeFormData});
+  AddRecipeResult({this.recipe});
 
   @override
   Widget build(BuildContext context) {

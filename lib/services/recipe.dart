@@ -1,16 +1,18 @@
-import 'add_recipe_form.dart';
 import 'ingredients.dart';
+import 'dart:io';
 
-class RecipeFormData {
+class Recipe {
   String title;
   String description;
   List<Ingredient> ingredients;
   List<String> steps;
+  File imageFile;
 
-  RecipeFormData({
+  Recipe({
     this.description,
     this.ingredients,
     this.steps,
-    this.title
+    this.title,
+    this.imageFile,
 });
 }
