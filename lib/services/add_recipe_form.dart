@@ -5,10 +5,9 @@ import 'package:cibus/services/colors.dart';
 import 'package:validators/validators.dart' as validator;
 import 'recipe.dart';
 import 'my_text_form_field.dart';
-import 'add_recipe_form_steps.dart';
+//import 'add_recipe_form_steps.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-
 
 class AddRecipeForm extends StatefulWidget {
   @override
@@ -16,11 +15,9 @@ class AddRecipeForm extends StatefulWidget {
 }
 
 class _AddRecipeFormState extends State<AddRecipeForm> {
-  final formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   Recipe recipe = Recipe();
-
-  int step = 1;
-
+  int currentStep = 1;
   File imageFile;
 
   void openGallery(BuildContext context, Recipe recipe) async {
@@ -42,57 +39,58 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
   }
 
   Future<void> showChoiceDialog(BuildContext context, Recipe recipe) {
-    return showDialog(context: context, builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text("From"),
-        content: SingleChildScrollView(
-          child: ListBody(
-            children: [
-              Row(children: <Widget>[
-                GestureDetector(
-                  child: Text("Gallery"),
-                  onTap: () {
-                    openGallery(context, recipe);
-                  },
-                ),
-                Padding(
-                  padding: EdgeInsets.all(10.0),
-                ),
-                GestureDetector(
-                  child: Text("Camera"),
-                  onTap: () {
-                    openCamera(context, recipe);
-                  },
-                ),
-              ],
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("From"),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: [
+                  Row(
+                    children: <Widget>[
+                      GestureDetector(
+                        child: Text("Gallery"),
+                        onTap: () {
+                          openGallery(context, recipe);
+                        },
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(10.0),
+                      ),
+                      GestureDetector(
+                        child: Text("Camera"),
+                        onTap: () {
+                          openCamera(context, recipe);
+                        },
+                      ),
+                    ],
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
-      );
-    }
-    );
+            ),
+          );
+        });
   }
 
-  Widget decideImageView () {
+  Widget decideImageView() {
     if (imageFile == null) {
       return Center(child: Text("No image selected"));
-    }
-    else {
+    } else {
       return Image.file(imageFile, width: 400.0, height: 400.0);
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
+    recipe.listOfSteps = List(20);
+
     // works for different screens
     // final halfMedianWidth = MediaQuery.of(context).size.width / 2.0;
 
     return Form(
-      key: formKey,
+      key: _formKey,
       child: ListView(
-        //padding: EdgeInsets.all(10.0),
         children: <Widget>[
           //Title
           Padding(
@@ -103,13 +101,12 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
               validator: (String title) {
                 if (title.isEmpty) {
                   return 'Enter a Title';
-                }
-                else {
-                  formKey.currentState.save();
+                } else {
+                  _formKey.currentState.save();
                   return null;
                 }
               },
-              onSaved: (String title){
+              onSaved: (String title) {
                 recipe.title = title;
               },
             ),
@@ -123,13 +120,12 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
               validator: (String description) {
                 if (description.isEmpty) {
                   return 'Enter a Description';
-                }
-                else {
-                  formKey.currentState.save();
+                } else {
+                  _formKey.currentState.save();
                   return null;
                 }
               },
-              onSaved: (String description){
+              onSaved: (String description) {
                 recipe.description = description;
               },
             ),
@@ -139,7 +135,7 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
             padding: const EdgeInsets.all(8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget> [
+              children: <Widget>[
                 Expanded(
                   child: MyTextFormField(
                     maxLength: 20,
@@ -147,15 +143,18 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                     onTap: () {
                       showPopup(context, _popupBody(), 'Add Ingredient');
                     },
-                    //TODO:  add ingredients to recipe object
+                    //TODO:  onSaved: save ingredients to recipe object
+                    //TODO: validator: validate ingredients
                   ),
                 ),
               ],
             ),
           ),
           //Steps
-          AddRecipeSteps(
-            //TODO: want to pass the formkey to AddRecipeSteps class
+          Column(
+            children: <Widget>[
+              ...addRecipeSteps(context),
+            ],
           ),
           //No image selected/Selected image
           decideImageView(),
@@ -176,18 +175,58 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
             padding: const EdgeInsets.all(8.0),
             child: RaisedButton(
                 child: Text("Submit"),
-              onPressed: () {
-                if (formKey.currentState.validate()) {
-                }
-              }
-            ),
+                onPressed: () {
+                  if (_formKey.currentState.validate()) {
+                    _formKey.currentState.save();
+                    print(recipe.title);
+                    print(recipe.description);
+                    print(recipe.listOfSteps);
+                  }
+                }),
           ),
         ],
       ),
     );
   }
 
+//method that returns a list of MyTextFormField and RaisedButton to add recipe steps
+  List<Widget> addRecipeSteps(context) {
+    List<Widget> listOfTextFormFieldsSteps = [];
 
+    for (int i = 1; i <= currentStep; i++)
+      listOfTextFormFieldsSteps.add(Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: MyTextFormField(
+          labelText: "Step $i",
+          validator: (String step) {
+            if (step.isEmpty) {
+              return 'Enter a step';
+            } else {
+              _formKey.currentState.save();
+              return null;
+            }
+          },
+          onSaved: (String step) {
+            recipe.listOfSteps[i-1] = step;
+          },
+        ),
+      ));
+
+    listOfTextFormFieldsSteps.add(
+      Center(
+        child: RaisedButton(
+          child: Text("Add step"),
+          onPressed: () {
+            setState(() {
+              currentStep++;
+            });
+          },
+        ),
+      ),
+    );
+
+    return listOfTextFormFieldsSteps;
+  }
 
   showPopup(BuildContext context, Widget widget, String title,
       {BuildContext popupContext}) {
@@ -228,17 +267,10 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
         padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
         children: <Widget>[
           MyTextFormField(
-
             labelText: "Search",
           ),
         ],
-
       ),
     );
   }
-
 }
-
-
-
-

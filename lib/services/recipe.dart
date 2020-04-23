@@ -5,13 +5,13 @@ class Recipe {
   String title;
   String description;
   List<Ingredient> ingredients;
-  List<String> steps;
+  var listOfSteps;
   File imageFile;
 
   Recipe({
     this.description,
     this.ingredients,
-    this.steps,
+    this.listOfSteps,
     this.title,
     this.imageFile,
 });
