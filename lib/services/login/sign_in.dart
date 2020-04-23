@@ -1,3 +1,4 @@
+import 'package:cibus/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
@@ -11,8 +12,9 @@ class SignIn {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final FacebookLogin facebookLogin = FacebookLogin();
+  bool isNewUser;
 
-  Future<String> signInWithGoogle() async {
+  Future<bool> signInWithGoogle() async {
     final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
     final GoogleSignInAuthentication googleSignInAuthentication =
         await googleSignInAccount.authentication;
@@ -23,7 +25,13 @@ class SignIn {
     );
 
     final AuthResult authResult = await _auth.signInWithCredential(credential);
+
+    isNewUser = authResult.additionalUserInfo.isNewUser;
     final FirebaseUser user = authResult.user;
+    if (isNewUser) {
+      await DatabaseService(uid: user.uid)
+          .updateUserData(name: user.displayName, description: 'description', age: 5);
+    }
 
     assert(!user.isAnonymous);
     assert(await user.getIdToken() != null);
@@ -31,10 +39,10 @@ class SignIn {
     final FirebaseUser currentUser = await _auth.currentUser();
     assert(user.uid == currentUser.uid);
 
-    return 'signInWithGoogle succeeded: $user';
+    return isNewUser;
   }
 
-  Future<String> signInWithFacebook() async {
+  Future<bool> signInWithFacebook() async {
     FacebookLoginResult facebookLoginResult = await _handleFBSignIn();
     final accessToken = facebookLoginResult.accessToken.token;
     if (facebookLoginResult.status == FacebookLoginStatus.loggedIn) {
@@ -42,14 +50,21 @@ class SignIn {
           FacebookAuthProvider.getCredential(accessToken: accessToken);
       final AuthResult authResult =
           await _auth.signInWithCredential(facebookAuthCred);
+
+      isNewUser = authResult.additionalUserInfo.isNewUser;
       final FirebaseUser user = authResult.user;
+      if (isNewUser) {
+        await DatabaseService(uid: user.uid)
+            .updateUserData(name: user.displayName, description: 'description', age: 5);
+      }
+
       assert(!user.isAnonymous);
       assert(await user.getIdToken() != null);
 
       final FirebaseUser currentUser = await _auth.currentUser();
       assert(user.uid == currentUser.uid);
 
-      return 'signIn With Facebook succeeded: $user';
+      return isNewUser;
     }
   }
 

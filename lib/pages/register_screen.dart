@@ -26,7 +26,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String name = '';
   String description = '';
   int age = 0;
-  int dropdownValue = 0;
+  int dropdownValue = null;
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +101,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             dropdownValue = newAge;
                             age = newAge;
                         });},
-                          items: <int>[1, 2, 3, 4]
+                          items: <int>[0, 1, 2, 3, 4]
                               .map<DropdownMenuItem<int>>((int value) {
                             return DropdownMenuItem<int>(
                               value: value,

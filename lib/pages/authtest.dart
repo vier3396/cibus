@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cibus/services/login/sign_in.dart';
 import 'package:cibus/pages/firstScreen.dart';
+import 'package:cibus/pages/username_screen.dart';
 
 
 SignIn signIn = SignIn();
@@ -29,8 +30,8 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(height: 50),
               _signInButtonGoogle(),
               _signInButtonFacebook(),
-              _registerButton(),
               _signInEmailButton(),
+              _registerButton(),
             ],
           ),
         ),
@@ -47,8 +48,9 @@ class _LoginPageState extends State<LoginPage> {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) {
-                return FirstScreen();
-              },
+                if(signIn.isNewUser) {
+                  return UsernameScreen();}
+              return FirstScreen();},
             ),
           );
         });

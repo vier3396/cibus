@@ -12,3 +12,5 @@ const textInputDecoration = InputDecoration(
       borderSide: BorderSide(color: Colors.pink, width: 2.0)
   ),
 );
+
+var kageList = Iterable<int>.generate(90).toList();
