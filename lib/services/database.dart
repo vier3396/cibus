@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cibus/services/login/user.dart';
+import 'package:flutter/cupertino.dart';
 
 class DatabaseService {
 
@@ -22,6 +23,21 @@ class DatabaseService {
     return await userCollection.document(uid).setData({
       'username': username,
     }, merge: true);
+  }
+
+  Future<bool> isUsernameTaken({String username}) async {
+//    final _query = await userCollection
+//        .where('username', isEqualTo: username)
+//        .limit(1).snapshots();
+//    print(_query.toString());
+
+      final result = await Firestore.instance
+        .collection('users')
+        .where('username', isEqualTo: username)
+        .getDocuments();
+      print(result.documents.isEmpty);
+      return result.documents.isEmpty;
+
   }
 
 

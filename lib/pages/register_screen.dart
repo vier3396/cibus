@@ -1,3 +1,4 @@
+import 'package:cibus/pages/username_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/services/login/auth.dart';
 import 'package:cibus/services/constants.dart';
@@ -125,6 +126,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 error = 'Please supply valid email';
                                 loading = false;
                               });
+                            }
+                            else if(result != null) {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return UsernameScreen();
+                                  },
+                                ),
+                              );
+
                             }
                           }
                         },
