@@ -1,4 +1,4 @@
-import 'package:cibus/pages/popup.dart';
+import 'package:cibus/services/popup.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/services/colors.dart';
@@ -7,7 +7,7 @@ import 'recipe.dart';
 import 'my_text_form_field.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'package:cibus/pages/popup.dart';
+import 'package:cibus/services/popup.dart';
 
 class AddRecipeForm extends StatefulWidget {
   @override
