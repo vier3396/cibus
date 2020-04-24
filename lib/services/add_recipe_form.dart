@@ -1,13 +1,13 @@
-import 'package:cibus/pages/popup_add_ingredient.dart';
-import 'package:cibus/services/popup_content_add_ingredient.dart';
+import 'package:cibus/pages/popup.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/services/colors.dart';
 import 'package:validators/validators.dart' as validator;
 import 'recipe.dart';
 import 'my_text_form_field.dart';
-//import 'add_recipe_form_steps.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:cibus/pages/popup.dart';
 
 class AddRecipeForm extends StatefulWidget {
   @override
@@ -141,7 +141,9 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                     maxLength: 20,
                     labelText: "Add ingredient",
                     onTap: () {
-                      showPopup(context, _popupBody(), 'Add Ingredient');
+                      PopupLayout().showPopup(context,
+                          popupBodySearchIngredients(), 'Add Ingredient');
+                      //.showPopup(context, popupBody(), 'Add Ingredient');
                     },
                     //TODO:  onSaved: save ingredients to recipe object
                     //TODO: validator: validate ingredients
@@ -178,9 +180,8 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
                     _formKey.currentState.save();
-                    print(recipe.title);
-                    print(recipe.description);
-                    print(recipe.listOfSteps);
+                    PopupLayout().showPopup(context,
+                        popupBodyRecipeResults(), 'Review Your Recipe');
                   }
                 }),
           ),
@@ -207,7 +208,7 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
             }
           },
           onSaved: (String step) {
-            recipe.listOfSteps[i-1] = step;
+            recipe.listOfSteps[i - 1] = step;
           },
         ),
       ));
@@ -228,40 +229,7 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
     return listOfTextFormFieldsSteps;
   }
 
-  showPopup(BuildContext context, Widget widget, String title,
-      {BuildContext popupContext}) {
-    Navigator.push(
-      context,
-      PopupLayout(
-        top: 40,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        child: PopupContent(
-          content: Scaffold(
-            appBar: AppBar(
-              title: Text(title),
-              leading: new Builder(builder: (context) {
-                return IconButton(
-                  icon: Icon(Icons.arrow_back),
-                  onPressed: () {
-                    try {
-                      Navigator.pop(context); //close the popup
-                    } catch (e) {}
-                  },
-                );
-              }),
-              brightness: Brightness.light,
-            ),
-            resizeToAvoidBottomPadding: false,
-            body: widget,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _popupBody() {
+  Widget popupBodySearchIngredients() {
     return Container(
       child: ListView(
         padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
@@ -273,4 +241,46 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
       ),
     );
   }
+
+  Widget popupBodyRecipeResults() {
+    return Container(
+      child: ListView(
+        children: <Widget>[
+          Text("Title"),
+          Text(recipe.title != null ? recipe.title : "null"),
+          Text("Description"),
+          Text(recipe.description != null ? recipe.description : "null"),
+          Text("Ingredients"),
+          Text("recipe.ingredients"),
+          Text("Steps"),
+          //Text(recipe.listOfSteps[0]),
+          getTextWidgets(recipe.listOfSteps),
+          FloatingActionButton(
+            child: Text("submit"),
+            onPressed: () {
+              print("success");
+              _formKey.currentState.reset();
+              currentStep = 1;
+              Navigator.pop(context);
+              //recipe = Recipe();
+              //TODO send the recuoe to backend nerds
+            },
+          ),
+
+        ],
+      ),
+    );
+  }
+
+  Widget getTextWidgets(List<dynamic> strings) //services
+  {
+    List<Widget> list = new List<Widget>();
+    for(var i = 0; i < strings.length; i++){
+      if(strings[i] != null) {
+        list.add(new Text(strings[i]));
+      }
+    }
+    return Column(children: list);
+  }
+
 }

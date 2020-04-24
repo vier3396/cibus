@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:cibus/services/my_text_form_field.dart';
 
 class PopupLayout extends ModalRoute {
   double top;
@@ -60,13 +61,13 @@ class PopupLayout extends ModalRoute {
         // make sure that the overlay content is not cut off
         child: SafeArea(
           bottom: true,
-          child: _buildOverlayContent(context),
+          child: buildOverlayContent(context),
         ),
       ),
     );
   }
 
-  Widget _buildOverlayContent(BuildContext context) {
+  Widget buildOverlayContent(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(
           bottom: this.bottom,
@@ -87,6 +88,67 @@ class PopupLayout extends ModalRoute {
         scale: animation,
         child: child,
       ),
+    );
+  }
+
+  showPopup(BuildContext context, Widget widget, String title,
+      {BuildContext popupContext}) {
+    Navigator.push(
+      context,
+      PopupLayout(
+        top: 40,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        child: PopupContent(
+          content: Scaffold(
+            appBar: AppBar(
+              title: Text(title),
+              leading: new Builder(builder: (context) {
+                return IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () {
+                    try {
+                      Navigator.pop(context); //close the popup
+                    } catch (e) {}
+                  },
+                );
+              }),
+              brightness: Brightness.light,
+            ),
+            resizeToAvoidBottomPadding: false,
+            body: widget,
+          ),
+        ),
+      ),
+    );
+  }
+
+
+
+}
+
+class PopupContent extends StatefulWidget {
+  final Widget content;
+
+  PopupContent({
+    Key key,
+    this.content,
+  }) : super(key: key);
+
+  _PopupContentState createState() => _PopupContentState();
+}
+
+class _PopupContentState extends State<PopupContent> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: widget.content,
     );
   }
 }
