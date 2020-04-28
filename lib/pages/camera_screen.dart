@@ -5,7 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'dart:core';
 
 /// Widget to capture and crop the image
 class ImageCapture extends StatefulWidget {
@@ -19,16 +19,16 @@ class _ImageCaptureState extends State<ImageCapture> {
   /// Cropper plugin
   Future<void> _cropImage() async {
     File cropped = await ImageCropper.cropImage(
-        sourcePath: _imageFile.path,
-        androidUiSettings: AndroidUiSettings(
-        // ratioX: 1.0,
-        // ratioY: 1.0,
-        // maxWidth: 512,
-        // maxHeight: 512,
-        toolbarColor: Colors.purple,
-        toolbarWidgetColor: Colors.white,
-        toolbarTitle: 'Crop It'
-        ),);
+      sourcePath: _imageFile.path,
+      androidUiSettings: AndroidUiSettings(
+          // ratioX: 1.0,
+          // ratioY: 1.0,
+          // maxWidth: 512,
+          // maxHeight: 512,
+          toolbarColor: Colors.purple,
+          toolbarWidgetColor: Colors.white,
+          toolbarTitle: 'Crop It'),
+    );
 
     setState(() {
       _imageFile = cropped ?? _imageFile;
@@ -52,7 +52,6 @@ class _ImageCaptureState extends State<ImageCapture> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       // Select an image from the camera or gallery
       bottomNavigationBar: BottomAppBar(
         child: Row(
@@ -73,9 +72,7 @@ class _ImageCaptureState extends State<ImageCapture> {
       body: ListView(
         children: <Widget>[
           if (_imageFile != null) ...[
-
             Image.file(_imageFile),
-
             Row(
               children: <Widget>[
                 FlatButton(
@@ -88,7 +85,6 @@ class _ImageCaptureState extends State<ImageCapture> {
                 ),
               ],
             ),
-
             Uploader(file: _imageFile)
           ]
         ],
@@ -106,28 +102,31 @@ class Uploader extends StatefulWidget {
 }
 
 class _UploaderState extends State<Uploader> {
-  final FirebaseStorage _storage =
-  FirebaseStorage(storageBucket: 'gs://independent-project-7edde.appspot.com/');
+  String filePath;
+  final FirebaseStorage _storage = FirebaseStorage(
+      storageBucket: 'gs://independent-project-7edde.appspot.com/');
 
   StorageUploadTask _uploadTask;
 
   /// Starts an upload task
   void _startUpload() {
-
     /// Unique file name for the file
-    String filePath = 'images/${DateTime.now()}.png';
-
-    setState(()  {
+    filePath = 'images/${DateTime.now()}.png';
+    setState(() {
       _uploadTask = _storage.ref().child(filePath).putFile(widget.file);
-      String uRL =  _storage.ref().child('2020-04-27 15:35:07.831630.png').getDownloadURL().toString();
-      print(uRL);
     });
+  }
+
+  void getuRL(String filePath) async {
+    print('kompis');
+    var uRL = await _storage.ref().child(filePath).getDownloadURL();
+    print(uRL);
+    print('kompis2');
   }
 
   @override
   Widget build(BuildContext context) {
     if (_uploadTask != null) {
-
       /// Manage the task state and event subscription with a StreamBuilder
       return StreamBuilder<StorageTaskEvent>(
           stream: _uploadTask.events,
@@ -138,12 +137,12 @@ class _UploaderState extends State<Uploader> {
                 ? event.bytesTransferred / event.totalByteCount
                 : 0;
 
+            if (_uploadTask.isComplete) {
+              getuRL(filePath);
+            }
             return Column(
-
               children: [
-                if (_uploadTask.isComplete)
-                  Text('🎉🎉🎉'),
-
+                if (_uploadTask.isComplete) Text('🎉🎉🎉'),
 
                 if (_uploadTask.isPaused)
                   FlatButton(
@@ -159,24 +158,17 @@ class _UploaderState extends State<Uploader> {
 
                 // Progress bar
                 LinearProgressIndicator(value: progressPercent),
-                Text(
-                    '${(progressPercent * 100).toStringAsFixed(2)} % '
-                ),
+                Text('${(progressPercent * 100).toStringAsFixed(2)} % '),
               ],
             );
           });
-
-
     } else {
-
       // Allows user to decide when to start the upload
       return FlatButton.icon(
         label: Text('Upload to Firebase'),
         icon: Icon(Icons.cloud_upload),
         onPressed: _startUpload,
       );
-
     }
   }
 }
-
