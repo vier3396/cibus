@@ -16,7 +16,7 @@ class DatabaseService {
       'name': name,
       'description': description,
       'age': age,
-    });
+    }, merge: true);
   }
 
   Future updateUsername({String username}) async {

@@ -88,6 +88,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       SizedBox(height: 20.0),
                       TextFormField(
                         decoration: textInputDecoration.copyWith(hintText: 'Description'),
+                        minLines: 5,
+                        maxLines: 10,
                         validator: (val) => val.isEmpty ? 'Enter your description' : null,
                         onChanged: (val) {
                           setState(() => description = val);

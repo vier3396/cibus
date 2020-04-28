@@ -5,6 +5,7 @@ import 'package:cibus/services/database.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:provider/provider.dart';
 import 'package:cibus/pages/settings_screen.dart';
+import 'package:cibus/main.dart';
 
 
 class FirstScreen extends StatefulWidget {
@@ -16,11 +17,11 @@ class FirstScreen extends StatefulWidget {
 class _FirstScreenState extends State<FirstScreen> {
 
 
+
   @override
   Widget build(BuildContext context) {
 
     final user = Provider.of<User>(context);
-
 
     return StreamBuilder<UserData>(
       stream: DatabaseService(uid: user.uid).userData,
@@ -41,9 +42,10 @@ class _FirstScreenState extends State<FirstScreen> {
                         signIn.signOut(context);
                       },
                     ),
-                    Text(userData.name),
-                    Text(userData.description),
-                    Text(userData.age.toString()),
+                    Text(userData?.name ?? ''),
+                    Text(userData?.username ?? ''),
+                    Text(userData?.description ?? ''),
+                    Text(userData?.age.toString() ?? ''),
                     IconButton(
                       icon: Icon(Icons.settings),
                       onPressed: () {

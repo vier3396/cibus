@@ -1,9 +1,17 @@
+import 'package:cibus/pages/camera_screen.dart';
 import 'package:cibus/pages/loading_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/database.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:cibus/services/constants.dart';
+import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/widgets.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:cibus/services/imageServices.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -20,6 +28,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
   String _currentName;
   int _currentAge;
   String _currentDescription;
+  String image;
+  
+  void getImage()async{
+    image =  await ImageService.loadImage().toString();
+    
+  }
+  
 
 
   @override
@@ -44,6 +59,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
       Text(
       'Update your Cibus settings',
       style: TextStyle(fontSize: 18.0),
+      ),
+      SizedBox(height: 20.0),
+      Row(
+        children: <Widget>[
+          CircleAvatar(
+            backgroundColor: Colors.pink,
+            radius: 60.0,
+            backgroundImage: NetworkImage('https://firebasestorage.googleapis.com/v0/b/independent-project-7edde.appspot.com/o/images%2F2020-04-27%2015%3A35%3A07.831630.png?alt=media&token=90b8c4c8-8165-468e-99f5-8508e60b4b88'),
+          ),
+          IconButton(
+            icon: Icon(Icons.camera_alt),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) {
+                    return ImageCapture();
+                  },
+                ),
+              );
+            },
+          ),
+        ],
       ),
       SizedBox(height: 20.0),
       Text('Name'),
