@@ -10,8 +10,13 @@ class FavoritesPage extends StatelessWidget {
             child: Text('Favorites'),
           ),
         ),
-        body: Center(
-          child: Text('These are your favorites'),
+        body: ListView(children: <Widget>[
+          Column(children: <Widget>[
+            Text("A recipe"),
+            Text("Another recipe"),
+          ],
+          ),
+        ],
         ),
       ),
     );

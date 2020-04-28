@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:cibus/services/my_text_form_field.dart';
 
 class PopupLayout extends ModalRoute {
   double top;
@@ -9,6 +8,7 @@ class PopupLayout extends ModalRoute {
   double right;
   Color bgColor;
   final Widget child;
+  List<Widget> appBarActions;
 
   @override
   Duration get transitionDuration => Duration(milliseconds: 300);
@@ -33,10 +33,12 @@ class PopupLayout extends ModalRoute {
       {Key key,
         this.bgColor,
         @required this.child,
-        this.top,
-        this.bottom,
-        this.left,
-        this.right});
+        this.top = 30.0,
+        this.bottom = 0.0,
+        this.left = 0.0,
+        this.right = 0.0,
+        this.appBarActions,
+      });
 
   @override
   Widget buildPage(
@@ -44,10 +46,11 @@ class PopupLayout extends ModalRoute {
       Animation<double> animation,
       Animation<double> secondaryAnimation,
       ) {
-    if (top == null) this.top = 10;
+
+    /* if (top == null) this.top = 10;
     if (bottom == null) this.bottom = 20;
     if (left == null) this.left = 20;
-    if (right == null) this.right = 20;
+    if (right == null) this.right = 20; */
 
     return GestureDetector(
       onTap: () {
@@ -96,10 +99,10 @@ class PopupLayout extends ModalRoute {
     Navigator.push(
       context,
       PopupLayout(
-        top: 40,
-        left: 0,
-        right: 0,
-        bottom: 0,
+        top: top,
+        left: left,
+        right: right,
+        bottom: bottom,
         child: PopupContent(
           content: Scaffold(
             appBar: AppBar(
@@ -114,6 +117,7 @@ class PopupLayout extends ModalRoute {
                   },
                 );
               }),
+              actions: appBarActions,
               brightness: Brightness.light,
             ),
             resizeToAvoidBottomPadding: false,
@@ -123,8 +127,6 @@ class PopupLayout extends ModalRoute {
       ),
     );
   }
-
-
 
 }
 

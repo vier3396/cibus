@@ -48,7 +48,7 @@ class _MyPageViewState extends State<MyPageView> {
           HomePage(),
           SearchRecipe(),
           Profile(),
-          AddRecipe(),
+          //AddRecipe(),
           FavoritesPage(),
         ],
       ),

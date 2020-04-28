@@ -2,12 +2,14 @@ import 'package:cibus/services/popup.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/services/colors.dart';
-import 'package:validators/validators.dart' as validator;
 import 'recipe.dart';
 import 'my_text_form_field.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'package:cibus/services/popup.dart';
+import 'popup_body_search_ingredients.dart';
+import 'steps.dart';
+
+/*
 
 class AddRecipeForm extends StatefulWidget {
   @override
@@ -15,11 +17,11 @@ class AddRecipeForm extends StatefulWidget {
 }
 
 class _AddRecipeFormState extends State<AddRecipeForm> {
-  final _formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
   Recipe recipe = Recipe();
-  int currentStep = 1;
   File imageFile;
 
+  //Open gallery
   void openGallery(BuildContext context, Recipe recipe) async {
     var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
     this.setState(() {
@@ -29,6 +31,7 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
     Navigator.of(context).pop();
   }
 
+  //Open camera
   void openCamera(BuildContext context, Recipe recipe) async {
     var picture = await ImagePicker.pickImage(source: ImageSource.camera);
     this.setState(() {
@@ -38,6 +41,7 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
     Navigator.of(context).pop();
   }
 
+  //Popup - choose between open gallery or camera
   Future<void> showChoiceDialog(BuildContext context, Recipe recipe) {
     return showDialog(
         context: context,
@@ -73,6 +77,7 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
         });
   }
 
+  //No image selected, or view image selected
   Widget decideImageView() {
     if (imageFile == null) {
       return Center(child: Text("No image selected"));
@@ -83,13 +88,10 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
 
   @override
   Widget build(BuildContext context) {
-    recipe.listOfSteps = List(20);
-
-    // works for different screens
-    // final halfMedianWidth = MediaQuery.of(context).size.width / 2.0;
+    // final halfMedianWidth = MediaQuery.of(context).size.width / 2.0; (for different screens)
 
     return Form(
-      key: _formKey,
+      key: formKey,
       child: ListView(
         children: <Widget>[
           //Title
@@ -102,7 +104,7 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                 if (title.isEmpty) {
                   return 'Enter a Title';
                 } else {
-                  _formKey.currentState.save();
+                  formKey.currentState.save();
                   return null;
                 }
               },
@@ -121,7 +123,7 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                 if (description.isEmpty) {
                   return 'Enter a Description';
                 } else {
-                  _formKey.currentState.save();
+                  formKey.currentState.save();
                   return null;
                 }
               },
@@ -143,7 +145,6 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                     onTap: () {
                       PopupLayout().showPopup(context,
                           popupBodySearchIngredients(), 'Add Ingredient');
-                      //.showPopup(context, popupBody(), 'Add Ingredient');
                     },
                     //TODO:  onSaved: save ingredients to recipe object
                     //TODO: validator: validate ingredients
@@ -152,11 +153,9 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
               ],
             ),
           ),
-          //Steps
-          Column(
-            children: <Widget>[
-              ...addRecipeSteps(context),
-            ],
+          RecipeSteps(
+            formkey: formKey,
+            recipe: recipe,
           ),
           //No image selected/Selected image
           decideImageView(),
@@ -176,12 +175,15 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: RaisedButton(
-                child: Text("Submit"),
+                child: Text("Review and submit recipe"),
                 onPressed: () {
-                  if (_formKey.currentState.validate()) {
-                    _formKey.currentState.save();
-                    PopupLayout().showPopup(context,
-                        popupBodyRecipeResults(), 'Review Your Recipe');
+                  if (formKey.currentState.validate()  ) {
+                    print(recipe.listOfSteps[0]);
+                    formKey.currentState.save();
+                    //if (isRecipesListNotNull()) {
+                    //}
+                    PopupLayout().showPopup(context, popupBodyRecipeResults(),
+                        'Review Your Recipe');
                   }
                 }),
           ),
@@ -190,97 +192,53 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
     );
   }
 
-//method that returns a list of MyTextFormField and RaisedButton to add recipe steps
-  List<Widget> addRecipeSteps(context) {
-    List<Widget> listOfTextFormFieldsSteps = [];
-
-    for (int i = 1; i <= currentStep; i++)
-      listOfTextFormFieldsSteps.add(Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: MyTextFormField(
-          labelText: "Step $i",
-          validator: (String step) {
-            if (step.isEmpty) {
-              return 'Enter a step';
-            } else {
-              _formKey.currentState.save();
-              return null;
-            }
-          },
-          onSaved: (String step) {
-            recipe.listOfSteps[i - 1] = step;
-          },
-        ),
-      ));
-
-    listOfTextFormFieldsSteps.add(
-      Center(
-        child: RaisedButton(
-          child: Text("Add step"),
-          onPressed: () {
-            setState(() {
-              currentStep++;
-            });
-          },
-        ),
-      ),
-    );
-
-    return listOfTextFormFieldsSteps;
-  }
-
-  Widget popupBodySearchIngredients() {
-    return Container(
-      child: ListView(
-        padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
-        children: <Widget>[
-          MyTextFormField(
-            labelText: "Search",
-          ),
-        ],
-      ),
-    );
-  }
-
+  //Popup page to preview and submit the recipe form
   Widget popupBodyRecipeResults() {
     return Container(
       child: ListView(
         children: <Widget>[
-          Text("Title"),
           Text(recipe.title != null ? recipe.title : "null"),
-          Text("Description"),
           Text(recipe.description != null ? recipe.description : "null"),
-          Text("Ingredients"),
           Text("recipe.ingredients"),
-          Text("Steps"),
-          //Text(recipe.listOfSteps[0]),
           getTextWidgets(recipe.listOfSteps),
           FloatingActionButton(
-            child: Text("submit"),
+            child: Text("Submit"),
             onPressed: () {
-              print("success");
-              _formKey.currentState.reset();
-              currentStep = 1;
+              // send it here to avoid overwrite loss
+              print("Success");
+              formKey.currentState.reset();
+              recipe = Recipe();
+              recipe.listOfSteps = List(20);
               Navigator.pop(context);
-              //recipe = Recipe();
-              //TODO send the recuoe to backend nerds
+              //TODO send the recipe to the backend nerds
             },
           ),
-
         ],
       ),
     );
   }
 
+  //Column with recipe steps as strings
   Widget getTextWidgets(List<dynamic> strings) //services
   {
     List<Widget> list = new List<Widget>();
-    for(var i = 0; i < strings.length; i++){
-      if(strings[i] != null) {
+    for (var i = 0; i < strings.length; i++) {
+      if (strings[i] != null) {
         list.add(new Text(strings[i]));
       }
     }
     return Column(children: list);
   }
 
+  bool isRecipesListNotNull() { // behövs nog inte
+    for (int i = 0; i < recipe.listOfSteps.length; i++ ) {
+      if (recipe.listOfSteps[i] != null) {
+        return true;
+      }
+      return false;
+    }
+  }
 }
+
+
+ */

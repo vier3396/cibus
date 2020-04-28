@@ -8,6 +8,10 @@ class MyTextFormField extends StatelessWidget {
   final int maxLength;
   final bool isAmount;
   final Function onTap;
+  final TextEditingController controller;
+  final InputDecoration decoration;
+  final IconButton suffixIcon;
+  final GlobalKey<FormState> formkey;
 
   MyTextFormField({
     this.labelText,
@@ -17,6 +21,10 @@ class MyTextFormField extends StatelessWidget {
     this.maxLength = 30,
     this.isAmount = false,
     this.onTap,
+    this.controller,
+    this.decoration,
+    this.suffixIcon,
+    this.formkey,
   });
 
   @override
@@ -27,11 +35,13 @@ class MyTextFormField extends StatelessWidget {
       validator: validator,
       onSaved: onSaved,
       onTap: onTap,
+      controller: controller,
       keyboardType: isAmount ? TextInputType.number : TextInputType.text,
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(25.0),
         ),
+        suffixIcon: suffixIcon,
         labelText: labelText,
       ),
     );

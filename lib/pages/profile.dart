@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cibus/services/colors.dart';
+import 'package:cibus/services/popup.dart';
+
+const topMarginPopupLayout = 0.0;
+
 class Profile extends StatefulWidget {
   @override
   _ProfileState createState() => _ProfileState();
@@ -13,7 +17,6 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBackgroundColor,
       body: SafeArea(
         child: Column(
           children: <Widget>[
@@ -25,7 +28,6 @@ class _ProfileState extends State<Profile> {
             wallOfText,
           ],
         ),
-        // det här är början på en ny metod
       ),
     );
   }
@@ -127,7 +129,6 @@ class _ProfileState extends State<Profile> {
               Text(
                 'YOUR NAME',
                 style: TextStyle(
-                  color: kCibusTextColor,
                   fontSize: 20.0,
                 ),
               ),
@@ -135,7 +136,6 @@ class _ProfileState extends State<Profile> {
               Text(
                 'Karma points: $karma',
                 style: TextStyle(
-                  color: kCibusTextColor,
                 ),
               ),
             ],
@@ -145,13 +145,31 @@ class _ProfileState extends State<Profile> {
             icon: Image.asset('assets/cogwheel.png'),
             iconSize: 50,
             onPressed: () {
-              print("pressed!"); // push settings!
+              PopupLayout(top: topMarginPopupLayout).showPopup(context,
+                  popupBodySettings(), 'Settings');
             },
           ),
         ],
       ),
     );
   }
+
+  Widget popupBodySettings() {
+    return Container(
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            child: Row(
+              children: <Widget>[
+                Text("Account"),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
 }
 
 class MyFavorites extends StatelessWidget {
