@@ -4,7 +4,6 @@ import 'package:cibus/pages/loading_screen.dart';
 import 'package:cibus/services/constants.dart';
 import 'package:cibus/pages/firstScreen.dart';
 import 'package:cibus/pages/register_screen.dart';
-import 'package:cibus/main.dart';
 
 class EmailSignIn extends StatefulWidget {
   final Function toggleView;
@@ -85,9 +84,16 @@ class _EmailSignInState extends State<EmailSignIn> {
                             style: TextStyle(color: Colors.white)),
                         onPressed: () async {
                           if (_formKey.currentState.validate()) {
+                            setState(() => loading = true);
                             dynamic result = await _auth
-                                .signInWithEmailAndPassword(email, password)
-                                .whenComplete(() {
+                                .signInWithEmailAndPassword(email, password);
+                            if (result == null) {
+                              setState(() {
+                                error =
+                                    'Could not sign in with those credentials';
+                                loading = false;
+                              });
+                            } else {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) {
@@ -95,7 +101,7 @@ class _EmailSignInState extends State<EmailSignIn> {
                                   },
                                 ),
                               );
-                            });
+                            }
                           }
                         },
                       ),

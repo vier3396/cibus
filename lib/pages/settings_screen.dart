@@ -5,12 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:cibus/services/database.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:cibus/services/constants.dart';
-import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/widgets.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:cibus/services/imageServices.dart';
 
 class SettingsScreen extends StatefulWidget {
