@@ -49,7 +49,7 @@ class _MyPageViewState extends State<MyPageView> {
           SearchRecipe(),
           Profile(),
           //AddRecipe(),
-          FavoritesPage(),
+          Favorites(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

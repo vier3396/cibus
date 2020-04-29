@@ -1,14 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class PopupLayout extends ModalRoute {
+class PopupLayoutRecipe extends ModalRoute {
   double top;
   double bottom;
   double left;
   double right;
   Color bgColor;
   final Widget child;
+
   List<Widget> appBarActions;
+  static Icon favoriteBorderIcon = Icon(Icons.favorite_border);
+  static Icon favoriteFilledIcon = Icon(Icons.favorite);
+
+  //initial favorites icon is heart icon with boarder, and isFavorite = false,
+  //tooltip showing "Add to favorites"
+  bool isFavorite = false;
+  String favoritesToolTip = "Add to favorites";
+  Icon favoritesIcon = favoriteBorderIcon;
+
+  //Snackbar is the popup message on bottom of screen showing when added/removed from favorites
+  String snackBarFavoritesText;
+  SnackBar snackBarFavorites;
 
   @override
   Duration get transitionDuration => Duration(milliseconds: 300);
@@ -29,7 +42,7 @@ class PopupLayout extends ModalRoute {
   @override
   bool get maintainState => false;
 
-  PopupLayout(
+  PopupLayoutRecipe(
       {Key key,
         this.bgColor,
         @required this.child,
@@ -37,7 +50,6 @@ class PopupLayout extends ModalRoute {
         this.bottom = 0.0,
         this.left = 0.0,
         this.right = 0.0,
-        this.appBarActions,
       });
 
   @override
@@ -98,7 +110,7 @@ class PopupLayout extends ModalRoute {
       {BuildContext popupContext}) {
     Navigator.push(
       context,
-      PopupLayout(
+      PopupLayoutRecipe(
         top: top,
         left: left,
         right: right,
@@ -118,7 +130,23 @@ class PopupLayout extends ModalRoute {
                   },
                 );
               }),
-              actions: appBarActions,
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    setState(() {
+                      print(isFavorite);
+                      isFavorite =! isFavorite;
+                      print(isFavorite);
+                    });
+                  },
+                  icon: isFavorite
+                      ? favoriteFilledIcon
+                      : favoriteBorderIcon,
+                  tooltip: isFavorite
+                      ? "Added to favorites"
+                      : "Removed from favorites",
+                )
+              ],
               brightness: Brightness.light,
             ),
             resizeToAvoidBottomPadding: false,
