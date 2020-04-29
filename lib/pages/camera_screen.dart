@@ -1,3 +1,4 @@
+import 'package:cibus/services/database.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -6,6 +7,9 @@ import 'package:flutter/widgets.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:core';
+import 'package:provider/provider.dart';
+import 'package:cibus/main.dart';
+import 'package:cibus/services/login/user.dart';
 
 /// Widget to capture and crop the image
 class ImageCapture extends StatefulWidget {
@@ -51,6 +55,7 @@ class _ImageCaptureState extends State<ImageCapture> {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<User>(context);
     return Scaffold(
       // Select an image from the camera or gallery
       bottomNavigationBar: BottomAppBar(
@@ -117,15 +122,18 @@ class _UploaderState extends State<Uploader> {
     });
   }
 
-  void getuRL(String filePath) async {
+  void getuRL(String filePath, BuildContext context) async {
     print('kompis');
     var uRL = await _storage.ref().child(filePath).getDownloadURL();
     print(uRL);
-    print('kompis2');
+    final user = Provider.of<User>(context);
+    DatabaseService(uid: user.uid).updateUserPicture(pictureURL: uRL);
   }
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<User>(context);
+
     if (_uploadTask != null) {
       /// Manage the task state and event subscription with a StreamBuilder
       return StreamBuilder<StorageTaskEvent>(
@@ -138,7 +146,7 @@ class _UploaderState extends State<Uploader> {
                 : 0;
 
             if (_uploadTask.isComplete) {
-              getuRL(filePath);
+              getuRL(filePath, context);
             }
             return Column(
               children: [

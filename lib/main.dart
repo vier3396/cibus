@@ -10,10 +10,7 @@ import 'package:cibus/pages/test.dart';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:cibus/pages/firstScreen.dart';
-
-
-
-
+import 'package:cibus/pages/camera_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -34,11 +31,9 @@ class MyApp extends StatelessWidget {
           '/loginPage': (context) => LoginPage(),
           '/firstScreen': (context) => FirstScreen(),
           '/settingsScreen': (context) => SettingsScreen(),
+          'camerscreen': (context) => ImageCapture(),
         },
       ),
     );
   }
 }
-
-
-
