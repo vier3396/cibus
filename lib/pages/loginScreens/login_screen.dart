@@ -1,10 +1,10 @@
-import 'package:cibus/pages/register_screen.dart';
+import 'package:cibus/pages/loginScreens/register_screen.dart';
 import 'package:cibus/services/constants.dart';
-import 'package:cibus/services/login/e-sign_in.dart';
+import 'package:cibus/pages/loginScreens/e-sign_in_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/services/login/sign_in.dart';
 import 'package:cibus/pages/firstScreen.dart';
-import 'package:cibus/pages/username_screen.dart';
+import 'package:cibus/pages/loginScreens/username_screen.dart';
 
 SignIn signIn = SignIn();
 

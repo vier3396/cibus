@@ -3,7 +3,7 @@ import 'package:cibus/services/login/auth.dart';
 import 'package:cibus/pages/loading_screen.dart';
 import 'package:cibus/services/constants.dart';
 import 'package:cibus/pages/firstScreen.dart';
-import 'package:cibus/pages/register_screen.dart';
+import 'package:cibus/pages/loginScreens/register_screen.dart';
 
 class EmailSignIn extends StatefulWidget {
   final Function toggleView;
@@ -39,7 +39,7 @@ class _EmailSignInState extends State<EmailSignIn> {
                   label: Text('Register'),
                   onPressed: () {
                     //widget.toggleView();
-                    Navigator.of(context).push(
+                    Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                         builder: (context) {
                           return RegisterScreen();
