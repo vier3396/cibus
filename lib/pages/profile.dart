@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cibus/services/colors.dart';
-import 'package:cibus/services/popup.dart';
+import 'package:cibus/services/popup_layout.dart';
 
 const topMarginPopupLayout = 0.0;
 

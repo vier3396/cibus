@@ -6,8 +6,8 @@ class Recipe {
   String description;
   List<Ingredient> ingredients;
   List<String> listOfSteps;
-  //File imageFile;
-  String imageFile;
+  //TODO: NetworkImage? imageFile;
+  String imageFile; //just to view temporary Recipe objects images
   int time;
   double rating;
 

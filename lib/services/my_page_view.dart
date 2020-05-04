@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:cibus/pages/add_recipe.dart';
 import 'package:cibus/pages/search_recipe.dart';
 import 'package:cibus/pages/profile.dart';
 import 'package:cibus/pages/home.dart';
 import 'package:cibus/pages/favorites.dart';
-import '../pages/add_recipe.dart';
+import '../pages/add_recipe_form.dart';
 
 const TextStyle bottomBarTextStyle = TextStyle(
   fontSize: 18.0
@@ -48,7 +47,7 @@ class _MyPageViewState extends State<MyPageView> {
           HomePage(),
           SearchRecipe(),
           Profile(),
-          //AddRecipe(),
+          AddRecipeForm(),
           Favorites(),
         ],
       ),
