@@ -1,6 +1,11 @@
+import 'package:cibus/pages/home.dart';
+import 'package:cibus/services/database.dart';
+import 'package:cibus/services/login/user.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/services/colors.dart';
 import 'package:cibus/services/popup_layout.dart';
+import 'package:cibus/services/login/user.dart';
+import 'package:provider/provider.dart';
 
 const topMarginPopupLayout = 0.0;
 
@@ -16,20 +21,70 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: <Widget>[
-            buildProfileHeader(),
-            Divider(color: kCibusTextColor),
-            SizedBox(height: 40.0),
-            buildProfileButtons(),
-            SizedBox(height: 20.0),
-            wallOfText,
-          ],
-        ),
-      ),
-    );
+    final user = Provider.of<User>(context);
+
+    return StreamBuilder<UserData>(
+      stream: DatabaseService(uid: user.uid).userData,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          UserData userData = snapshot.data;
+          return Scaffold(
+            body: SafeArea(
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        CircleAvatar(
+                          backgroundImage: NetworkImage(userData.profilePic),
+                          radius: 40.0,
+                        ),
+                        SizedBox(width: 20.0),
+                        Column(
+                          children: <Widget>[
+                            SizedBox(height: 20.0),
+                            Text(userData.name,
+                              style: TextStyle(
+                                fontSize: 20.0,
+                              ),
+                            ),
+                            SizedBox(height: 5.0),
+                            Text(
+                              'Karma points: $karma',
+                              //TODO: karma points
+                              style: TextStyle(
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(width: 40.0),
+                        IconButton(
+                          icon: Image.asset('assets/cogwheel.png'),
+                          iconSize: 50,
+                          onPressed: () {
+                            PopupLayout(top: topMarginPopupLayout).showPopup(context,
+                                popupBodySettings(), 'Settings');
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  Divider(color: kCibusTextColor),
+                  SizedBox(height: 40.0),
+                  buildProfileButtons(),
+                  SizedBox(height: 20.0),
+                  wallOfText,
+                ],
+              ),
+            ),
+          );
+        } else {
+          return HomePage();
+        }
+      }
+      );
   }
 
   Container buildProfileButtons() {
@@ -112,14 +167,14 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  Padding buildProfileHeader() {
+  /* Padding buildProfileHeader() {
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           CircleAvatar(
-            backgroundImage: AssetImage('assets/blank_profile_picture.png'),
+            backgroundImage: NetworkImage(userData.profilePic),
             radius: 40.0,
           ),
           SizedBox(width: 20.0),
@@ -152,7 +207,8 @@ class _ProfileState extends State<Profile> {
         ],
       ),
     );
-  }
+
+  } */
 
   Widget popupBodySettings() {
     return Container(
