@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:cibus/services/constants.dart';
 import 'package:cibus/pages/firstScreen.dart';
 
+
 class UsernameScreen extends StatefulWidget {
   @override
   _UsernameScreenState createState() => _UsernameScreenState();
@@ -41,7 +42,12 @@ class _UsernameScreenState extends State<UsernameScreen> {
                 TextFormField(
                   initialValue: '',
                   decoration: textInputDecoration,
-                  validator: (val) => val.isEmpty ? 'Please enter a name' : null,
+                  validator: (val)  {
+                    if(val.length < 3)
+                      return 'Name must be more than 2 charater';
+                    else
+                      return null;
+                  },
                   onChanged: (val) => setState(() => _currentUsername = val),
                 ),
                 RaisedButton(
@@ -52,6 +58,7 @@ class _UsernameScreenState extends State<UsernameScreen> {
                   ),
                   onPressed: () async {
                     if(_formKey.currentState.validate()) {
+                      bool checkUsername = await DatabaseService().isUsernameTaken(username: _currentUsername);
                       await DatabaseService(uid: user.uid).updateUsername(
                         username: _currentUsername ?? userData.username,
                       );

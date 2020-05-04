@@ -1,12 +1,10 @@
-import 'package:cibus/pages/register_screen.dart';
+import 'package:cibus/pages/loginScreens/register_screen.dart';
 import 'package:cibus/services/constants.dart';
-import 'package:cibus/services/login/e-sign_in.dart';
+import 'package:cibus/pages/loginScreens/e-sign_in_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cibus/services/login/sign_in.dart';
 import 'package:cibus/pages/firstScreen.dart';
-import 'package:cibus/pages/username_screen.dart';
-
+import 'package:cibus/pages/loginScreens/username_screen.dart';
 
 SignIn signIn = SignIn();
 
@@ -45,14 +43,15 @@ class _LoginPageState extends State<LoginPage> {
       onPressed: () {
         signIn.whatLogin = loginType.google;
         signIn.signInWithGoogle().whenComplete(() {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) {
-                if(signIn.isNewUser) {
-                  return UsernameScreen();}
-              return FirstScreen();},
-            ),
-          );
+          if (signIn.isNewUser && signIn.isLoggedInGoogle) {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+              return UsernameScreen();
+            }));
+          } else if (signIn.isLoggedInGoogle) {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+              return FirstScreen();
+            }));
+          }
         });
       },
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
@@ -87,13 +86,15 @@ class _LoginPageState extends State<LoginPage> {
       onPressed: () {
         signIn.whatLogin = loginType.facebook;
         signIn.signInWithFacebook().whenComplete(() {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) {
-                return FirstScreen();
-              },
-            ),
-          );
+          if (signIn.isNewUser && signIn.isLoggedInFacebook) {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+              return UsernameScreen();
+            }));
+          } else if (signIn.isLoggedInFacebook) {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+              return FirstScreen();
+            }));
+          }
         });
       },
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
@@ -121,7 +122,6 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-
 
   Widget _registerButton() {
     return OutlineButton(

@@ -13,7 +13,8 @@ class UserData {
   final String description;
   final int age;
   final String username;
+  final String profilePic;
 
-  UserData({ this.uid, this.name, this.description, this.age, this.username });
+  UserData({ this.uid, this.name, this.description, this.age, this.username, this.profilePic });
 }
 
