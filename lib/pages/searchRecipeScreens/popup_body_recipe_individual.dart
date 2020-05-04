@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'recipe.dart';
+import '../../services/recipe.dart';
 
 const TextStyle ingredientsTitleStyle = TextStyle(
   fontSize: 18.0,

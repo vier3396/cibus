@@ -10,6 +10,7 @@ class Recipe {
   String imageFile; //just to view temporary Recipe objects images
   int time;
   double rating;
+  //int userId;
 
   Recipe({
     this.title,
@@ -19,5 +20,6 @@ class Recipe {
     this.imageFile,
     this.time,
     this.rating,
+    //this.userId,
   });
 }

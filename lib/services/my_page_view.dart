@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:cibus/pages/search_recipe.dart';
+import 'package:cibus/pages/searchRecipeScreens/search_recipe.dart';
 import 'package:cibus/pages/profile.dart';
 import 'package:cibus/pages/home.dart';
 import 'package:cibus/pages/favorites.dart';
-import '../pages/add_recipe_form.dart';
+import '../pages/addRecipeScreens/add_recipe_form.dart';
 
 const TextStyle bottomBarTextStyle = TextStyle(
   fontSize: 18.0

@@ -1,3 +1,4 @@
+import 'package:cibus/services/my_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/services/login/auth.dart';
 import 'package:cibus/pages/loading_screen.dart';
@@ -97,7 +98,7 @@ class _EmailSignInState extends State<EmailSignIn> {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) {
-                                    return FirstScreen();
+                                    return MyPageView();
                                   },
                                 ),
                               );

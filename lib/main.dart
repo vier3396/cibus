@@ -1,7 +1,8 @@
+import 'package:cibus/pages/settings_screen.dart';
+import 'package:cibus/services/login/auth.dart';
+import 'package:cibus/services/my_page_view.dart';
 import 'package:flutter/material.dart';
-import 'package:cibus/pages/add_recipe.dart';
 import 'package:cibus/pages/loginScreens/login_screen.dart';
-import 'package:cibus/pages/cook_recipe.dart';
 import 'package:cibus/pages/profile.dart';
 import 'package:cibus/pages/loading_screen.dart';
 import 'package:provider/provider.dart';
@@ -21,11 +22,10 @@ class MyApp extends StatelessWidget {
         initialRoute: '/loginPage',
         routes: {
           '/': (context) => LoadingScreen(),
-          '/cook': (context) => CookRecipe(),
-          '/add': (context) => AddRecipe(),
+          //'/add': (context) => AddRecipe(),
           '/profile': (context) => Profile(),
           '/loginPage': (context) => LoginPage(),
-          '/firstScreen': (context) => FirstScreen(),
+          '/firstScreen': (context) => MyPageView(),
           '/settingsScreen': (context) => SettingsScreen(),
           'camerscreen': (context) => ImageCapture(),
         },
@@ -33,3 +33,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+
+

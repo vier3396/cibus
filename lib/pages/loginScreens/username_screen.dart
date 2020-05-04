@@ -1,3 +1,4 @@
+import 'package:cibus/services/my_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:cibus/services/database.dart';
@@ -65,7 +66,7 @@ class _UsernameScreenState extends State<UsernameScreen> {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) {
-                            return FirstScreen();
+                            return MyPageView();
                             },
                         ),
                       );

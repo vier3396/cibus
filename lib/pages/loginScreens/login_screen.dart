@@ -1,10 +1,12 @@
 import 'package:cibus/pages/loginScreens/register_screen.dart';
 import 'package:cibus/services/constants.dart';
 import 'package:cibus/pages/loginScreens/e-sign_in_screen.dart';
+import 'package:cibus/services/my_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/services/login/sign_in.dart';
 import 'package:cibus/pages/firstScreen.dart';
 import 'package:cibus/pages/loginScreens/username_screen.dart';
+import 'package:cibus/services/my_page_view.dart';
 
 SignIn signIn = SignIn();
 
@@ -49,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
             }));
           } else if (signIn.isLoggedInGoogle) {
             Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-              return FirstScreen();
+              return MyPageView();
             }));
           }
         });
@@ -92,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
             }));
           } else if (signIn.isLoggedInFacebook) {
             Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-              return FirstScreen();
+              return MyPageView();
             }));
           }
         });

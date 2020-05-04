@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:getflutter/components/avatar/gf_avatar.dart';
 import 'package:getflutter/getflutter.dart';
-import 'recipe.dart';
+import '../../services/recipe.dart';
 import 'popup_body_recipe_individual.dart';
 
 const topMarginPopupIndividualRecipe = 0.0;

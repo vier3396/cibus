@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cibus/services/my_text_form_field.dart';
 import 'package:cibus/services/popup_layout.dart';
 import 'package:cibus/services/popup_body_search_ingredients.dart';
-import 'package:cibus/services/popup_body_recipes.dart';
+import 'package:cibus/pages/searchRecipeScreens/popup_body_recipes.dart';
 import 'package:cibus/services/colors.dart';
 
 const circleAvatarRadius = 30.0;
