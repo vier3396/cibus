@@ -48,13 +48,14 @@ class _RecipeStepsState extends State<RecipeSteps> {
         padding: const EdgeInsets.all(8.0),
         child: MyTextFormField(
           controller: controller,
-          maxLength: 20,
+          maxLength: 300,
+          maxLines: 5,
           labelText: "Step $displayNumber",
-          decoration: InputDecoration(
-          ),
+          decoration: InputDecoration(),
           suffixIcon: IconButton(
-            icon: Icon(Icons.clear,
-            color: Colors.grey,
+            icon: Icon(
+              Icons.clear,
+              color: Colors.grey,
             ),
             onPressed: () {
               // when removing a TextField, you must do two things:
@@ -73,18 +74,15 @@ class _RecipeStepsState extends State<RecipeSteps> {
               print(controllers.length);
               print(controllers);
               return 'Enter a step';
-            }
-            else if (controllers.length < 1) {
+            } else if (controllers.length < 1) {
               print(controllers.length);
               print(controllers);
               return "Please add a step";
-            }
-            else if (controllers.length > 20) {
+            } else if (controllers.length > 20) {
               print(controllers.length);
               print(controllers);
-              return "You've reached maximum nrOfsteps, bitch";
-            }
-            else {
+              return "You've exceded the maximum number of steps";
+            } else {
               print(controllers.length);
               print(controllers);
               widget.formkey.currentState.save();
@@ -93,6 +91,7 @@ class _RecipeStepsState extends State<RecipeSteps> {
           },
           //when pressing submit button to save form
           onSaved: (String step) {
+            print(displayNumber);
             widget.recipe.listOfSteps[displayNumber - 1] = step;
             //widget.formkey.currentState.reset();
             /* for (i=0; i < controllers.length; i++) {
@@ -103,7 +102,6 @@ class _RecipeStepsState extends State<RecipeSteps> {
       );
     }).toList(); // convert to a list
   }
-
 
   @override
   Widget build(BuildContext context) {

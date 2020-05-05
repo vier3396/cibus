@@ -9,7 +9,6 @@ import 'dart:io';
 import '../../services/popup_body_search_ingredients.dart';
 import 'recipe_steps.dart';
 
-
 class AddRecipeForm extends StatefulWidget {
   @override
   _AddRecipeFormState createState() => _AddRecipeFormState();
@@ -18,6 +17,7 @@ class AddRecipeForm extends StatefulWidget {
 class _AddRecipeFormState extends State<AddRecipeForm> {
   final formKey = GlobalKey<FormState>();
   Recipe recipe = Recipe();
+  int initialCountOfSteps = 1;
 
   // TODO: use different method for uploading pictures
   /*
@@ -93,6 +93,7 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
 
   @override
   Widget build(BuildContext context) {
+    recipe.listOfSteps = List(20);
     // final halfMedianWidth = MediaQuery.of(context).size.width / 2.0; (for different screens)
 
     return MaterialApp(
@@ -110,9 +111,9 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
           ),
         ),
         body: GestureDetector(
-            onTap: () {
-              FocusScope.of(context).requestFocus(new FocusNode());
-              }, //When tapping outside form/text input fields, keyboard disappears
+          onTap: () {
+            FocusScope.of(context).requestFocus(new FocusNode());
+          }, //When tapping outside form/text input fields, keyboard disappears
           child: Form(
             key: formKey,
             child: ListView(
@@ -140,6 +141,7 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: MyTextFormField(
+                    maxLength: 300,
                     maxLines: 5,
                     labelText: "Describe your dish",
                     validator: (String description) {
@@ -177,6 +179,7 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                   ),
                 ),
                 RecipeSteps(
+                  initialCount: initialCountOfSteps,
                   formkey: formKey,
                   recipe: recipe,
                 ),
@@ -200,13 +203,14 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                   child: RaisedButton(
                       child: Text("Review and submit recipe"),
                       onPressed: () {
-                        if (formKey.currentState.validate()  ) {
-                          print(recipe.listOfSteps[0]);
+                        if (formKey.currentState.validate()) {
+                          //print("list of stepsgrejen");
+                          //print(recipe.listOfSteps[0]);
                           formKey.currentState.save();
                           //if (isRecipesListNotNull()) {
                           //}
-                          PopupLayout().showPopup(context, popupBodyRecipeResults(),
-                              'Review Your Recipe');
+                          PopupLayout().showPopup(context,
+                              popupBodyRecipeResults(), 'Review Your Recipe');
                         }
                       }),
                 ),
@@ -235,6 +239,9 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
               formKey.currentState.reset();
               recipe = Recipe();
               recipe.listOfSteps = List(20);
+              setState(() {
+                initialCountOfSteps = 1;
+              });
               Navigator.pop(context);
               //TODO send the recipe to the backend nerds
             },
@@ -256,8 +263,9 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
     return Column(children: list);
   }
 
-  bool isRecipesListNotNull() { // behövs nog inte
-    for (int i = 0; i < recipe.listOfSteps.length; i++ ) {
+  bool isRecipesListNotNull() {
+    // behövs nog inte
+    for (int i = 0; i < recipe.listOfSteps.length; i++) {
       if (recipe.listOfSteps[i] != null) {
         return true;
       }

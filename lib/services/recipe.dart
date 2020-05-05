@@ -5,7 +5,7 @@ class Recipe {
   String title;
   String description;
   List<Ingredient> ingredients;
-  List<String> listOfSteps;
+  List<String> listOfSteps = List(20);
   //TODO: NetworkImage? imageFile;
   String imageFile; //just to view temporary Recipe objects images
   int time;
