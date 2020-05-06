@@ -87,7 +87,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     TextFormField(
                       initialValue:
                           userData.description ?? "Cannot find description",
-                      initialValue: userData.description,
                       minLines: 3,
                       maxLines: 20,
                       decoration: textInputDecoration,
