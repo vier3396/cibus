@@ -19,7 +19,6 @@ class UsernameScreen extends StatefulWidget {
 }
 
 class _UsernameScreenState extends State<UsernameScreen> {
-
   final _formKey = GlobalKey<FormState>();
   String _currentUsername;
   //bool checkUsername;
@@ -29,10 +28,9 @@ class _UsernameScreenState extends State<UsernameScreen> {
     final user = Provider.of<User>(context);
 
     return StreamBuilder<UserData>(
-      stream: DatabaseService(uid: user.uid).userData,
-      builder: (context, snapshot) {
-
-        UserData userData = snapshot.data;
+        stream: DatabaseService(uid: user.uid).userData,
+        builder: (context, snapshot) {
+          UserData userData = snapshot.data;
 
           return Scaffold(
             body: Form(
