@@ -6,11 +6,13 @@ import 'package:flutter/widgets.dart';
 import 'dart:core';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/login/user.dart';
+import 'package:cibus/services/recipe.dart';
 
 class Uploader extends StatefulWidget {
   final File file;
+  final bool recipePhoto;
 
-  Uploader({Key key, this.file}) : super(key: key);
+  Uploader({Key key, this.file, @required this.recipePhoto}) : super(key: key);
 
   createState() => _UploaderState();
 }
@@ -21,6 +23,8 @@ class _UploaderState extends State<Uploader> {
       storageBucket: 'gs://independent-project-7edde.appspot.com/');
 
   StorageUploadTask _uploadTask;
+
+  bool urlResult = false;
 
   /// Starts an upload task
   void _startUpload() {
@@ -39,10 +43,20 @@ class _UploaderState extends State<Uploader> {
     DatabaseService(uid: user.uid).updateUserPicture(pictureURL: uRL);
   }
 
+  void getuRLRecipe(String filePath, BuildContext context) async {
+    print('kompis recipe');
+    var uRL = await _storage.ref().child(filePath).getDownloadURL();
+    print(uRL);
+    Provider.of<Recipe>(context).addImage(uRL);
+
+    if (uRL != null && Provider.of<Recipe>(context).imageURL != null) {
+      print('kom hit');
+      urlResult = true;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
-
     if (_uploadTask != null) {
       /// Manage the task state and event subscription with a StreamBuilder
       return StreamBuilder<StorageTaskEvent>(
@@ -54,8 +68,12 @@ class _UploaderState extends State<Uploader> {
                 ? event.bytesTransferred / event.totalByteCount
                 : 0;
 
-            if (_uploadTask.isComplete) {
-              getuRL(filePath, context);
+            if (_uploadTask.isComplete && !urlResult) {
+              if (widget.recipePhoto) {
+                getuRLRecipe(filePath, context);
+              } else if (!widget.recipePhoto) {
+                getuRL(filePath, context);
+              }
             }
             return Column(
               children: [

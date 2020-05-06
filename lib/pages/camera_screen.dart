@@ -14,6 +14,8 @@ import 'package:cibus/services/camera/cameraservices.dart';
 
 /// Widget to capture and crop the image
 class ImageCapture extends StatefulWidget {
+  final bool recipePhoto;
+  ImageCapture({@required this.recipePhoto});
   createState() => _ImageCaptureState();
 }
 
@@ -91,7 +93,10 @@ class _ImageCaptureState extends State<ImageCapture> {
                 ),
               ],
             ),
-            Uploader(file: _imageFile)
+            Uploader(
+              file: _imageFile,
+              recipePhoto: widget.recipePhoto,
+            )
           ]
         ],
       ),

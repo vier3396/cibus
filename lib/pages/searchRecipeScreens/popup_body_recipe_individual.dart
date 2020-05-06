@@ -91,7 +91,7 @@ class _PopupBodyIndividualRecipeState extends State<PopupBodyIndividualRecipe> {
       body: ListView(
         children: <Widget>[
           Image.asset(
-            widget.recipe.imageFile,
+            widget.recipe.imageURL,
             width: MediaQuery.of(context).size.width,
             //TODO: image size problem
           ),

@@ -38,8 +38,8 @@ class _SearchRecipeState extends State<SearchRecipe> {
                   maxLength: 20,
                   labelText: "Add ingredient",
                   onTap: () {
-                    PopupLayout().showPopup(
-                        context, popupBodySearchIngredients(), 'Add Ingredient');
+                    PopupLayout().showPopup(context,
+                        PopupBodySearchIngredients(), 'Add Ingredient');
                   },
                   //TODO:  onSaved: save ingredients to recipe object
                   //TODO: validator: validate ingredients
@@ -49,76 +49,80 @@ class _SearchRecipeState extends State<SearchRecipe> {
               ListView(
                 shrinkWrap: true, //to solve overflow problem
                 children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: <Widget>[
-                          CircleAvatar(
-                            backgroundColor: Colors.teal[800],
-                            radius: circleAvatarRadius,
-                            child: Icon(Icons.fastfood,
-                              size: circleAvatarSize,
-                              color: Colors.white,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: <Widget>[
+                            CircleAvatar(
+                              backgroundColor: Colors.teal[800],
+                              radius: circleAvatarRadius,
+                              child: Icon(
+                                Icons.fastfood,
+                                size: circleAvatarSize,
+                                color: Colors.white,
+                              ),
                             ),
-                          ),
-                          Text("Vegan"),
-                        ],
+                            Text("Vegan"),
+                          ],
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: <Widget>[
-                          CircleAvatar(
-                            backgroundColor: kPalePink,
-                            radius: circleAvatarRadius,
-                            child: Icon(Icons.adb,
-                              size: circleAvatarSize,
-                              color: Colors.white,
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: <Widget>[
+                            CircleAvatar(
+                              backgroundColor: kPalePink,
+                              radius: circleAvatarRadius,
+                              child: Icon(
+                                Icons.adb,
+                                size: circleAvatarSize,
+                                color: Colors.white,
+                              ),
                             ),
-                          ),
-                          Text("Robot"),
-                        ],
+                            Text("Robot"),
+                          ],
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: <Widget>[
-                          CircleAvatar(
-                            backgroundColor: kVibrantYellow,
-                            radius: circleAvatarRadius,
-                            child: Icon(Icons.airline_seat_recline_normal,
-                              size: circleAvatarSize,
-                              color: Colors.white,
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: <Widget>[
+                            CircleAvatar(
+                              backgroundColor: kVibrantYellow,
+                              radius: circleAvatarRadius,
+                              child: Icon(
+                                Icons.airline_seat_recline_normal,
+                                size: circleAvatarSize,
+                                color: Colors.white,
+                              ),
                             ),
-                          ),
-                          Text("Flygplan"),
-                        ],
+                            Text("Flygplan"),
+                          ],
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: <Widget>[
-                          CircleAvatar(
-                            backgroundColor: kSkyBlue,
-                            radius: circleAvatarRadius,
-                            child: Icon(Icons.face,
-                              size: circleAvatarSize,
-                              color: Colors.white,
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: <Widget>[
+                            CircleAvatar(
+                              backgroundColor: kSkyBlue,
+                              radius: circleAvatarRadius,
+                              child: Icon(
+                                Icons.face,
+                                size: circleAvatarSize,
+                                color: Colors.white,
+                              ),
                             ),
-                          ),
-                          Text("Face"),
-                        ],
+                            Text("Face"),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                )
-              ],
+                    ],
+                  )
+                ],
               ),
               Expanded(
                 child: Align(
@@ -126,24 +130,24 @@ class _SearchRecipeState extends State<SearchRecipe> {
                   child: MaterialButton(
                     color: kWarmOrange,
                     height: 55.0,
-                    child: Row(children: <Widget>[
-                      Text("Number of recipes"),
-                      //TODO: Count number of recipes found
-                      Icon(Icons.arrow_forward_ios),
-                    ],
+                    child: Row(
+                      children: <Widget>[
+                        Text("Number of recipes"),
+                        //TODO: Count number of recipes found
+                        Icon(Icons.arrow_forward_ios),
+                      ],
                     ),
                     onPressed: () {
-                      PopupLayout(top: topMarginPopupRecipes).showPopup(context,
-                          PopupBodyRecipes(), 'Recipes');
+                      PopupLayout(top: topMarginPopupRecipes)
+                          .showPopup(context, PopupBodyRecipes(), 'Recipes');
                     },
                   ),
                 ),
               ),
-              ],
-            ),
+            ],
+          ),
         ),
-        ),
+      ),
     );
   }
-
 }
