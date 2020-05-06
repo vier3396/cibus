@@ -90,6 +90,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     Text('Description'),
                     TextFormField(
                       initialValue: userData.description,
+                      minLines: 3,
+                      maxLines: 20,
                       decoration: textInputDecoration,
                       validator: (val) =>
                           val.isEmpty ? 'Please enter a description' : null,
