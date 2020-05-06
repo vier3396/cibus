@@ -37,11 +37,16 @@ class DatabaseService {
 //    print(_query.toString());
 
     final result = await Firestore.instance
-        .collection('users')
+        .collection('Users')
         .where('username', isEqualTo: username)
         .getDocuments();
-    print(result.documents.isEmpty);
-    return result.documents.isEmpty;
+    /*.then((value) {
+      value.documents.forEach((result) {
+        print(result.data);
+      });
+    });*/
+    print(result.documents.isNotEmpty); //isEmpty
+    return result.documents.isNotEmpty;
   }
 
   //userData from snapshot
@@ -52,7 +57,8 @@ class DatabaseService {
         description: snapshot.data['description'],
         age: snapshot.data['age'],
         username: snapshot.data['username'],
-        profilePic: snapshot.data['profilePic']);
+        profilePic: snapshot.data['profilePic'],
+        isEmail: snapshot.data['isEmail']);
   }
 
   //get user doc stream

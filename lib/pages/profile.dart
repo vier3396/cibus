@@ -1,4 +1,5 @@
 import 'package:cibus/pages/home.dart';
+import 'package:cibus/pages/settings_screen.dart';
 import 'package:cibus/services/database.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:flutter/material.dart';
@@ -6,10 +7,12 @@ import 'package:cibus/services/colors.dart';
 import 'package:cibus/services/popup_layout.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 const topMarginPopupLayout = 0.0;
 
 class Profile extends StatefulWidget {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   @override
   _ProfileState createState() => _ProfileState();
 }
@@ -24,67 +27,71 @@ class _ProfileState extends State<Profile> {
     final user = Provider.of<User>(context);
 
     return StreamBuilder<UserData>(
-      stream: DatabaseService(uid: user.uid).userData,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          UserData userData = snapshot.data;
-          return Scaffold(
-            body: SafeArea(
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        CircleAvatar(
-                          backgroundImage: NetworkImage(userData.profilePic),
-                          radius: 40.0,
-                        ),
-                        SizedBox(width: 20.0),
-                        Column(
-                          children: <Widget>[
-                            SizedBox(height: 20.0),
-                            Text(userData.name,
-                              style: TextStyle(
-                                fontSize: 20.0,
+        stream: DatabaseService(uid: user.uid).userData,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            UserData userData = snapshot.data;
+            return Scaffold(
+              body: SafeArea(
+                child: Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          CircleAvatar(
+                            backgroundImage: NetworkImage(userData.profilePic),
+                            radius: 40.0,
+                          ),
+                          SizedBox(width: 20.0),
+                          Column(
+                            children: <Widget>[
+                              SizedBox(height: 20.0),
+                              Text(
+                                userData.name,
+                                style: TextStyle(
+                                  fontSize: 20.0,
+                                ),
                               ),
-                            ),
-                            SizedBox(height: 5.0),
-                            Text(
-                              'Karma points: $karma',
-                              //TODO: karma points
-                              style: TextStyle(
+                              SizedBox(height: 5.0),
+                              Text(
+                                'Karma points: $karma',
+                                //TODO: karma points
+                                style: TextStyle(),
                               ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(width: 40.0),
-                        IconButton(
-                          icon: Image.asset('assets/cogwheel.png'),
-                          iconSize: 50,
-                          onPressed: () {
-                            PopupLayout(top: topMarginPopupLayout).showPopup(context,
-                                popupBodySettings(), 'Settings');
-                          },
-                        ),
-                      ],
+                            ],
+                          ),
+                          SizedBox(width: 40.0),
+                          IconButton(
+                            icon: Image.asset('assets/cogwheel.png'),
+                            iconSize: 50,
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return SettingsScreen();
+                                  },
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Divider(color: kCibusTextColor),
-                  SizedBox(height: 40.0),
-                  buildProfileButtons(),
-                  SizedBox(height: 20.0),
-                  wallOfText,
-                ],
+                    Divider(color: kCibusTextColor),
+                    SizedBox(height: 40.0),
+                    buildProfileButtons(),
+                    SizedBox(height: 20.0),
+                    wallOfText,
+                  ],
+                ),
               ),
-            ),
-          );
-        } else {
-          return HomePage();
-        }
-      }
-      );
+            );
+          } else {
+            return HomePage();
+          }
+        });
   }
 
   Container buildProfileButtons() {
@@ -225,7 +232,6 @@ class _ProfileState extends State<Profile> {
       ),
     );
   }
-
 }
 
 class MyFavorites extends StatelessWidget {
