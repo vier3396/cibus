@@ -23,15 +23,15 @@ class MyApp extends StatelessWidget {
         value: AuthService().user,
         child: MaterialApp(
           theme: ThemeData(
-          backgroundColor: Colors.white,
-          primaryColor: kCoral, //Appbar
-          accentColor: kCoral,
-          appBarTheme: AppBarTheme(
-            color: Colors.white,
-            elevation: 0.0,
+            backgroundColor: Colors.white,
+            primaryColor: kCoral, //Appbar
+            accentColor: kCoral,
+            appBarTheme: AppBarTheme(
+              color: Colors.white,
+              elevation: 0.0,
+            ),
+            //backgroundColor: , //Buttons etc
           ),
-          //backgroundColor: , //Buttons etc
-        ),
           initialRoute: '/loginPage',
           routes: {
             '/': (context) => LoadingScreen(),
@@ -43,6 +43,7 @@ class MyApp extends StatelessWidget {
             'camerscreen': (context) => ImageCapture(),
           },
         ),
-
+      ),
+    );
   }
 }
