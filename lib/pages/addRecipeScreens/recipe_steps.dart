@@ -112,7 +112,6 @@ class _RecipeStepsState extends State<RecipeSteps> {
     }).toList(); // convert to a list
   }
 
-
   @override
   Widget build(BuildContext context) {
     // generate the list of TextFields

@@ -141,7 +141,10 @@ class _ImageCaptureState extends State<ImageCapture> {
                   ),
                 ],
               ),
-              Uploader(file: _imageFile)
+              Uploader(
+                file: _imageFile,
+                recipePhoto: widget.recipePhoto,
+              )
             ]
           ],
         ),
