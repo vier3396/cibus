@@ -4,8 +4,11 @@ import 'package:cibus/services/login/user.dart';
 import 'package:cibus/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/constants.dart';
-import 'package:cibus/pages/firstScreen.dart';
+import 'package:cibus/services/colors.dart';
 
+OutlineInputBorder textInputBorder = OutlineInputBorder(
+  borderRadius: BorderRadius.circular(25.0),
+);
 
 class UsernameScreen extends StatefulWidget {
   @override
@@ -28,52 +31,64 @@ class _UsernameScreenState extends State<UsernameScreen> {
 
         UserData userData = snapshot.data;
 
-        return Scaffold(
-          body: Form(
-            key: _formKey,
-            child: Column(
-              children: <Widget>[
-                SizedBox(height: 60.0),
-                Text(
-                  'Update your Cibus username',
-                  style: TextStyle(fontSize: 18.0),
-                ),
-                SizedBox(height: 20.0),
-                Text('Name'),
-                TextFormField(
-                  initialValue: '',
-                  decoration: textInputDecoration,
-                  validator: (val)  {
-                    if(val.length < 3)
-                      return 'Name must be more than 2 charater';
-                    else
-                      return null;
-                  },
-                  onChanged: (val) => setState(() => _currentUsername = val),
-                ),
-                RaisedButton(
-                  color: Colors.pink[400],
-                  child: Text(
-                    'update',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  onPressed: () async {
-                    if(_formKey.currentState.validate()) {
-                      bool checkUsername = await DatabaseService().isUsernameTaken(username: _currentUsername);
-                      await DatabaseService(uid: user.uid).updateUsername(
-                        username: _currentUsername ?? userData.username,
-                      );
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return MyPageView();
-                            },
+        return Theme(
+          data: ThemeData(
+              primaryColor: Theme.of(context).primaryColor),
+          child: Scaffold(
+            body: SafeArea(
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
+                      child: Text(
+                        'Choose your Cibus username',
+                        style: TextStyle(fontSize: 18.0),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                      child: TextFormField(
+                        initialValue: '',
+                        decoration: InputDecoration(
+                          border: textInputBorder,
+                          labelText: 'Username',
                         ),
-                      );
-                    }
-                  },
-                )
-              ],
+                        validator: (val)  {
+                          if(val.length < 3)
+                            return 'Name must be more than 2 charater';
+                          else
+                            return null;
+                        },
+                        onChanged: (val) => setState(() => _currentUsername = val),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 20.0),
+                      child: RaisedButton(
+                        color: kTurquoise,
+                        child: Text(
+                          'Save',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        onPressed: () async {
+                          if(_formKey.currentState.validate()) {
+                            bool checkUsername = await DatabaseService().isUsernameTaken(username: _currentUsername);
+                            await DatabaseService(uid: user.uid).updateUsername(
+                              username: _currentUsername ?? userData.username,
+                            );
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (context) => MyPageView()),
+                                    (Route<dynamic> route) => false);
+                          }
+                        },
+                      ),
+                    )
+                  ],
+                ),
+              ),
             ),
           ),
         );

@@ -95,17 +95,12 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
   Widget build(BuildContext context) {
     // final halfMedianWidth = MediaQuery.of(context).size.width / 2.0; (for different screens)
 
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
         resizeToAvoidBottomPadding: false, // solves keyboard problems
         appBar: AppBar(
-          backgroundColor: kDarkerkBackgroundColor,
           title: Center(
             child: Text(
               'Add a recipe',
-              style: TextStyle(
-                color: kCibusTextColor,
-              ),
             ),
           ),
         ),
@@ -214,8 +209,7 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 
   //Popup page to preview and submit the recipe form

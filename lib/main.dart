@@ -7,8 +7,8 @@ import 'package:cibus/pages/profile.dart';
 import 'package:cibus/pages/loading_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/login/user.dart';
-import 'package:cibus/pages/firstScreen.dart';
 import 'package:cibus/pages/camera_screen.dart';
+import 'package:cibus/services/colors.dart';
 
 void main() => runApp(MyApp());
 
@@ -19,10 +19,19 @@ class MyApp extends StatelessWidget {
     return StreamProvider<User>.value(
       value: AuthService().user,
       child: MaterialApp(
+        theme: ThemeData(
+          backgroundColor: Colors.white,
+          primaryColor: kCoral, //Appbar
+          accentColor: kCoral,
+          appBarTheme: AppBarTheme(
+            color: Colors.white,
+            elevation: 0.0,
+          ),
+          //backgroundColor: , //Buttons etc
+        ),
         initialRoute: '/loginPage',
         routes: {
           '/': (context) => LoadingScreen(),
-          //'/add': (context) => AddRecipe(),
           '/profile': (context) => Profile(),
           '/loginPage': (context) => LoginPage(),
           '/firstScreen': (context) => MyPageView(),
