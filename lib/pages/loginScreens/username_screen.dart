@@ -7,6 +7,11 @@ import 'package:cibus/services/constants.dart';
 import 'package:cibus/pages/firstScreen.dart';
 import 'package:cibus/services/login/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cibus/services/colors.dart';
+
+OutlineInputBorder textInputBorder = OutlineInputBorder(
+  borderRadius: BorderRadius.circular(25.0),
+);
 
 class UsernameScreen extends StatefulWidget {
   @override
@@ -14,6 +19,7 @@ class UsernameScreen extends StatefulWidget {
 }
 
 class _UsernameScreenState extends State<UsernameScreen> {
+
   final _formKey = GlobalKey<FormState>();
   String _currentUsername;
   //bool checkUsername;
@@ -23,9 +29,10 @@ class _UsernameScreenState extends State<UsernameScreen> {
     final user = Provider.of<User>(context);
 
     return StreamBuilder<UserData>(
-        stream: DatabaseService(uid: user.uid).userData,
-        builder: (context, snapshot) {
-          UserData userData = snapshot.data;
+      stream: DatabaseService(uid: user.uid).userData,
+      builder: (context, snapshot) {
+
+        UserData userData = snapshot.data;
 
           return Scaffold(
             body: Form(

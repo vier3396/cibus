@@ -3,8 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:cibus/services/login/auth.dart';
 import 'package:cibus/pages/loading_screen.dart';
 import 'package:cibus/services/constants.dart';
-import 'package:cibus/pages/firstScreen.dart';
 import 'package:cibus/pages/loginScreens/register_screen.dart';
+import 'package:cibus/services/colors.dart';
+
+const TextStyle textStyleErrorMessage = TextStyle(color: Colors.red, fontSize: 14.0);
+
+OutlineInputBorder textInputBorder = OutlineInputBorder(
+  borderRadius: BorderRadius.circular(25.0),
+);
 
 class EmailSignIn extends StatefulWidget {
   final Function toggleView;
@@ -29,9 +35,7 @@ class _EmailSignInState extends State<EmailSignIn> {
     return loading
         ? LoadingScreen()
         : Scaffold(
-            backgroundColor: Colors.brown[100],
             appBar: AppBar(
-              backgroundColor: Colors.brown[400],
               elevation: 0.0,
               title: Text('Sign in to Cibus'),
               actions: <Widget>[
@@ -58,8 +62,10 @@ class _EmailSignInState extends State<EmailSignIn> {
                     child: Column(children: <Widget>[
                       SizedBox(height: 20.0),
                       TextFormField(
-                        decoration:
-                            textInputDecoration.copyWith(hintText: 'Email'),
+                        decoration: InputDecoration(
+                          border: textInputBorder,
+                          labelText: 'Email',
+                        ),
                         validator: (val) =>
                             val.isEmpty ? 'Enter an email' : null,
                         onChanged: (val) {
@@ -68,8 +74,10 @@ class _EmailSignInState extends State<EmailSignIn> {
                       ),
                       SizedBox(height: 20.0),
                       TextFormField(
-                        decoration:
-                            textInputDecoration.copyWith(hintText: 'Password'),
+                        decoration: InputDecoration(
+                          border: textInputBorder,
+                          labelText: 'Password',
+                        ),
                         obscureText: true,
                         validator: (val) => val.length < 6
                             ? 'Enter a password at least 6 chars long'
@@ -80,7 +88,7 @@ class _EmailSignInState extends State<EmailSignIn> {
                       ),
                       SizedBox(height: 20.0),
                       RaisedButton(
-                        color: Colors.pink[400],
+                        color: kTurquoise,
                         child: Text('Sign In',
                             style: TextStyle(color: Colors.white)),
                         onPressed: () async {
@@ -95,13 +103,10 @@ class _EmailSignInState extends State<EmailSignIn> {
                                 loading = false;
                               });
                             } else {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return MyPageView();
-                                  },
-                                ),
-                              );
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (context) => MyPageView()),
+                                  (Route<dynamic> route) => false);
                             }
                           }
                         },
@@ -109,7 +114,7 @@ class _EmailSignInState extends State<EmailSignIn> {
                       SizedBox(height: 12.0),
                       Text(
                         error,
-                        style: TextStyle(color: Colors.red, fontSize: 14.0),
+                        style: textStyleErrorMessage,
                       ),
                     ]))));
   }
