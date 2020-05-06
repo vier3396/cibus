@@ -12,6 +12,7 @@ class MyTextFormField extends StatelessWidget {
   final InputDecoration decoration;
   final IconButton suffixIcon;
   final GlobalKey<FormState> formkey;
+  final Function onChanged;
 
   MyTextFormField({
     this.labelText,
@@ -25,6 +26,7 @@ class MyTextFormField extends StatelessWidget {
     this.decoration,
     this.suffixIcon,
     this.formkey,
+    this.onChanged,
   });
 
   @override

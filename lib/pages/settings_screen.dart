@@ -1,5 +1,6 @@
 import 'package:cibus/pages/camera_screen.dart';
 import 'package:cibus/pages/loading_screen.dart';
+import 'package:cibus/services/my_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/database.dart';
@@ -38,22 +39,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 key: _formKey,
                 child: Column(
                   children: <Widget>[
-                    SizedBox(height: 60.0),
-                    Text(
-                      'Update your Cibus settings',
-                      style: TextStyle(fontSize: 18.0),
-                    ),
                     SizedBox(height: 20.0),
                     Row(
                       children: <Widget>[
-                        CircleAvatar(
-                          backgroundColor: Colors.pink,
-                          radius: 60.0,
-                          backgroundImage: NetworkImage(userData.profilePic),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.camera_alt),
-                          onPressed: () {
+                        GestureDetector(
+                          child: CircleAvatar(
+                            backgroundColor: Colors.pink,
+                            radius: 60.0,
+                            backgroundImage: NetworkImage(
+                                userData.profilePic ?? kBackupProfilePic),
+                          ),
+                          onTap: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) {
@@ -68,12 +64,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     SizedBox(height: 20.0),
                     Text('Name'),
                     TextFormField(
-                      initialValue: userData.name,
+                      initialValue: userData.name ?? "Cannot find name",
                       decoration: textInputDecoration,
                       validator: (val) =>
                           val.isEmpty ? 'Please enter a name' : null,
                       onChanged: (val) => setState(() => _currentName = val),
                     ),
+
                     SizedBox(height: 40.0),
                     Text('Age: $_currentAge'),
                     Slider(
@@ -87,9 +84,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           setState(() => _currentAge = val.round()),
                     ),
                     SizedBox(height: 40.0),
-                    Text('Description'),
+                    //Text('Description'),
                     TextFormField(
-                      initialValue: userData.description,
+                      initialValue:
+                          userData.description ?? "Cannot find description",
                       decoration: textInputDecoration,
                       validator: (val) =>
                           val.isEmpty ? 'Please enter a description' : null,

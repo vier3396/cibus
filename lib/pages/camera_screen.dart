@@ -11,6 +11,7 @@ import 'package:cibus/main.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:cibus/services/camera/uploader.dart';
 import 'package:cibus/services/camera/cameraservices.dart';
+import 'dart:math';
 
 /// Widget to capture and crop the image
 class ImageCapture extends StatefulWidget {
@@ -41,6 +42,15 @@ class _ImageCaptureState extends State<ImageCapture> {
   }
 
   /// Select an image via gallery or services.camera
+
+  Future<void> chooseImage(ImageSource source) async {
+    File selected = await ImagePicker.pickImage(source: source);
+
+    setState(() {
+      _imageFile = selected;
+    });
+  }
+
   Future<void> _pickImage(ImageSource source) async {
     File selected = await ImagePicker.pickImage(source: source);
 
@@ -56,44 +66,83 @@ class _ImageCaptureState extends State<ImageCapture> {
 
   @override
   Widget build(BuildContext context) {
+    var happyPhrases = [
+      "Don't forget to smile!",
+      "You're a great person!",
+      "You're doing great!",
+      "The world's a better place because of you!",
+      "Keep on rocking in the free world!",
+      "You're a barrel full of laughs!",
+      "You're on top of the world!",
+      "We're all very happy because of you!",
+      "You're the best!",
+      "If you were a pastry you'd be a chocolate cake full of joy!",
+      "Good times never last, unless you're around",
+    ];
+
+    final _random = Random();
+    String _happyQuote = happyPhrases[_random.nextInt(happyPhrases.length)];
+
     final user = Provider.of<User>(context);
     return Scaffold(
       // Select an image from the services.camera or gallery
-      bottomNavigationBar: BottomAppBar(
-        child: Row(
+      body: SafeArea(
+        child: ListView(
+          //mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            IconButton(
-              icon: Icon(Icons.photo_camera),
-              onPressed: () => _pickImage(ImageSource.camera),
-            ),
-            IconButton(
-              icon: Icon(Icons.photo_library),
-              onPressed: () => _pickImage(ImageSource.gallery),
-            ),
-          ],
-        ),
-      ),
-
-      // Preview the image and crop it
-      body: ListView(
-        children: <Widget>[
-          if (_imageFile != null) ...[
-            Image.file(_imageFile),
-            Row(
-              children: <Widget>[
-                FlatButton(
-                  child: Icon(Icons.crop),
-                  onPressed: _cropImage,
+            SizedBox(height: 50),
+            Center(
+              child: Text(
+                _happyQuote,
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepOrange,
                 ),
-                FlatButton(
-                  child: Icon(Icons.refresh),
-                  onPressed: _clear,
+              ),
+            ),
+            SizedBox(height: 150),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                IconButton(
+                  iconSize: 100.0,
+                  icon: Icon(
+                    Icons.photo_camera,
+                    color: Colors.orange,
+                  ),
+                  onPressed: () => _pickImage(ImageSource.camera),
+                ),
+                SizedBox(width: 100),
+                IconButton(
+                  iconSize: 100.0,
+                  icon: Icon(
+                    Icons.photo_library,
+                    color: Colors.orange,
+                  ),
+                  onPressed: () => _pickImage(ImageSource.gallery),
                 ),
               ],
             ),
-            Uploader(file: _imageFile)
-          ]
-        ],
+            // Preview the image and crop it
+            if (_imageFile != null) ...[
+              Image.file(_imageFile),
+              Row(
+                children: <Widget>[
+                  FlatButton(
+                    child: Icon(Icons.crop),
+                    onPressed: _cropImage,
+                  ),
+                  FlatButton(
+                    child: Icon(Icons.refresh),
+                    onPressed: _clear,
+                  ),
+                ],
+              ),
+              Uploader(file: _imageFile)
+            ]
+          ],
+        ),
       ),
     );
   }

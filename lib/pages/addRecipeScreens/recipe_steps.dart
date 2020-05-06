@@ -164,4 +164,13 @@ class _RecipeStepsState extends State<RecipeSteps> {
   void didChangeDependencies() {
     super.didChangeDependencies();
   }
+
+  void resetSteps() {
+    if (controllers.length > 1) {
+      for (int i = controllers.length - 1; i > 0; i--) {
+        controllers.remove(controllers[i]);
+      }
+    }
+    controllers[0].clear();
+  }
 }

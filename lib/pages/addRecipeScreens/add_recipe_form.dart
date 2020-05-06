@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import '../../services/popup_body_search_ingredients.dart';
 import 'recipe_steps.dart';
+import '../camera_screen.dart';
 
 class AddRecipeForm extends StatefulWidget {
   @override
@@ -15,9 +16,13 @@ class AddRecipeForm extends StatefulWidget {
 }
 
 class _AddRecipeFormState extends State<AddRecipeForm> {
-  final formKey = GlobalKey<FormState>();
-  Recipe recipe = Recipe();
+  static final formKey = GlobalKey<FormState>();
+  static Recipe recipe = Recipe();
   int initialCountOfSteps = 1;
+  RecipeSteps recipeSteps = RecipeSteps(
+    formkey: formKey,
+    recipe: recipe,
+  );
 
   // TODO: use different method for uploading pictures
   /*
@@ -178,11 +183,7 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                     ],
                   ),
                 ),
-                RecipeSteps(
-                  initialCount: initialCountOfSteps,
-                  formkey: formKey,
-                  recipe: recipe,
-                ),
+                recipeSteps,
                 //No image selected/Selected image
                 // decideImageView(), TODO: different method
                 //Add image button
@@ -192,6 +193,13 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                     child: RaisedButton(
                       child: Icon(Icons.add_a_photo),
                       onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return ImageCapture();
+                            },
+                          ),
+                        );
                         // showChoiceDialog(context, recipe); TODO: different method
                       },
                     ),
@@ -204,11 +212,7 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                       child: Text("Review and submit recipe"),
                       onPressed: () {
                         if (formKey.currentState.validate()) {
-                          //print("list of stepsgrejen");
-                          //print(recipe.listOfSteps[0]);
                           formKey.currentState.save();
-                          //if (isRecipesListNotNull()) {
-                          //}
                           PopupLayout().showPopup(context,
                               popupBodyRecipeResults(), 'Review Your Recipe');
                         }
@@ -239,9 +243,11 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
               formKey.currentState.reset();
               recipe = Recipe();
               recipe.listOfSteps = List(20);
-              setState(() {
-                initialCountOfSteps = 1;
-              });
+              //setState(() {
+              //använd shuno resetSteps häääär
+              recipeSteps.formkey.currentState.reset();
+              //formKey.currentState.resetSteps();
+              //});
               Navigator.pop(context);
               //TODO send the recipe to the backend nerds
             },
