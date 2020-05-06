@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import '../../services/my_text_form_field.dart';
 import '../../services/recipe.dart';
+import 'package:provider/provider.dart';
 
 // needs to be StatefulWidget, so we can keep track of the count of the fields internally
 class RecipeSteps extends StatefulWidget {
@@ -69,30 +70,38 @@ class _RecipeStepsState extends State<RecipeSteps> {
           ),
           //validate input in MYTextFormField
           validator: (String step) {
-            //TODO: make this check of step work...
             if (step.isEmpty) {
-              print(controllers.length);
-              print(controllers);
-              return 'Enter a step';
-            } else if (controllers.length < 1) {
-              print(controllers.length);
-              print(controllers);
-              return "Please add a step";
-            } else if (controllers.length > 20) {
-              print(controllers.length);
-              print(controllers);
-              return "You've exceded the maximum number of steps";
+              return 'Enter a Description';
             } else {
-              print(controllers.length);
-              print(controllers);
-              widget.formkey.currentState.save();
+              //widget.formkey.currentState.save();
               return null;
             }
+            //TODO: make this check of step work...
+            //if (step.isEmpty) {
+            //              print(controllers.length);
+            //              print(controllers);
+            //              return 'Enter a step';
+            //            } else if (controllers.length < 1) {
+            //              print(controllers.length);
+            //              print(controllers);
+            //              return "Please add a step";
+            //            } else if (controllers.length > 20) {
+            //              print(controllers.length);
+            //              print(controllers);
+            //              return "You've reached maximum nrOfsteps, bitch";
+            //            } else {
+            //              print(controllers.length);
+            //              print(controllers);
+            //              //widget.formkey.currentState.save();
+            //              return null;
+            //            }
           },
           //when pressing submit button to save form
           onSaved: (String step) {
-            print(displayNumber);
-            widget.recipe.listOfSteps[displayNumber - 1] = step;
+            print('once');
+            //widget.recipe.listOfSteps[displayNumber - 1] = step;
+            Provider.of<Recipe>(context).addSteps(step, displayNumber - 1);
+
             //widget.formkey.currentState.reset();
             /* for (i=0; i < controllers.length; i++) {
               controllers[i].clear();
@@ -102,6 +111,7 @@ class _RecipeStepsState extends State<RecipeSteps> {
       );
     }).toList(); // convert to a list
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -163,14 +173,5 @@ class _RecipeStepsState extends State<RecipeSteps> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-  }
-
-  void resetSteps() {
-    if (controllers.length > 1) {
-      for (int i = controllers.length - 1; i > 0; i--) {
-        controllers.remove(controllers[i]);
-      }
-    }
-    controllers[0].clear();
   }
 }

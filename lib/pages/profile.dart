@@ -1,5 +1,6 @@
 import 'package:cibus/pages/home.dart';
 import 'package:cibus/services/constants.dart';
+import 'package:cibus/pages/settings_screen.dart';
 import 'package:cibus/services/database.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:cibus/services/colors.dart';
 import 'package:cibus/services/popup_layout.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'settings_screen.dart';
 
 //konfliktkoll
@@ -14,6 +16,7 @@ import 'settings_screen.dart';
 const topMarginPopupLayout = 0.0;
 
 class Profile extends StatefulWidget {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   @override
   _ProfileState createState() => _ProfileState();
 }
@@ -214,6 +217,22 @@ class _ProfileState extends State<Profile> {
     );
 
   } */
+
+  Widget popupBodySettings() {
+    return Container(
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            child: Row(
+              children: <Widget>[
+                Text("Account"),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class MyFavorites extends StatelessWidget {

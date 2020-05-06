@@ -15,6 +15,8 @@ import 'dart:math';
 
 /// Widget to capture and crop the image
 class ImageCapture extends StatefulWidget {
+  final bool recipePhoto;
+  ImageCapture({@required this.recipePhoto});
   createState() => _ImageCaptureState();
 }
 

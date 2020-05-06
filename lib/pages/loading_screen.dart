@@ -11,44 +11,41 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBackgroundColor,
-      body: SafeArea(
-        child: SizedBox.expand(
+        backgroundColor: kPalePink,
+        body: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              SizedBox(
-                height: 120.0,
-              ),
-              Text(
-                'CIBUS',
-                style: TextStyle(
-                  fontSize: 50.0,
-                  letterSpacing: 3.0,
-                  color: kCibusTextColor,
-                  fontWeight: FontWeight.bold,
+              Container(
+                margin: EdgeInsets.only(top: 150.0), //TODO: have to work for multiple screens
+                child: Image.asset('assets/pink_lemon.png',
+                  width: 250.0,
+                  height: 250.0,
                 ),
               ),
-              CircleAvatar(
-                backgroundImage: AssetImage('assets/peach.jpg'),
-                radius: 80.0,
+              Container(
+                //margin: EdgeInsets.only(top: 150.0),
+                child: Text(
+                  'CIBUS',
+                  style: TextStyle(
+                    fontSize: 50.0,
+                    letterSpacing: 3.0,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
-              SizedBox(
-                height: 80.0,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SpinKitRipple(
+                  color: kDarkerkBackgroundColor,
+                  size: 90.0,
+                  duration: Duration(milliseconds: 2000),
+                ),
               ),
-              SpinKitRipple(
-                color: kDarkerkBackgroundColor,
-                size: 90.0,
-                duration: Duration(milliseconds: 2000),
-              ),
-              SizedBox(
-                height: 30.0
-              ),
-              // Text("vi löser mat"), // KLATCHIG fras
             ],
           ),
-        ),
-      )
+        )
     );
   }
 }
