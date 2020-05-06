@@ -1,5 +1,6 @@
 import 'package:cibus/pages/camera_screen.dart';
 import 'package:cibus/pages/loading_screen.dart';
+import 'package:cibus/pages/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/database.dart';
@@ -39,9 +40,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 child: Column(
                   children: <Widget>[
                     SizedBox(height: 60.0),
-                    Text(
-                      'Update your Cibus settings',
-                      style: TextStyle(fontSize: 18.0),
+                    Row(
+                      children: <Widget>[
+                        IconButton(
+                          icon: Icon(Icons.arrow_back),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                        SizedBox(width: 40.0),
+                        Text(
+                          'Update your Cibus settings',
+                          style: TextStyle(fontSize: 18.0),
+                        ),
+                      ],
                     ),
                     SizedBox(height: 20.0),
                     Row(

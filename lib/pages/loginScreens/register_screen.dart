@@ -1,8 +1,19 @@
 import 'package:cibus/pages/loginScreens/username_screen.dart';
+import 'package:cibus/services/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/services/login/auth.dart';
 import 'package:cibus/services/constants.dart';
 import 'package:cibus/pages/loginScreens/e-sign_in_screen.dart';
+
+const registerButtonColor = kTurquoise;
+const formSizedBox = SizedBox(height: 15.0);
+const EdgeInsets formPadding = EdgeInsets.symmetric(vertical: 10.0, horizontal: 50.0);
+const TextStyle textStyleErrorMessage = TextStyle(color: Colors.red, fontSize: 14.0);
+const TextStyle textStyleRegisterButton = TextStyle(color: Colors.white);
+
+OutlineInputBorder textInputBorder = OutlineInputBorder(
+  borderRadius: BorderRadius.circular(25.0),
+);
 
 class RegisterScreen extends StatefulWidget {
   final Function toggleView;
@@ -29,9 +40,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.brown[100],
+        backgroundColor: Theme.of(context).backgroundColor,
         appBar: AppBar(
-          backgroundColor: Colors.brown[400],
+          backgroundColor: Theme.of(context).backgroundColor,
           elevation: 0.0,
           title: Text('Sign up to Cibus'),
           actions: <Widget>[
@@ -51,23 +62,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
           ],
         ),
-        body: Container(
-            padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+        body: Padding(
+          padding: formPadding,
+          child: SingleChildScrollView(
             child: Form(
                 key: _formKey,
                 child: Column(children: <Widget>[
-                  SizedBox(height: 20.0),
+                  formSizedBox,
                   TextFormField(
-                    decoration: textInputDecoration.copyWith(hintText: 'Email'),
+                    decoration: InputDecoration(
+                      enabledBorder: textInputBorder,
+                      border: textInputBorder,
+                      labelText: 'Email',
+                    ),
                     validator: (val) => val.isEmpty ? 'Enter an email' : null,
                     onChanged: (val) {
                       setState(() => email = val);
                     },
                   ),
-                  SizedBox(height: 20.0),
+                  formSizedBox,
                   TextFormField(
-                    decoration:
-                        textInputDecoration.copyWith(hintText: 'Password'),
+                    decoration: InputDecoration(
+                      enabledBorder: textInputBorder,
+                      border: textInputBorder,
+                      labelText: 'Password',
+                    ),
                     obscureText: true,
                     validator: (val) => val.length < 6
                         ? 'Enter a password at least 6 chars long'
@@ -76,29 +95,40 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       setState(() => password = val);
                     },
                   ),
-                  SizedBox(height: 20.0),
+                  formSizedBox,
                   TextFormField(
-                    decoration: textInputDecoration.copyWith(hintText: 'Name'),
+                    decoration: InputDecoration(
+                      enabledBorder: textInputBorder,
+                      border: textInputBorder,
+                      labelText: 'Name',
+                    ),
                     validator: (val) => val.isEmpty ? 'Enter your name' : null,
                     onChanged: (val) {
                       setState(() => name = val);
                     },
                   ),
-                  SizedBox(height: 20.0),
+                  formSizedBox,
                   TextFormField(
-                    decoration:
-                        textInputDecoration.copyWith(hintText: 'Description'),
+                    decoration: InputDecoration(
+                      enabledBorder: textInputBorder,
+                      border: textInputBorder,
+                      labelText: 'Description',
+                    ),
                     minLines: 5,
                     maxLines: 10,
                     validator: (val) =>
-                        val.isEmpty ? 'Enter your description' : null,
+                    val.isEmpty ? 'Enter your description' : null,
                     onChanged: (val) {
                       setState(() => description = val);
                     },
                   ),
-                  SizedBox(height: 20),
+                  formSizedBox,
                   DropdownButtonFormField(
-                    decoration: textInputDecoration.copyWith(hintText: 'Age'),
+                    decoration: InputDecoration(
+                      enabledBorder: textInputBorder,
+                      border: textInputBorder,
+                      labelText: 'Age',
+                    ),
                     value: dropdownValue,
                     onChanged: (newAge) {
                       setState(() {
@@ -114,17 +144,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       );
                     }).toList(),
                   ),
-                  SizedBox(height: 20.0),
+                  formSizedBox,
                   RaisedButton(
-                    color: Colors.pink[400],
+                    color: registerButtonColor,
                     child:
-                        Text('Register', style: TextStyle(color: Colors.white)),
+                    Text('Register', style: textStyleRegisterButton),
                     onPressed: () async {
                       if (_formKey.currentState.validate()) {
                         setState(() => loading = true);
                         dynamic result =
-                            await _auth.registerWithEmailAndPassword(
-                                email, password, name, description, age);
+                        await _auth.registerWithEmailAndPassword(
+                            email, password, name, description, age);
                         if (result == null) {
                           setState(() {
                             error = 'Please supply valid email';
@@ -142,11 +172,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       }
                     },
                   ),
-                  SizedBox(height: 12.0),
                   Text(
                     error,
-                    style: TextStyle(color: Colors.red, fontSize: 14.0),
+                    style: textStyleErrorMessage,
                   ),
-                ]))));
+                ])),
+          ),
+        ));
   }
 }

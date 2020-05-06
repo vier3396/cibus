@@ -4,9 +4,34 @@ import 'package:cibus/pages/loginScreens/e-sign_in_screen.dart';
 import 'package:cibus/services/my_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/services/login/sign_in.dart';
-import 'package:cibus/pages/firstScreen.dart';
 import 'package:cibus/pages/loginScreens/username_screen.dart';
-import 'package:cibus/services/my_page_view.dart';
+import 'package:cibus/services/colors.dart';
+
+const widthLogo = 250.0;
+const heightLogo = 250.0;
+const backgroundColor = kCoral;
+const loginSplashColor = kWarmOrange;
+const loginHighlightedBorderColor = kPalePink;
+const EdgeInsets loginPaddingFbGo = EdgeInsets.only(left: 10, right: 5);
+const EdgeInsets loginPadding = EdgeInsets.only(left: 10, right: 10);
+
+const TextStyle loginTextStyle = TextStyle(
+  fontSize: 20,
+  color: Colors.white,
+);
+
+const TextStyle newUserTextStyle = TextStyle(
+  fontSize: 17,
+  color: Colors.white,
+);
+
+BorderSide loginBorderSide = BorderSide(
+  color: Colors.white,
+);
+
+RoundedRectangleBorder loginShape = RoundedRectangleBorder(
+  borderRadius: BorderRadius.circular(40),
+);
 
 SignIn signIn = SignIn();
 
@@ -20,18 +45,36 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Colors.white,
+        color: backgroundColor,
         child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              FlutterLogo(size: 150),
-              SizedBox(height: 50),
-              _signInButtonGoogle(),
-              _signInButtonFacebook(),
-              _signInEmailButton(),
-              _registerButton(),
+              Image.asset(
+                'assets/coral_lemon.png',
+                height: heightLogo,
+                width: widthLogo,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: _signInButtonGoogle(),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: _signInButtonFacebook(),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: _signInEmailButton(),
+              ),
+              SizedBox(height: 20.0),
+              Text('New to CIBUS?',
+              style: newUserTextStyle),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: _registerButton(),
+              ),
             ],
           ),
         ),
@@ -41,7 +84,8 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _signInButtonGoogle() {
     return OutlineButton(
-      splashColor: Colors.grey,
+      splashColor: loginSplashColor,
+      highlightedBorderColor: loginHighlightedBorderColor,
       onPressed: () {
         signIn.whatLogin = loginType.google;
         signIn.signInWithGoogle().whenComplete(() {
@@ -50,15 +94,13 @@ class _LoginPageState extends State<LoginPage> {
               return UsernameScreen();
             }));
           } else if (signIn.isLoggedInGoogle) {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-              return MyPageView();
-            }));
+            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                MyPageView()), (Route<dynamic> route) => false);
           }
         });
       },
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-      highlightElevation: 0,
-      borderSide: BorderSide(color: Colors.grey),
+      shape: loginShape,
+      borderSide: loginBorderSide,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
         child: Row(
@@ -67,13 +109,10 @@ class _LoginPageState extends State<LoginPage> {
           children: <Widget>[
             Image(image: AssetImage("assets/google_logo.png"), height: 35.0),
             Padding(
-              padding: const EdgeInsets.only(left: 10),
+              padding: loginPaddingFbGo,
               child: Text(
                 'Sign in with Google',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.grey,
-                ),
+                style: loginTextStyle,
               ),
             )
           ],
@@ -84,7 +123,8 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _signInButtonFacebook() {
     return OutlineButton(
-      splashColor: Colors.grey,
+      splashColor: loginSplashColor,
+      highlightedBorderColor: loginHighlightedBorderColor,
       onPressed: () {
         signIn.whatLogin = loginType.facebook;
         signIn.signInWithFacebook().whenComplete(() {
@@ -93,67 +133,25 @@ class _LoginPageState extends State<LoginPage> {
               return UsernameScreen();
             }));
           } else if (signIn.isLoggedInFacebook) {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-              return MyPageView();
-            }));
+            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                MyPageView()), (Route<dynamic> route) => false);
           }
         });
       },
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-      highlightElevation: 0,
-      borderSide: BorderSide(color: Colors.grey),
+      shape: loginShape,
+      borderSide: loginBorderSide,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image(image: AssetImage("assets/facebook.jpg"), height: 35.0),
+            Image(image: AssetImage("assets/icon_fb.png"), height: 35.0),
             Padding(
-              padding: const EdgeInsets.only(left: 10),
+              padding: loginPaddingFbGo,
               child: Text(
                 'Sign in with Facebook',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.grey,
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _registerButton() {
-    return OutlineButton(
-      splashColor: Colors.grey,
-      onPressed: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) {
-              return RegisterScreen();
-            },
-          ),
-        );
-      },
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-      highlightElevation: 0,
-      borderSide: BorderSide(color: Colors.grey),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(left: 10),
-              child: Text(
-                'Register new user',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.grey,
-                ),
+                style: loginTextStyle,
               ),
             )
           ],
@@ -164,7 +162,8 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _signInEmailButton() {
     return OutlineButton(
-      splashColor: Colors.grey,
+      splashColor: loginSplashColor,
+      highlightedBorderColor: loginHighlightedBorderColor,
       onPressed: () {
         Navigator.of(context).push(
           MaterialPageRoute(
@@ -174,9 +173,8 @@ class _LoginPageState extends State<LoginPage> {
           ),
         );
       },
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-      highlightElevation: 0,
-      borderSide: BorderSide(color: Colors.grey),
+      shape: loginShape,
+      borderSide: loginBorderSide,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
         child: Row(
@@ -184,13 +182,44 @@ class _LoginPageState extends State<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(left: 10),
+              padding: loginPadding,
               child: Text(
-                'Sign in with email',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.grey,
-                ),
+                  'Sign in with email',
+                  style: loginTextStyle
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _registerButton() {
+    return OutlineButton(
+      splashColor: loginSplashColor,
+      highlightedBorderColor: loginHighlightedBorderColor,
+      onPressed: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) {
+              return RegisterScreen();
+            },
+          ),
+        );
+      },
+      shape: loginShape,
+      borderSide: loginBorderSide,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Padding(
+              padding: loginPadding,
+              child: Text(
+                'Register new user',
+                style: loginTextStyle
               ),
             )
           ],
