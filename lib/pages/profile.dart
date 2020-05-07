@@ -55,6 +55,7 @@ class _ProfileState extends State<Profile> {
                               SizedBox(height: 20.0),
                               Text(
                                 userData.name ?? "Cannot find name",
+                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   fontSize: 20.0,
                                 ),
@@ -63,6 +64,7 @@ class _ProfileState extends State<Profile> {
                               Text(
                                 userData.description ??
                                     "Cannot find description",
+                                overflow: TextOverflow.ellipsis,
                                 maxLines: 5,
                                 style: TextStyle(),
                               ),

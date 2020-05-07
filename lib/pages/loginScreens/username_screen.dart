@@ -131,17 +131,17 @@ class _UsernameScreenState extends State<UsernameScreen> {
                             .isUsernameTaken(username: _currentUsername);
                         print(' checkUsername: $checkUsername');
                         if (!checkUsername) {
-                          /* await DatabaseService(uid: user.uid).updateUsername(
+                          await DatabaseService(uid: user.uid).updateUsername(
                             username: _currentUsername,
-                          ); */
+                          );
                           print('Creating usernamse');
-                          /*Navigator.of(context).push(
+                          Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
                               builder: (context) {
                                 return MyPageView();
                               },
                             ),
-                          );*/
+                          );
                         } else {
                           _usernameDialog();
                         }
