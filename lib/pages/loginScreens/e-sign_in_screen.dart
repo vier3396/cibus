@@ -62,6 +62,7 @@ class _EmailSignInState extends State<EmailSignIn> {
                     child: Column(children: <Widget>[
                       SizedBox(height: 20.0),
                       TextFormField(
+                        keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
                           border: textInputBorder,
                           labelText: 'Email',

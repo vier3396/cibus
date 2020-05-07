@@ -101,11 +101,9 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
 
     return Consumer<Recipe>(
       builder: (context, recipe, child) {
-        return MaterialApp(
-          home: Scaffold(
+        return Scaffold(
             resizeToAvoidBottomPadding: false, // solves keyboard problems
             appBar: AppBar(
-              backgroundColor: kDarkerkBackgroundColor,
               title: Center(
                 child: Text(
                   'Add a recipe',
@@ -234,8 +232,7 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                 ),
               ),
             ),
-          ),
-        );
+          );
       },
     );
   }

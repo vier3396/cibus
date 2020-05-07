@@ -30,7 +30,6 @@ class MyApp extends StatelessWidget {
               color: Colors.white,
               elevation: 0.0,
             ),
-            //backgroundColor: , //Buttons etc
           ),
           initialRoute: '/loginPage',
           routes: {

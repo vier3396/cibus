@@ -18,17 +18,7 @@ class SearchRecipe extends StatefulWidget {
 class _SearchRecipeState extends State<SearchRecipe> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        primaryColor: kDarkerkBackgroundColor,
-        accentColor: kAccentColor,
-      ),
-      home: Scaffold(
-        /* appBar: AppBar(
-          title: Center(
-            child: Text('Search recipe'),
-          ),
-        ), */
+    return Scaffold(
         body: SafeArea(
           child: Column(
             children: <Widget>[
@@ -77,12 +67,12 @@ class _SearchRecipeState extends State<SearchRecipe> {
                               backgroundColor: kPalePink,
                               radius: circleAvatarRadius,
                               child: Icon(
-                                Icons.adb,
+                                Icons.fastfood,
                                 size: circleAvatarSize,
                                 color: Colors.white,
                               ),
                             ),
-                            Text("Robot"),
+                            Text("Lactose"),
                           ],
                         ),
                       ),
@@ -94,12 +84,12 @@ class _SearchRecipeState extends State<SearchRecipe> {
                               backgroundColor: kVibrantYellow,
                               radius: circleAvatarRadius,
                               child: Icon(
-                                Icons.airline_seat_recline_normal,
+                                Icons.fastfood,
                                 size: circleAvatarSize,
                                 color: Colors.white,
                               ),
                             ),
-                            Text("Flygplan"),
+                            Text("Gluten"),
                           ],
                         ),
                       ),
@@ -111,12 +101,12 @@ class _SearchRecipeState extends State<SearchRecipe> {
                               backgroundColor: kSkyBlue,
                               radius: circleAvatarRadius,
                               child: Icon(
-                                Icons.face,
+                                Icons.fastfood,
                                 size: circleAvatarSize,
                                 color: Colors.white,
                               ),
                             ),
-                            Text("Face"),
+                            Text("Other"),
                           ],
                         ),
                       ),
@@ -147,7 +137,6 @@ class _SearchRecipeState extends State<SearchRecipe> {
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 }

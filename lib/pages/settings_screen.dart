@@ -1,6 +1,5 @@
 import 'package:cibus/pages/camera_screen.dart';
 import 'package:cibus/pages/loading_screen.dart';
-import 'package:cibus/pages/profile.dart';
 import 'package:cibus/services/my_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +8,7 @@ import 'package:cibus/services/login/user.dart';
 import 'package:cibus/services/constants.dart';
 import 'package:flutter/widgets.dart';
 import 'package:cibus/services/imageServices.dart';
+import 'package:cibus/services/colors.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -17,7 +17,6 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   final _formKey = GlobalKey<FormState>();
-  final List<String> sugars = ['0', '1', '2', '3', '4'];
 
   //form values
   String _currentName;
@@ -40,31 +39,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 key: _formKey,
                 child: Column(
                   children: <Widget>[
-                    SizedBox(height: 60.0),
-                    Row(
-                      children: <Widget>[
-                        IconButton(
-                          icon: Icon(Icons.arrow_back),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                        SizedBox(width: 40.0),
-                        Text(
-                          'Update your Cibus settings',
-                          style: TextStyle(fontSize: 18.0),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 20.0),
                     Row(
                       children: <Widget>[
                         GestureDetector(
-                          child: CircleAvatar(
-                            backgroundColor: Colors.pink,
-                            radius: 60.0,
-                            backgroundImage: NetworkImage(
-                                userData.profilePic ?? kBackupProfilePic),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: CircleAvatar(
+                              radius: 60.0,
+                              backgroundImage: NetworkImage(
+                                  userData.profilePic ?? kBackupProfilePic),
+                            ),
                           ),
                           onTap: () {
                             Navigator.of(context).push(
@@ -114,9 +98,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                     SizedBox(height: 20.0),
                     RaisedButton(
-                      color: Colors.pink[400],
+                      color: kTurquoise,
                       child: Text(
-                        'update',
+                        'Update',
                         style: TextStyle(color: Colors.white),
                       ),
                       onPressed: () async {
