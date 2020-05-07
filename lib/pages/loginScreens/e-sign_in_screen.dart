@@ -36,8 +36,7 @@ class _EmailSignInState extends State<EmailSignIn> {
         ? LoadingScreen()
         : Scaffold(
             appBar: AppBar(
-              elevation: 0.0,
-              title: Text('Sign in to Cibus'),
+              title: Text('Sign in'),
               actions: <Widget>[
                 FlatButton.icon(
                   icon: Icon(Icons.person),

@@ -4,7 +4,6 @@ import 'package:cibus/services/login/user.dart';
 import 'package:cibus/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/constants.dart';
-import 'package:cibus/pages/firstScreen.dart';
 import 'package:cibus/services/login/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cibus/services/colors.dart';
@@ -131,17 +130,14 @@ class _UsernameScreenState extends State<UsernameScreen> {
                             .isUsernameTaken(username: _currentUsername);
                         print(' checkUsername: $checkUsername');
                         if (!checkUsername) {
-                          /* await DatabaseService(uid: user.uid).updateUsername(
+                          await DatabaseService(uid: user.uid).updateUsername(
                             username: _currentUsername,
-                          ); */
+                          );
                           print('Creating usernamse');
-                          /*Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return MyPageView();
-                              },
-                            ),
-                          );*/
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                  builder: (context) => MyPageView()),
+                                  (Route<dynamic> route) => false);
                         } else {
                           _usernameDialog();
                         }

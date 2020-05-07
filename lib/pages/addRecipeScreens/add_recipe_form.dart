@@ -97,7 +97,6 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
 
   @override
   Widget build(BuildContext context) {
-    // final halfMedianWidth = MediaQuery.of(context).size.width / 2.0; (for different screens)
 
     return Consumer<Recipe>(
       builder: (context, recipe, child) {
