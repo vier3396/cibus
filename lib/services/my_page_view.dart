@@ -5,9 +5,7 @@ import 'package:cibus/pages/home.dart';
 import 'package:cibus/pages/favorites.dart';
 import '../pages/addRecipeScreens/add_recipe_form.dart';
 
-const TextStyle bottomBarTextStyle = TextStyle(
-  fontSize: 18.0
-);
+const TextStyle bottomBarTextStyle = TextStyle(fontSize: 18.0);
 
 class MyPageView extends StatefulWidget {
   @override
@@ -21,17 +19,14 @@ class _MyPageViewState extends State<MyPageView> {
   int _currentPage = 0;
 
   //this is for page animation-not necessary
-  Duration pageChanging = Duration(
-      milliseconds: 300);
-  Curve animationCurve = Curves
-      .linear;
+  Duration pageChanging = Duration(milliseconds: 300);
+  Curve animationCurve = Curves.linear;
 
   //Called when this object is inserted into the tree (subscribe to the object). The framework will call this method exactly once for each State object it creates.
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(
-        initialPage: _currentPage);
+    _pageController = PageController(initialPage: _currentPage);
   }
 
   @override
@@ -58,7 +53,8 @@ class _MyPageViewState extends State<MyPageView> {
             icon: Icon(
               Icons.home,
             ),
-            title: Text('Home',
+            title: Text(
+              'Home',
               style: bottomBarTextStyle,
             ), // to remove title: Container(height: 0.0)
           ),
@@ -66,7 +62,8 @@ class _MyPageViewState extends State<MyPageView> {
             icon: Icon(
               Icons.search,
             ),
-            title: Text('Search',
+            title: Text(
+              'Search',
               style: bottomBarTextStyle,
             ),
           ),
@@ -74,35 +71,39 @@ class _MyPageViewState extends State<MyPageView> {
             icon: Icon(
               Icons.person,
             ),
-            title: Text('Profile',
+            title: Text(
+              'Profile',
               style: bottomBarTextStyle,
             ),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.note_add),
-            title: Text('Add',
+            title: Text(
+              'Add',
               style: bottomBarTextStyle,
             ),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.favorite),
-            title: Text('Favorites',
+            title: Text(
+              'Favorites',
               style: bottomBarTextStyle,
             ),
           ),
         ],
         onTap: navigationTapped,
-        selectedItemColor: Theme
-            .of(context)
-            .backgroundColor,
+        selectedItemColor: Theme.of(context).backgroundColor,
         currentIndex: _currentPage,
       ),
     );
   }
 
   void navigationTapped(int page) {
-    _pageController.animateToPage(page, duration: pageChanging,
-      curve: animationCurve,);
+    _pageController.animateToPage(
+      page,
+      duration: pageChanging,
+      curve: animationCurve,
+    );
   }
 
   //Called when this object is removed from the tree permanently. (unsubscribe from the object)
@@ -121,5 +122,4 @@ class _MyPageViewState extends State<MyPageView> {
       });
     }
   }
-
 }
