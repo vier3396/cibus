@@ -4,6 +4,7 @@ import 'package:cibus/pages/profile.dart';
 import 'package:cibus/pages/home.dart';
 import 'package:cibus/pages/favorites.dart';
 import '../pages/addRecipeScreens/add_recipe_form.dart';
+import 'package:cibus/services/colors.dart';
 
 const TextStyle bottomBarTextStyle = TextStyle(
   fontSize: 18.0
@@ -43,7 +44,6 @@ class _MyPageViewState extends State<MyPageView> {
         controller: _pageController,
         onPageChanged: onPageChanged,
         children: <Widget>[
-          //here are all the pages you need:
           HomePage(),
           SearchRecipe(),
           Profile(),
@@ -53,6 +53,7 @@ class _MyPageViewState extends State<MyPageView> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
+        unselectedItemColor: kBottomNavigationBarColor,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(
@@ -94,7 +95,7 @@ class _MyPageViewState extends State<MyPageView> {
         onTap: navigationTapped,
         selectedItemColor: Theme
             .of(context)
-            .backgroundColor,
+            .accentColor,
         currentIndex: _currentPage,
       ),
     );

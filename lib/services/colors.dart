@@ -2,6 +2,8 @@
 
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
+
 
 // this should maybe be structured better
 const kBackgroundColor = Color(0xffEDB297);
@@ -19,3 +21,4 @@ const kCoral = Color(0xffFFA68F);
 const kTurquoiseLight = Color(0xffC2D7D0);
 const kTurquoise = Color(0xff21baa8);
 const kTeal = Color(0xff008F93);
+final kBottomNavigationBarColor = Colors.grey[500];

@@ -14,11 +14,9 @@ import 'package:cibus/services/database.dart';
 import 'package:cibus/pages/loading_screen.dart';
 
 const registerButtonColor = kTurquoise;
-const formSizedBox = SizedBox(height: 15.0);
-const EdgeInsets formPadding =
-    EdgeInsets.symmetric(vertical: 10.0, horizontal: 50.0);
-const TextStyle textStyleErrorMessage =
-    TextStyle(color: Colors.red, fontSize: 14.0);
+const formSizedBox = SizedBox(height: 20.0);
+const EdgeInsets formPadding = EdgeInsets.symmetric(vertical: 10.0, horizontal: 50.0);
+const TextStyle textStyleErrorMessage = TextStyle(color: Colors.red, fontSize: 14.0);
 const TextStyle textStyleRegisterButton = TextStyle(color: Colors.white);
 
 OutlineInputBorder textInputBorder = OutlineInputBorder(
@@ -87,6 +85,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: Column(children: <Widget>[
                       formSizedBox,
                       TextFormField(
+                        keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
                           enabledBorder: textInputBorder,
                           border: textInputBorder,

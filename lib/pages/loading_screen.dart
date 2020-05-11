@@ -2,6 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:cibus/services/colors.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+// final halfMedianWidth = MediaQuery.of(context).size.width / 2.0; //(for different screens)
+
+TextStyle cibusLogoTextStyle = TextStyle(
+  fontSize: 50.0,
+  letterSpacing: 3.0,
+  color: Colors.white,
+  fontWeight: FontWeight.bold,
+);
+
 class LoadingScreen extends StatefulWidget {
   @override
   _LoadingScreenState createState() => _LoadingScreenState();
@@ -29,12 +38,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
                 //margin: EdgeInsets.only(top: 150.0),
                 child: Text(
                   'CIBUS',
-                  style: TextStyle(
-                    fontSize: 50.0,
-                    letterSpacing: 3.0,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: cibusLogoTextStyle,
                 ),
               ),
               Padding(

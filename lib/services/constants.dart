@@ -14,3 +14,7 @@ const textInputDecoration = InputDecoration(
 var kageList = Iterable<int>.generate(90).toList();
 
 enum WhatToShow { none, foundIngredient, notYetSea }
+
+
+const kBackupProfilePic =
+    'https://firebasestorage.googleapis.com/v0/b/independent-project-7edde.appspot.com/o/blank_profile_picture.png?alt=media&token=49efb712-d543-40ca-8e33-8c0fdb029ea5';
