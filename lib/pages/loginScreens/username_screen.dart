@@ -35,120 +35,72 @@ class _UsernameScreenState extends State<UsernameScreen> {
           return Scaffold(
             body: Form(
               key: _formKey,
-              child: Column(
-                children: <Widget>[
-                  SizedBox(height: 60.0),
-                  Text(
-                    'Check your email and verify it',
-                    style: TextStyle(fontSize: 18.0),
-                  ),
-                  SizedBox(height: 40.0),
-                  Row(
+              child: SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Column(
                     children: <Widget>[
+                      SizedBox(height: 30.0),
                       Text(
-                          'Press button to check if email is verified. \n you might have to press it twice hehe:))'),
-                      SizedBox(width: 10.0),
+                        'Update your Cibus username',
+                        style: TextStyle(fontSize: 25.0),
+                      ),
+                      SizedBox(height: 200.0),
+                      TextFormField(
+                          initialValue: '',
+                          decoration: InputDecoration(
+                            enabledBorder: textInputBorder,
+                            border: textInputBorder,
+                            labelText: 'Name',
+                          ),
+                          validator: (val) {
+                            if (val.length < 3)
+                              return 'Name must be more than 2 characters';
+                            else if (user.isEmail == false)
+                              return 'Please verify email first';
+                            /*else if (checkUsername == false)
+                              return 'Username is allready taken';*/
+                            return null; //Vi säger aldrig till om att username är taken???
+                          },
+                          onChanged: (val) {
+                            setState(() {
+                              _currentUsername = val;
+                              print(_currentUsername);
+                            });
+                          }),
                       RaisedButton(
-                        color: Colors.pink[400],
+                        color: kCoral,
                         child: Text(
-                          'verified?',
+                          'update',
                           style: TextStyle(color: Colors.white),
                         ),
                         onPressed: () async {
-                          //AuthService.isEmailVerified();
-                          FirebaseUser _firebaseUser =
-                              await FirebaseAuth.instance.currentUser();
-                          AuthService().isEmailVerified(_firebaseUser);
-                          await _firebaseUser.reload();
-                          setState(() {
-                            user.isEmail = _firebaseUser.isEmailVerified;
-                          });
-                          //user.isEmail = _firebaseUser.isEmailVerified;
-                          print(_firebaseUser.isEmailVerified);
-                          //print(AuthService().isEmailVerified(_firebaseUser));
+                          if (_formKey.currentState.validate()) {
+                            bool checkUsername = await DatabaseService()
+                                .isUsernameTaken(username: _currentUsername);
+                            print(' checkUsername: $checkUsername');
+                            if (!checkUsername) {
+                              await DatabaseService(uid: user.uid)
+                                  .updateUsername(
+                                username: _currentUsername,
+                              );
+                              print('Creating usernamse');
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return MyPageView();
+                                  },
+                                ),
+                              );
+                            } else {
+                              _usernameDialog();
+                            }
+                          }
                         },
-                      ),
-                      SizedBox(width: 10.0),
-                      Text(user.isEmail.toString()),
+                      )
                     ],
                   ),
-                  SizedBox(height: 60.0),
-                  Row(
-                    children: <Widget>[
-                      Text('Press to resend verification email'),
-                      SizedBox(width: 20.0),
-                      RaisedButton(
-                        color: Colors.pink[400],
-                        child: Text(
-                          'resend?',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        onPressed: () async {
-                          FirebaseUser _firebaseUser =
-                              await FirebaseAuth.instance.currentUser();
-                          await _firebaseUser.sendEmailVerification();
-
-                          Text('Verification email resent');
-                          _verificationDialog();
-                        },
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 60.0),
-                  Text(
-                    'Update your Cibus username',
-                    style: TextStyle(fontSize: 18.0),
-                  ),
-                  SizedBox(height: 20.0),
-                  Text('Name'),
-                  TextFormField(
-                      initialValue: '',
-                      decoration: textInputDecoration,
-                      validator: (val) {
-                        if (val.length < 3)
-                          return 'Name must be more than 2 character';
-                        else if (user.isEmail == false)
-                          return 'Please verify email first';
-                        /*else if (checkUsername == false)
-                          return 'Username is allready taken';*/
-                        return null; //Vi säger aldrig till om att username är taken???
-                      },
-                      onChanged: (val) {
-                        setState(() {
-                          _currentUsername = val;
-                          print(_currentUsername);
-                        });
-                      }),
-                  RaisedButton(
-                    color: Colors.pink[400],
-                    child: Text(
-                      'update',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    onPressed: () async {
-                      if (_formKey.currentState.validate()) {
-                        bool checkUsername = await DatabaseService()
-                            .isUsernameTaken(username: _currentUsername);
-                        print(' checkUsername: $checkUsername');
-                        if (!checkUsername) {
-                          /* await DatabaseService(uid: user.uid).updateUsername(
-                            username: _currentUsername,
-                          ); */
-                          print('Creating usernamse');
-                          /*Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return MyPageView();
-                              },
-                            ),
-                          );*/
-                        } else {
-                          _usernameDialog();
-                        }
-                      }
-                    },
-                  )
-                ],
+                ),
               ),
             ),
           );

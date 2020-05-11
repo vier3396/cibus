@@ -40,6 +40,7 @@ dev_dependencies:
   firebase_core: ^0.4.4+3
   image_cropper: ^1.2.1
   image_picker: ^0.6.5+2
+  firebase_user_stream: ^1.0.0
 
 
 

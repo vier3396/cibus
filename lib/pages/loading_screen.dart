@@ -11,14 +11,16 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: kPalePink,
+        backgroundColor: kCoral,
         body: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Container(
-                margin: EdgeInsets.only(top: 150.0), //TODO: have to work for multiple screens
-                child: Image.asset('assets/pink_lemon.png',
+                margin: EdgeInsets.only(
+                    top: 150.0), //TODO: have to work for multiple screens
+                child: Image.asset(
+                  'assets/pink_lemon.png',
                   width: 250.0,
                   height: 250.0,
                 ),
@@ -45,7 +47,6 @@ class _LoadingScreenState extends State<LoadingScreen> {
               ),
             ],
           ),
-        )
-    );
+        ));
   }
 }

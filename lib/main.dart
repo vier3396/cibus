@@ -1,3 +1,5 @@
+import 'package:cibus/pages/loginScreens/username_screen.dart';
+import 'package:cibus/pages/loginScreens/verify_screen.dart';
 import 'package:cibus/pages/settings_screen.dart';
 import 'package:cibus/services/login/auth.dart';
 import 'package:cibus/services/my_page_view.dart';
@@ -37,11 +39,10 @@ class MyApp extends StatelessWidget {
           '/firstScreen': (context) => MyPageView(),
           '/settingsScreen': (context) => SettingsScreen(),
           'camerscreen': (context) => ImageCapture(),
+          '/verifyscreen': (context) => VerifyScreen(),
+          '/usernamescreen': (context) => UsernameScreen(),
         },
       ),
     );
   }
 }
-
-
-
