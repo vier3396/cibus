@@ -6,7 +6,7 @@ import 'package:cibus/services/constants.dart';
 import 'package:cibus/pages/loginScreens/e-sign_in_screen.dart';
 
 const registerButtonColor = kTurquoise;
-const formSizedBox = SizedBox(height: 15.0);
+const formSizedBox = SizedBox(height: 20.0);
 const EdgeInsets formPadding = EdgeInsets.symmetric(vertical: 10.0, horizontal: 50.0);
 const TextStyle textStyleErrorMessage = TextStyle(color: Colors.red, fontSize: 14.0);
 const TextStyle textStyleRegisterButton = TextStyle(color: Colors.white);
@@ -43,8 +43,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         backgroundColor: Theme.of(context).backgroundColor,
         appBar: AppBar(
           backgroundColor: Theme.of(context).backgroundColor,
-          elevation: 0.0,
-          title: Text('Sign up to Cibus'),
+          title: Text('Sign up'),
           actions: <Widget>[
             FlatButton.icon(
               icon: Icon(Icons.person),
@@ -70,6 +69,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 child: Column(children: <Widget>[
                   formSizedBox,
                   TextFormField(
+                    keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       enabledBorder: textInputBorder,
                       border: textInputBorder,
@@ -121,28 +121,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     onChanged: (val) {
                       setState(() => description = val);
                     },
-                  ),
-                  formSizedBox,
-                  DropdownButtonFormField(
-                    decoration: InputDecoration(
-                      enabledBorder: textInputBorder,
-                      border: textInputBorder,
-                      labelText: 'Age',
-                    ),
-                    value: dropdownValue,
-                    onChanged: (newAge) {
-                      setState(() {
-                        dropdownValue = newAge;
-                        age = newAge;
-                      });
-                    },
-                    items: <int>[0, 1, 2, 3, 4]
-                        .map<DropdownMenuItem<int>>((int value) {
-                      return DropdownMenuItem<int>(
-                        value: value,
-                        child: Text(value.toString()),
-                      );
-                    }).toList(),
                   ),
                   formSizedBox,
                   RaisedButton(

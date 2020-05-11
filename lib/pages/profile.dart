@@ -6,12 +6,9 @@ import 'package:cibus/services/login/user.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/services/colors.dart';
 import 'package:cibus/services/popup_layout.dart';
-import 'package:cibus/services/login/user.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'settings_screen.dart';
-
-//konfliktkoll
 
 const topMarginPopupLayout = 0.0;
 
@@ -24,7 +21,7 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   List<bool> _boldButtons = [false, true, false];
   Container wallOfText = yourRecipes();
-  int karma;
+  //int karma;
 
   @override
   Widget build(BuildContext context) {
@@ -50,25 +47,28 @@ class _ProfileState extends State<Profile> {
                             radius: 40.0,
                           ),
                           SizedBox(width: 20.0),
-                          Column(
-                            children: <Widget>[
-                              SizedBox(height: 20.0),
-                              Text(
-                                userData.name ?? "Cannot find name",
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontSize: 20.0,
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                SizedBox(height: 20.0),
+                                Text(
+                                  userData.name ?? "Cannot find name",
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 20.0,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(height: 5.0),
-                              Text(
-                                userData.description ??
-                                    "Cannot find description",
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 5,
-                                style: TextStyle(),
-                              ),
-                            ],
+                                SizedBox(height: 5.0),
+                                Text(
+                                  userData.description ??
+                                      "Cannot find description",
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 5,
+                                  style: TextStyle(),
+                                ),
+                              ],
+                            ),
                           ),
                           SizedBox(width: 40.0),
                           IconButton(

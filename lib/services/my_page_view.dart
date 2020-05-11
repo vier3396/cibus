@@ -53,7 +53,7 @@ class _MyPageViewState extends State<MyPageView> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        unselectedItemColor: Colors.grey[500],
+        unselectedItemColor: kBottomNavigationBarColor,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(
