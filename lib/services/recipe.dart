@@ -14,12 +14,14 @@ class Recipe extends ChangeNotifier {
   int time;
   double rating;
   String userId;
+  List<String> ingredientList = [];
 
   void addIngredient(
       {String ingredientId,
       String ingredientName,
       int ingredientQuantity,
       String quantityType}) {
+    this.ingredientList.add(ingredientId);
     this.ingredients.add(Ingredient(
         ingredientId: ingredientId,
         ingredientName: ingredientName,
@@ -62,6 +64,12 @@ class Recipe extends ChangeNotifier {
     this.userId = uId;
   }
 
+  void removeIngredient(int index) {
+    this.ingredients.removeAt(index);
+    this.ingredientList.removeAt(index);
+    notifyListeners();
+  }
+
   Map<String, dynamic> toMap() => {
         'title': this.title,
         'desctiption': this.description,
@@ -70,7 +78,8 @@ class Recipe extends ChangeNotifier {
         'imageURL': this.imageURL,
         'time': this.time,
         'rating': this.rating,
-        'userId': this.userId
+        'userId': this.userId,
+        'ingredientsArray': this.ingredientList,
       };
 
   int get ingredientCount {

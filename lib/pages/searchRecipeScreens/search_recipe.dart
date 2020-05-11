@@ -38,8 +38,8 @@ class _SearchRecipeState extends State<SearchRecipe> {
                   maxLength: 20,
                   labelText: "Add ingredient",
                   onTap: () {
-                    PopupLayout().showPopup(context,
-                        PopupBodySearchIngredients(), 'Add Ingredient');
+                    PopupLayout().showPopup(
+                        context, PopupBodyRecipes(), 'Add Ingredient');
                   },
                   //TODO:  onSaved: save ingredients to recipe object
                   //TODO: validator: validate ingredients

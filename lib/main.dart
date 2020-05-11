@@ -10,6 +10,7 @@ import 'package:cibus/services/login/user.dart';
 import 'package:cibus/pages/camera_screen.dart';
 import 'package:cibus/services/recipe.dart';
 import 'package:cibus/services/colors.dart';
+import 'package:cibus/widgets/recipe_preview.dart';
 
 void main() => runApp(MyApp());
 
@@ -41,6 +42,7 @@ class MyApp extends StatelessWidget {
             '/firstScreen': (context) => MyPageView(),
             '/settingsScreen': (context) => SettingsScreen(),
             'camerscreen': (context) => ImageCapture(),
+            '/recipePreview': (context) => RecipePreview(),
           },
         ),
       ),
