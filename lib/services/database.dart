@@ -91,12 +91,32 @@ class DatabaseService {
           mapWithNameAndId['ingredientId'] = document.documentID;
           print(mapWithNameAndId);
         }
+        return mapWithNameAndId;
       } else if (result.documents.isEmpty) {
         print('Finns inte');
-        return mapWithNameAndId;
+        return null;
       }
     }
-    return mapWithNameAndId;
+    return null;
+  }
+
+  Future<List> findRecipes(List<Ingredient> ingredientList) async {
+    List<String> ingredientIdList = [];
+    List<DocumentSnapshot> recipeList = [];
+    for (Ingredient ingredient in ingredientList) {
+      ingredientIdList.add(ingredient.ingredientId);
+    }
+    var result = await recipeCollection
+        .where('ingredientsArray', arrayContainsAny: ingredientIdList)
+        .getDocuments();
+    if (result.documents.isNotEmpty) {
+      final documents = result.documents;
+      for (DocumentSnapshot document in documents) {
+        recipeList.add(document);
+      }
+      return recipeList;
+    }
+    return null;
   }
 
   void uploadRecipe(Recipe recipe) async {

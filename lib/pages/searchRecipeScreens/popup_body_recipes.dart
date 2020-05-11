@@ -3,6 +3,17 @@ import 'package:getflutter/components/avatar/gf_avatar.dart';
 import 'package:getflutter/getflutter.dart';
 import '../../services/recipe.dart';
 import 'popup_body_recipe_individual.dart';
+import 'package:cibus/services/database.dart';
+import 'package:cibus/services/constants.dart';
+import 'package:cibus/widgets/ingredientTile.dart';
+import 'package:cibus/widgets/ingredientChooserTile.dart';
+import 'package:provider/provider.dart';
+import 'package:cibus/services/login/user.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:cibus/services/ingredients.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cibus/services/ingredientList.dart';
+import 'package:cibus/widgets/ingredientTileWithoutQuantity.dart';
 
 const topMarginPopupIndividualRecipe = 0.0;
 
@@ -12,99 +23,160 @@ class PopupBodyRecipes extends StatefulWidget {
 }
 
 class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
-  List<Recipe> recipes = [];
-  //Recipe(
-  //      title: "Recipe 1",
-  //      description: description1,
-  //      listOfSteps: listOfStepsRecipe1,
-  //      imageFile: "assets/recipe1.jpg",
-  //      time: 30,
-  //      rating: 3.5,
-  //    ),
-  //    Recipe(
-  //      title: "Recipe 2",
-  //      description: description2,
-  //      listOfSteps: listOfStepsRecipe2,
-  //      imageFile: "assets/recipe2.jpg",
-  //      time: 120,
-  //      rating: 4,
-  //    ),
-  //    Recipe(
-  //      title: "Kladdkaka med annansgrädde",
-  //      description: description3,
-  //      listOfSteps: listOfStepsRecipe3,
-  //      imageFile: "assets/recipe3.jpg",
-  //      time: 90,
-  //      rating: 5,
-  //    ),
-  //    Recipe(
-  //      title: "Recipe 4",
-  //      description: description4,
-  //      listOfSteps: listOfStepsRecipe4,
-  //      imageFile: "assets/recipe4.jpg",
-  //      time: 40,
-  //      rating: 5,
-  //    ),
-  //    Recipe(
-  //      title: "Recipe 5",
-  //      description: description5,
-  //      listOfSteps: listOfStepsRecipe5,
-  //      imageFile: "assets/recipe5.jpg",
-  //      time: 50,
-  //      rating: 1,
-  //    )
-  //  ];
-  //
-  //  static String description1 = "This recipe is awsome";
-  //  static String description2 = "My moms recipe";
-  //  static String description3 = "Homemade and crazy good!";
-  //  static String description4 = "OK recipe";
-  //  static String description5 = "Hello I'm a recipe. Blabla Blabla Blabla Blab";
-  //
-  //  static List<String> listOfStepsRecipe1 = ["Step 1","Step 2","Step 3"];
-  //  static List<String> listOfStepsRecipe2 = ["Step 1","Step 2","Step 3", "Step 4"];
-  //  static List<String> listOfStepsRecipe3 = ["Step 1","Step 2","Step 3", "Step 4", "Step 5"];
-  //  static List<String> listOfStepsRecipe4 = ["Step 1","Step 2","Step 3", "Step 4", "Step 5", "Step 6"];
-  //  static List<String> listOfStepsRecipe5 = ["Step 1","Step 2"];
+  String ingredientName = ' ';
+  String ingredientSearch;
+  Map ingredientMap = Map();
+  String ingredientId = '';
+  List<String> quantityTypeList = ['gram', 'kg', 'liters'];
+  String dropDownValue = 'kg';
+  int quantityValue = 5;
+  WhatToShow whatToShow = WhatToShow.foundIngredient;
+  List<Ingredient> ingredientList = [];
+  List<DocumentSnapshot> recipeList = [];
+
+  Widget foundIngredient({whatToShowenum, ingredientMap}) {
+    if (whatToShowenum == WhatToShow.none) {
+      return Text('We could not find a matching ingredient, please try again');
+    } else if (whatToShowenum == WhatToShow.foundIngredient) {
+      return Container();
+    }
+    return IngredientChooserTile(
+        ingredientName: ingredientMap['ingredientName'],
+        ingredientId: ingredientMap['ingredientId']);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        itemCount: recipes.length,
-        itemBuilder: (context, index) {
-          return Card(
-              child: ListTile(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      PopupBodyIndividualRecipe(recipe: recipes[index]),
+    User user = Provider.of<User>(context);
+    DatabaseService database = DatabaseService(uid: user.uid);
+
+    return ChangeNotifierProvider<IngredientList>(
+        create: (context) => IngredientList(),
+        child:
+            Consumer<IngredientList>(builder: (context, ingredientList, child) {
+          return Scaffold(
+            body: Container(
+              decoration: BoxDecoration(
+                  color: Color(0xff757575),
+                  border: Border.all(color: Color(0xff757575))),
+              height: 550.0,
+              child: Container(
+                padding: EdgeInsets.all(20.0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20.0),
+                    topRight: Radius.circular(20.0),
+                  ),
                 ),
-              );
-            },
-            title: Text(
-              recipes[index].title,
-              style: TextStyle(
-                fontSize: 18.0,
+                child: ListView(
+                  physics: AlwaysScrollableScrollPhysics(),
+                  padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
+                  children: <Widget>[
+                    TextField(
+                      onChanged: (toSearch) {
+                        ingredientSearch = toSearch;
+                        ingredientSearch =
+                            "${ingredientSearch[0].toUpperCase()}${ingredientSearch.substring(1)}";
+                        print(ingredientSearch);
+                      },
+                    ),
+                    FlatButton(
+                        onPressed: () async {
+                          Map ingredientMapFromDatabase =
+                              await database.getIngredient(ingredientSearch);
+
+                          if (ingredientMapFromDatabase != null) {
+                            ingredientList.addIngredient(Ingredient(
+                                ingredientId:
+                                    ingredientMapFromDatabase['ingredientId'],
+                                ingredientName: ingredientMapFromDatabase[
+                                    'ingredientName']));
+                            List<DocumentSnapshot> recipeListFromDatabase =
+                                await database
+                                    .findRecipes(ingredientList.ingredientList);
+                            print(recipeListFromDatabase[0].data['title']);
+
+                            setState(() {
+                              recipeList = recipeListFromDatabase;
+                              whatToShow = WhatToShow.foundIngredient;
+                              FocusScope.of(context).requestFocus(FocusNode());
+                            });
+                          } else if (ingredientMap == null) {
+                            setState(() {
+                              whatToShow = WhatToShow.none;
+                            });
+                          }
+                        },
+                        child: Text('Search')),
+                    foundIngredient(
+                        whatToShowenum: whatToShow,
+                        ingredientMap: ingredientMap),
+                    AnimationLimiter(
+                      child: GridView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3),
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return AnimationConfiguration.staggeredGrid(
+                            columnCount: 3,
+                            position: index,
+                            duration: const Duration(milliseconds: 500),
+                            child: ScaleAnimation(
+                              child: FadeInAnimation(
+                                child:
+                                    IngredientTileWithoutQuantity(index: index),
+                              ),
+                            ),
+                          );
+                        },
+                        itemCount: (Provider.of<IngredientList>(context)
+                            .ingredientCount),
+                      ),
+                    ),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          child: InkWell(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                ListTile(
+                                  leading: Image(
+                                    image: NetworkImage(
+                                        recipeList[index].data['imageURL']),
+                                  ),
+                                  title: Text(recipeList[index].data['title']),
+                                  subtitle: Text(
+                                      recipeList[index].data['desctiption']),
+                                ),
+                                ButtonBar(
+                                  children: <Widget>[
+                                    Text(recipeList[index]
+                                        .data['time']
+                                        .toString()),
+                                    FlatButton(
+                                      child: Text(recipeList[index]
+                                          .data['rating']
+                                          .toString()),
+                                      onPressed: () {/* ... */},
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                      itemCount: recipeList.length,
+                    ),
+                  ],
+                ),
               ),
             ),
-            leading: GFAvatar(
-              shape: GFAvatarShape.square,
-              size: GFSize.LARGE,
-              backgroundImage: AssetImage(recipes[index].imageURL),
-            ),
-            subtitle: Text(recipes[index].description),
-            trailing: Column(
-              children: <Widget>[
-                Text((recipes[index].time).toString() + " min"),
-                Icon(
-                  Icons.star,
-                  color: Colors.orangeAccent,
-                ),
-                Text((recipes[index].rating).toString()),
-              ],
-            ),
-          ));
-        });
+          );
+        }));
   }
 }

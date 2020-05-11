@@ -54,7 +54,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) {
-                                  return ImageCapture();
+                                  return ImageCapture(
+                                    recipePhoto: false,
+                                  );
                                 },
                               ),
                             );
