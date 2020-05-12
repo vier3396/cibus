@@ -25,6 +25,7 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
+    print(user.uid);
 
     return StreamBuilder<UserData>(
         stream: DatabaseService(uid: user.uid).userData,

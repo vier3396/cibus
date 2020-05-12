@@ -35,7 +35,8 @@ class IngredientTileWithoutQuantity extends StatelessWidget {
           IconButton(
               icon: Icon(Icons.clear),
               onPressed: () {
-                Provider.of<IngredientList>(context).removeIngredient(index);
+                Provider.of<IngredientList>(context, listen: false)
+                    .removeIngredient(index);
               })
         ],
       ),

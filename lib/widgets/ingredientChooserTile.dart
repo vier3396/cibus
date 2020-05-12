@@ -84,7 +84,8 @@ class IngredientChooserTile extends StatelessWidget {
                     child: MaterialButton(
                       onPressed: () {
                         if (quantityValue != null && dropDownValue != null) {
-                          Provider.of<Recipe>(context).addIngredient(
+                          Provider.of<Recipe>(context, listen: false)
+                              .addIngredient(
                             ingredientName: ingredientName,
                             ingredientId: ingredientId,
                             quantityType: dropDownValue,

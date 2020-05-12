@@ -103,7 +103,11 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
     // final halfMedianWidth = MediaQuery.of(context).size.width / 2.0; (for different screens)
 
     return Consumer<Recipe>(
-      builder: (context, recipe, child) {
+      builder: (
+        context,
+        recipe,
+        child,
+      ) {
         return MaterialApp(
           home: Scaffold(
             resizeToAvoidBottomPadding: false, // solves keyboard problems
@@ -174,7 +178,8 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                             Expanded(
                               child: MyTextFormField(
                                 validator: (String ingredients) {
-                                  if (Provider.of<Recipe>(context)
+                                  if (Provider.of<Recipe>(context,
+                                              listen: false)
                                           .ingredientCount ==
                                       0) {
                                     return 'choose ingredients';
@@ -184,8 +189,9 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                                 maxLength: 20,
                                 labelText: 'Add ingredient',
                                 onTap: () {
-                                  final popProvider =
-                                      Provider.of<Recipe>(context);
+                                  final popProvider = Provider.of<Recipe>(
+                                      context,
+                                      listen: false);
                                   showModalBottomSheet(
                                     isScrollControlled: true,
                                     context: context,
