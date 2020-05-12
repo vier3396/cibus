@@ -100,7 +100,8 @@ class _RecipeStepsState extends State<RecipeSteps> {
           onSaved: (String step) {
             print('once');
             //widget.recipe.listOfSteps[displayNumber - 1] = step;
-            Provider.of<Recipe>(context).addSteps(step, displayNumber - 1);
+            Provider.of<Recipe>(context, listen: false)
+                .addSteps(step, displayNumber - 1);
 
             //widget.formkey.currentState.reset();
             /* for (i=0; i < controllers.length; i++) {

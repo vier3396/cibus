@@ -22,8 +22,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<Recipe>(
       create: (context) => Recipe(),
-      child: StreamProvider<User>.value(
-        value: AuthService().user,
+      child: StreamProvider<User>(
+        lazy: false,
+        create: (context) => AuthService().user,
         child: MaterialApp(
           theme: ThemeData(
             backgroundColor: Colors.white,

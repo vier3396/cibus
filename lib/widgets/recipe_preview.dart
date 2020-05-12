@@ -80,7 +80,7 @@ class _RecipePreviewState extends State<RecipePreview> {
                 right: 10,
                 child: InkWell(
                   onTap: () {
-                    User user = Provider.of<User>(context);
+                    User user = Provider.of<User>(context, listen: false);
                     recipe.addUserId(user.uid);
                     DatabaseService(uid: user.uid).uploadRecipe(recipe);
                     // send it here to avoid overwrite loss

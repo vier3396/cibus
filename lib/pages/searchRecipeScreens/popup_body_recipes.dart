@@ -145,8 +145,9 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                               children: <Widget>[
                                 ListTile(
                                   leading: Image(
-                                    image: NetworkImage(
-                                        recipeList[index].data['imageURL']),
+                                    image: NetworkImage(recipeList[index]
+                                            .data['imageURL'] ??
+                                        'https://firebasestorage.googleapis.com/v0/b/independent-project-7edde.appspot.com/o/images%2F2020-05-08%2011%3A32%3A16.330607.png?alt=media&token=1e4bff1d-c08b-4afa-a1f3-a975e46e89c5'),
                                   ),
                                   title: Text(recipeList[index].data['title']),
                                   subtitle: Text(

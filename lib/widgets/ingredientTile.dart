@@ -41,7 +41,8 @@ class _IngredientTileState extends State<IngredientTile> {
           IconButton(
               icon: Icon(Icons.clear),
               onPressed: () {
-                Provider.of<Recipe>(context).removeIngredient(widget.index);
+                Provider.of<Recipe>(context, listen: false)
+                    .removeIngredient(widget.index);
               })
         ],
       ),
