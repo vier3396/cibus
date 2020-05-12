@@ -14,7 +14,7 @@ description: Independent project for STS
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.2 <3.0.0"
 
 dependencies:
   flutter:
@@ -41,6 +41,7 @@ dev_dependencies:
   image_cropper: ^1.2.1
   image_picker: ^0.6.5+2
   flutter_staggered_animations: ^0.1.2
+  firebase_user_stream: ^1.0.0
 
 
 

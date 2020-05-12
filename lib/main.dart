@@ -1,3 +1,5 @@
+import 'package:cibus/pages/loginScreens/username_screen.dart';
+import 'package:cibus/pages/loginScreens/verify_screen.dart';
 import 'package:cibus/pages/settings_screen.dart';
 import 'package:cibus/services/login/auth.dart';
 import 'package:cibus/services/my_page_view.dart';
@@ -32,7 +34,6 @@ class MyApp extends StatelessWidget {
               color: Colors.white,
               elevation: 0.0,
             ),
-            //backgroundColor: , //Buttons etc
           ),
           initialRoute: '/loginPage',
           routes: {
@@ -44,6 +45,8 @@ class MyApp extends StatelessWidget {
             '/settingsScreen': (context) => SettingsScreen(),
             'camerscreen': (context) => ImageCapture(),
             '/recipePreview': (context) => RecipePreview(),
+            '/verifyscreen': (context) => VerifyScreen(),
+            '/usernamescreen': (context) => UsernameScreen(),
           },
         ),
       ),

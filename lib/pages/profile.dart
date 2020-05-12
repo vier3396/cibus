@@ -1,13 +1,14 @@
 import 'package:cibus/pages/home.dart';
+import 'package:cibus/services/constants.dart';
 import 'package:cibus/pages/settings_screen.dart';
 import 'package:cibus/services/database.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/services/colors.dart';
 import 'package:cibus/services/popup_layout.dart';
-import 'package:cibus/services/login/user.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'settings_screen.dart';
 
 const topMarginPopupLayout = 0.0;
 
@@ -20,7 +21,7 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   List<bool> _boldButtons = [false, true, false];
   Container wallOfText = yourRecipes();
-  int karma;
+  //int karma;
 
   @override
   Widget build(BuildContext context) {
@@ -42,39 +43,41 @@ class _ProfileState extends State<Profile> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           CircleAvatar(
-                            backgroundImage: NetworkImage(userData.profilePic),
+                            backgroundImage: NetworkImage(
+                                userData.profilePic ?? kBackupProfilePic),
                             radius: 40.0,
                           ),
                           SizedBox(width: 20.0),
-                          Column(
-                            children: <Widget>[
-                              SizedBox(height: 20.0),
-                              Text(
-                                userData.name,
-                                style: TextStyle(
-                                  fontSize: 20.0,
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                SizedBox(height: 20.0),
+                                Text(
+                                  userData.name ?? "Cannot find name",
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 20.0,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(height: 5.0),
-                              Text(
-                                'Karma points: $karma',
-                                //TODO: karma points
-                                style: TextStyle(),
-                              ),
-                            ],
+                                SizedBox(height: 5.0),
+                                Text(
+                                  userData.description ??
+                                      "Cannot find description",
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 5,
+                                  style: TextStyle(),
+                                ),
+                              ],
+                            ),
                           ),
                           SizedBox(width: 40.0),
                           IconButton(
                             icon: Image.asset('assets/cogwheel.png'),
                             iconSize: 50,
                             onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return SettingsScreen();
-                                  },
-                                ),
-                              );
+                              PopupLayout(top: topMarginPopupLayout).showPopup(
+                                  context, SettingsScreen(), 'Cibus Settings');
                             },
                           ),
                         ],
