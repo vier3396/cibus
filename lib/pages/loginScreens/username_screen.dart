@@ -56,11 +56,9 @@ class _UsernameScreenState extends State<UsernameScreen> {
                           validator: (val) {
                             if (val.length < 3)
                               return 'Name must be more than 2 characters';
-                            else if (user.isEmail == false)
-                              return 'Please verify email first';
                             /*else if (checkUsername == false)
                               return 'Username is allready taken';*/
-                            return null; //Vi säger aldrig till om att username är taken???
+                            return null;
                           },
                           onChanged: (val) {
                             setState(() {
