@@ -41,6 +41,58 @@ class DatabaseService {
     }, merge: true);
   }
 
+  Future updateAverageRating({String recipeId}) async {
+    double averageRating = await getAverageRating(recipeId: recipeId);
+    recipeCollection.document(recipeId).setData({"rating": averageRating});
+    return null;
+  }
+
+  Future updateRatings({int ratings, String recipeId, String userId}) async {
+    Map<String, int> ratingsMap = {userId: ratings};
+    return await recipeCollection
+        .document(recipeId)
+        .collection("newRatings")
+        .document(userId)
+        .setData(ratingsMap);
+  }
+
+  Future<int> getYourRating({
+    String recipeId,
+    String userId,
+  }) async {
+    QuerySnapshot querySnapshot = await recipeCollection
+        .document(recipeId)
+        .collection("newRatings")
+        .getDocuments();
+    final doc = querySnapshot.documents;
+    int value = doc[0].data[userId];
+    print("value i getyorrating " + value.toString());
+    if (value == null) {
+      print("myrating: 0");
+      return 0;
+    } else {
+      print("myrating " + value.toString());
+      return value;
+    }
+  }
+
+  Future<double> getAverageRating({String recipeId}) async {
+    QuerySnapshot querySnapshot = await recipeCollection
+        .document(recipeId)
+        .collection("newRatings")
+        .getDocuments();
+    final doc = querySnapshot.documents;
+    double sumRating = 0;
+    if (doc.length > 0) {
+      for (DocumentSnapshot snap in doc) {
+        snap.data.forEach((key, value) => sumRating += value);
+      }
+      return sumRating / doc.length;
+    } else {
+      return null;
+    }
+  }
+
   Future<bool> isUsernameTaken({String username}) async {
 //    final _query = await userCollection
 //        .where('username', isEqualTo: username)
@@ -133,6 +185,7 @@ class DatabaseService {
           .document(ingredientMap['ingredientName'])
           .setData(ingredientMap);
     }
+    recipe.setRecipeId(result.documentID);
     print('result');
     print(result);
   }

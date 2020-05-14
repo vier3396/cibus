@@ -15,6 +15,32 @@ class Recipe extends ChangeNotifier {
   double rating;
   String userId;
   List<String> ingredientList = [];
+  String recipeId;
+  int yourRating;
+  Map ratings = Map();
+
+  void rateRecipe({String userId, int rating}) {
+    ratings[userId] = rating;
+    notifyListeners();
+  }
+
+  void addYourRating({int rating}) {
+    this.yourRating = rating;
+  }
+
+  double getAverageRating() {
+    double totalRating = 0;
+    ratings.forEach((uID, rating) => totalRating += rating);
+    return totalRating / ratings.length;
+  }
+
+  int getRatingPerUserId(String userId) {
+    if (ratings[userId] == null) {
+      return 0;
+    } else {
+      return ratings[userId];
+    }
+  }
 
   void addIngredient(
       {String ingredientId,
@@ -29,6 +55,11 @@ class Recipe extends ChangeNotifier {
         quantity: ingredientQuantity));
     notifyListeners();
     print(ingredients);
+  }
+
+  void setRecipeId(String documentId) {
+    recipeId = documentId;
+    notifyListeners();
   }
 
   void addDescription(String description) {
@@ -72,7 +103,7 @@ class Recipe extends ChangeNotifier {
 
   Map<String, dynamic> toMap() => {
         'title': this.title,
-        'desctiption': this.description,
+        'description': this.description,
         //'ingredients' : this.ingredients,
         'listOfSteps': this.listOfSteps,
         'imageURL': this.imageURL,
@@ -80,6 +111,9 @@ class Recipe extends ChangeNotifier {
         'rating': this.rating,
         'userId': this.userId,
         'ingredientsArray': this.ingredientList,
+        'recipeId': this.recipeId,
+        'ratings': this.ratings,
+        'yourRating': this.yourRating,
       };
 
   int get ingredientCount {

@@ -29,7 +29,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
                 margin: EdgeInsets.only(
                     top: 150.0), //TODO: have to work for multiple screens
                 child: Image.asset(
-                  'assets/pink_lemon.png',
+                  'assets/coral_lemon.png',
                   width: 250.0,
                   height: 250.0,
                 ),

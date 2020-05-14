@@ -149,7 +149,7 @@ class _EmailSignInState extends State<EmailSignIn> {
   }
 
   Future<void> _forgotDialog() async {
-    String errorMessage = 'hejjj';
+    String errorMessage = '';
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
