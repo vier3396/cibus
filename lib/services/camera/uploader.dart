@@ -7,6 +7,7 @@ import 'dart:core';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:cibus/services/recipe.dart';
+import 'package:cibus/services/colors.dart';
 
 class Uploader extends StatefulWidget {
   final File file;
@@ -36,9 +37,9 @@ class _UploaderState extends State<Uploader> {
   }
 
   void getuRL(String filePath, BuildContext context) async {
-    print('kompis');
+    //print('kompis');
     var uRL = await _storage.ref().child(filePath).getDownloadURL();
-    print(uRL);
+    //print(uRL);
     final user = Provider.of<User>(context, listen: false);
     DatabaseService(uid: user.uid)
         .updateUserPicture(pictureURL: uRL)
@@ -46,16 +47,17 @@ class _UploaderState extends State<Uploader> {
   }
 
   void getuRLRecipe(String filePath, BuildContext context) async {
-    print('kompis recipe');
+    //print('kompis recipe');
     var uRL = await _storage.ref().child(filePath).getDownloadURL();
-    print(uRL);
+    //print(uRL);
     Provider.of<Recipe>(context, listen: false).addImage(uRL);
 
     if (uRL != null &&
         Provider.of<Recipe>(context, listen: false).imageURL != null) {
-      print('kom hit');
+      //print('kom hit');
       urlResult = true;
       Navigator.of(context).pop();
+      //print("vi poppar");
     }
   }
 
@@ -104,8 +106,11 @@ class _UploaderState extends State<Uploader> {
     } else {
       // Allows user to decide when to start the upload
       return FlatButton.icon(
-        label: Text('Upload to Firebase'),
-        icon: Icon(Icons.cloud_upload),
+        label: Text('Upload Image', style: TextStyle(color: kCoral)),
+        icon: Icon(
+          Icons.cloud_upload,
+          color: kCoral,
+        ),
         onPressed: _startUpload,
       );
     }

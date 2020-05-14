@@ -86,7 +86,8 @@ class _RecipePreviewState extends State<RecipePreview> {
                     // send it here to avoid overwrite loss
                     print("Success");
                     // formKey.currentState.reset();
-                    Navigator.of(context).pop();
+                    //TODO: clear all fields
+                    Navigator.pop(context);
                   },
                   child: Text(
                     'submit',

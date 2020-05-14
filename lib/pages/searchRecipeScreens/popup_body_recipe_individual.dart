@@ -103,10 +103,6 @@ class _PopupBodyIndividualRecipeState extends State<PopupBodyIndividualRecipe> {
                   color: Colors.orangeAccent,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text((widget.recipe.getAverageRating()).toString()),
-              ),
               //TODO: add the number of ratings
             ],
           ),

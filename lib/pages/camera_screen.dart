@@ -1,3 +1,4 @@
+import 'package:cibus/services/colors.dart';
 import 'package:cibus/services/database.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
@@ -99,7 +100,7 @@ class _ImageCaptureState extends State<ImageCapture> {
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
-                  color: Colors.deepOrange,
+                  color: kCoral,
                 ),
               ),
             ),
@@ -111,7 +112,7 @@ class _ImageCaptureState extends State<ImageCapture> {
                   iconSize: 100.0,
                   icon: Icon(
                     Icons.photo_camera,
-                    color: Colors.orange,
+                    color: kCoral,
                   ),
                   onPressed: () => _pickImage(ImageSource.camera),
                 ),
@@ -120,7 +121,7 @@ class _ImageCaptureState extends State<ImageCapture> {
                   iconSize: 100.0,
                   icon: Icon(
                     Icons.photo_library,
-                    color: Colors.orange,
+                    color: kCoral,
                   ),
                   onPressed: () => _pickImage(ImageSource.gallery),
                 ),

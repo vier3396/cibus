@@ -149,7 +149,7 @@ class _EmailSignInState extends State<EmailSignIn> {
   }
 
   Future<void> _forgotDialog() async {
-    String errorMessage = 'hejjj';
+    String errorMessage = '';
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -186,7 +186,7 @@ class _EmailSignInState extends State<EmailSignIn> {
             Column(
               children: <Widget>[
                 FlatButton(
-                  child: Text('Aight bruh'),
+                  child: Text('Reset Password'),
                   onPressed: () async {
                     setState(() {
                       loading = false;
