@@ -258,66 +258,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ));
   }
 
-  Future<void> _verificationDialog(User user) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Verification email'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(
-                    'The Verification email has been sent, please check your email and complete the registration. Press the verify button below when done.'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            RaisedButton(
-              child: Text('Verified?'),
-              onPressed: () async {
-                FirebaseUser _firebaseUser =
-                    await FirebaseAuth.instance.currentUser();
-                AuthService().isEmailVerified(_firebaseUser);
-                setState(() {
-                  user.isEmail = _firebaseUser.isEmailVerified;
-                });
-                //user.isEmail = _firebaseUser.isEmailVerified;
-                print(_firebaseUser.isEmailVerified);
-                _firebaseUser
-                    .reload(); //LÖS DET HÄR MED ATT MAN MÅSTE KLICKA TVÅ GÅNGER!!
-                //print(AuthService().isEmailVerified(_firebaseUser));
-              },
-            ),
-            FlatButton(
-              child: Text('Resend Verification email?'),
-              onPressed: () {},
-            ),
-            FlatButton(
-              child: Text('Click to continue when email is verified'),
-              onPressed: () {
-                //Navigator.of(context).pop();
-                print('Klar med popup');
-                setState(() {
-                  if (isVerified) {
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return MyPageView();
-                        },
-                      ),
-                    );
-                  }
-                });
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   Future<void> _usernameDialog() async {
     return showDialog<void>(
       context: context,

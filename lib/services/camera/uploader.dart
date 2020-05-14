@@ -39,19 +39,23 @@ class _UploaderState extends State<Uploader> {
     print('kompis');
     var uRL = await _storage.ref().child(filePath).getDownloadURL();
     print(uRL);
-    final user = Provider.of<User>(context);
-    DatabaseService(uid: user.uid).updateUserPicture(pictureURL: uRL);
+    final user = Provider.of<User>(context, listen: false);
+    DatabaseService(uid: user.uid)
+        .updateUserPicture(pictureURL: uRL)
+        .whenComplete(() => Navigator.of(context).pop());
   }
 
   void getuRLRecipe(String filePath, BuildContext context) async {
     print('kompis recipe');
     var uRL = await _storage.ref().child(filePath).getDownloadURL();
     print(uRL);
-    Provider.of<Recipe>(context).addImage(uRL);
+    Provider.of<Recipe>(context, listen: false).addImage(uRL);
 
-    if (uRL != null && Provider.of<Recipe>(context).imageURL != null) {
+    if (uRL != null &&
+        Provider.of<Recipe>(context, listen: false).imageURL != null) {
       print('kom hit');
       urlResult = true;
+      Navigator.of(context).pop();
     }
   }
 

@@ -151,7 +151,7 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                                   ),
                                   title: Text(recipeList[index].data['title']),
                                   subtitle: Text(
-                                      recipeList[index].data['desctiption']),
+                                      recipeList[index].data['description']),
                                 ),
                                 ButtonBar(
                                   children: <Widget>[

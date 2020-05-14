@@ -41,6 +41,17 @@ class DatabaseService {
     }, merge: true);
   }
 
+  Future updateRatings({int ratings, String recipeId, String userId}) async {
+    return await recipeCollection
+        .document(recipeId)
+        .collection('newRatings')
+        .document()
+        .setData({
+      'userId': userId,
+      'rating': ratings,
+    }, merge: true);
+  }
+
   Future<bool> isUsernameTaken({String username}) async {
 //    final _query = await userCollection
 //        .where('username', isEqualTo: username)
@@ -133,6 +144,10 @@ class DatabaseService {
           .document(ingredientMap['ingredientName'])
           .setData(ingredientMap);
     }
+
+    recipe.setRecipeId(result.documentID);
+    print('result.documentID: ' + result.documentID);
+    print('recipeId: ' + recipe.recipeId);
     print('result');
     print(result);
   }
