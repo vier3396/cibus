@@ -185,6 +185,14 @@ class DatabaseService {
           .document(ingredientMap['ingredientName'])
           .setData(ingredientMap);
     }
+
+    Map<String, int> ratingsMap = {};
+    await recipeCollection.add(ratingsMap);
+    await recipeCollection
+        .document(recipe.recipeId)
+        .collection('newRatings')
+        .document(uid)
+        .setData(ratingsMap);
     recipe.setRecipeId(result.documentID);
     print('result');
     print(result);

@@ -239,7 +239,7 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
     User user,
     int myRating,
   }) {
-    myRating ?? 0;
+    myRating = myRating ?? 0;
     return ButtonBar(
       // stars for rating, the _currentRating should be linked to each recipe's rating
       children: <Widget>[
