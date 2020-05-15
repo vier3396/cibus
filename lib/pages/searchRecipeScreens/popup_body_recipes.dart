@@ -190,14 +190,6 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
-                                RaisedButton(
-                                  child: Text("hej"),
-                                  onPressed: () {
-                                    DatabaseService().getAverageRating(
-                                        recipeId:
-                                            recipeClassList[index].recipeId);
-                                  },
-                                ),
                                 ListTile(
                                   leading: Image(
                                     image: NetworkImage(recipeList[index]
@@ -214,12 +206,13 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                                     Text(recipeList[index]
                                         .data['time']
                                         .toString()),
+                                    /*
                                     FlatButton(
                                       child: Text(recipeClassList[index]
                                           .rating
                                           .toStringAsFixed(1)),
                                       onPressed: () {/* ... */},
-                                    ),
+                                    ), */
                                   ],
                                 ),
                                 addStarButtons(
@@ -247,7 +240,7 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
     User user,
     int myRating,
   }) {
-    myRating ?? 0;
+    myRating = myRating ?? 0;
     return ButtonBar(
       // stars for rating, the _currentRating should be linked to each recipe's rating
       children: <Widget>[
