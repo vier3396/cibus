@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cibus/pages/home.dart';
 import 'package:cibus/services/constants.dart';
 import 'package:cibus/pages/settings_screen.dart';
@@ -14,6 +16,9 @@ const topMarginPopupLayout = 0.0;
 
 class Profile extends StatefulWidget {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  Stream userDataStream;
+
+  Profile({this.userDataStream});
   @override
   _ProfileState createState() => _ProfileState();
 }
@@ -21,18 +26,21 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   List<bool> _boldButtons = [false, true, false];
   Container wallOfText = yourRecipes();
+  bool firstTime = true;
+  Stream dataBaseStream;
   //int karma;
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
-    print(user.uid);
+    //final user = Provider.of<User>(context);
+    //print(user.uid);
 
     return StreamBuilder<UserData>(
-        stream: DatabaseService(uid: user.uid).userData,
+        stream: widget.userDataStream,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             UserData userData = snapshot.data;
+            print(userData.favoriteList);
             return Scaffold(
               body: SafeArea(
                 child: Column(

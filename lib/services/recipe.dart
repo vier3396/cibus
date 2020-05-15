@@ -1,20 +1,24 @@
+import 'package:cibus/services/database.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'ingredients.dart';
 import 'dart:io';
 import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Recipe extends ChangeNotifier {
+  String recipeID;
   String title;
   String description;
   List<Ingredient> ingredients = [];
-  List<String> listOfSteps = [];
+  List<dynamic> listOfSteps = [];
   //TODO: NetworkImage? imageFile;
   String imageURL; //just to view temporary Recipe objects images
   int time;
   double rating;
   String userId;
   List<String> ingredientList = [];
+  String username;
 
   void addIngredient(
       {String ingredientId,
@@ -60,8 +64,9 @@ class Recipe extends ChangeNotifier {
     this.rating = newRating;
   }
 
-  void addUserId(String uId) {
-    this.userId = uId;
+  void addUserIdAndUsername({String uid, String username}) {
+    this.userId = uid;
+    this.username = username;
   }
 
   void removeIngredient(int index) {
@@ -80,9 +85,31 @@ class Recipe extends ChangeNotifier {
         'rating': this.rating,
         'userId': this.userId,
         'ingredientsArray': this.ingredientList,
+        'username': this.username,
       };
 
   int get ingredientCount {
     return ingredients.length;
+  }
+
+  void addAllIngredientsFromDocument(
+      {Map<String, dynamic> recipe, String recipeID}) async {
+    print(recipe['title']);
+    this.title = recipe['title'];
+    this.ingredients =
+        await DatabaseService().getIngredientCollectionFromRecipe(recipeID);
+    this.imageURL = recipe['imageURL'];
+    this.rating = recipe['rating'];
+    this.userId = recipe['userId'];
+    this.time = recipe['time'];
+    this.listOfSteps = recipe['listOfSteps'];
+    this.description = recipe['description'];
+    this.recipeID = recipeID;
+    notifyListeners();
+  }
+
+  void setListOfStepsToZero() {
+    this.listOfSteps = [];
+    notifyListeners();
   }
 }

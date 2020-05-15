@@ -41,12 +41,17 @@ class DatabaseService {
     }, merge: true);
   }
 
+  Future<String> getUsername() async {
+    var result = await userCollection.document(uid).get();
+    return result.data['username'];
+  }
+
   Future<bool> isUsernameTaken({String username}) async {
 //    final _query = await userCollection
 //        .where('username', isEqualTo: username)
 //        .limit(1).snapshots();
 //    print(_query.toString());
-
+    //if (username != '' && username != ' ' && username != null) {
     final result = await Firestore.instance
         .collection('Users')
         .where('username', isEqualTo: username)
@@ -56,12 +61,19 @@ class DatabaseService {
         print(result.data);
       });
     });*/
+    for (DocumentSnapshot document in result.documents) {
+      print(document.data);
+    }
+
     print(result.documents.isNotEmpty); //isEmpty
     return result.documents.isNotEmpty;
+    //}
+    return true;
   }
 
   //userData from snapshot
   UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
+    print(snapshot.data['favoriteList']);
     return UserData(
         uid: uid,
         name: snapshot.data['name'],
@@ -69,17 +81,19 @@ class DatabaseService {
         age: snapshot.data['age'],
         username: snapshot.data['username'],
         profilePic: snapshot.data['profilePic'],
-        isEmail: snapshot.data['isEmail']);
+        isEmail: snapshot.data['isEmail'],
+        favoriteList: snapshot.data['favoriteList']);
   }
 
   //get user doc stream
   Stream<UserData> get userData {
+    print(userCollection.document(uid).snapshots());
     return userCollection.document(uid).snapshots().map(_userDataFromSnapshot);
   }
 
   Future<Map> getIngredient(String ingredient) async {
     Map mapWithNameAndId = {'ingredientName': ' ', 'ingredientId': ' '};
-    if (ingredient != '' && ingredient != null) {
+    if (ingredient != '' && ingredient != null && ingredient != ' ') {
       final result = await ingredientCollection
           .where('Livsmedelsnamn', isEqualTo: ingredient)
           .getDocuments();
@@ -101,20 +115,36 @@ class DatabaseService {
   }
 
   Future<List> findRecipes(List<Ingredient> ingredientList) async {
-    List<String> ingredientIdList = [];
-    List<DocumentSnapshot> recipeList = [];
-    for (Ingredient ingredient in ingredientList) {
-      ingredientIdList.add(ingredient.ingredientId);
-    }
-    var result = await recipeCollection
-        .where('ingredientsArray', arrayContainsAny: ingredientIdList)
-        .getDocuments();
-    if (result.documents.isNotEmpty) {
-      final documents = result.documents;
-      for (DocumentSnapshot document in documents) {
-        recipeList.add(document);
+    if (ingredientList.isNotEmpty && ingredientList != null) {
+      List<String> ingredientIdList = [];
+      for (Ingredient ingredient in ingredientList) {
+        ingredientIdList.add(ingredient.ingredientId);
       }
-      return recipeList;
+      var result = await recipeCollection
+          .where('ingredientsArray', arrayContainsAny: ingredientIdList)
+          .getDocuments();
+      if (result.documents.isNotEmpty) {
+        final documents = result.documents;
+
+        List<int> removeIndexList = [];
+        for (String ingredient in ingredientIdList) {
+          for (var index = 0; index < documents.length; index++) {
+            if (!documents[index]
+                .data['ingredientsArray']
+                .contains(ingredient)) {
+              removeIndexList.add(index);
+            }
+          }
+        }
+        if (removeIndexList.isNotEmpty) {
+          for (var index = 0; index < removeIndexList.length; index++) {
+            documents.removeAt(removeIndexList[index] - index);
+          }
+        }
+        return documents;
+      }
+
+      return null;
     }
     return null;
   }
@@ -135,5 +165,33 @@ class DatabaseService {
     }
     print('result');
     print(result);
+  }
+
+  Future<List<Ingredient>> getIngredientCollectionFromRecipe(
+      String documentID) async {
+    List<Ingredient> ingredientList = [];
+    if (documentID != null && documentID != '') {
+      var result = await recipeCollection
+          .document(documentID)
+          .collection('Ingredients')
+          .getDocuments();
+      if (result == null) {
+        return null;
+      }
+      var documents = result.documents;
+      if (documents.isEmpty) {
+        return null;
+      }
+      for (DocumentSnapshot document in documents) {
+        ingredientList.add(Ingredient(
+            ingredientName: document.data['ingredientName'],
+            quantity: document.data['quantity'],
+            quantityType: document.data['quantityType'],
+            ingredientId: document.data['ingredientID']));
+      }
+      return ingredientList;
+    } else {
+      return null;
+    }
   }
 }
