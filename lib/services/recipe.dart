@@ -19,6 +19,9 @@ class Recipe extends ChangeNotifier {
   String userId;
   List<String> ingredientList = [];
   String username;
+  String recipeId;
+  int yourRating;
+  Map ratings = Map();
 
   void addIngredient(
       {String ingredientId,
@@ -33,6 +36,11 @@ class Recipe extends ChangeNotifier {
         quantity: ingredientQuantity));
     notifyListeners();
     print(ingredients);
+  }
+
+  void setRecipeId(String documentId) {
+    recipeId = documentId;
+    notifyListeners();
   }
 
   void addDescription(String description) {
@@ -77,7 +85,7 @@ class Recipe extends ChangeNotifier {
 
   Map<String, dynamic> toMap() => {
         'title': this.title,
-        'desctiption': this.description,
+        'description': this.description,
         //'ingredients' : this.ingredients,
         'listOfSteps': this.listOfSteps,
         'imageURL': this.imageURL,
@@ -86,6 +94,9 @@ class Recipe extends ChangeNotifier {
         'userId': this.userId,
         'ingredientsArray': this.ingredientList,
         'username': this.username,
+    'recipeId': this.recipeId,
+    'ratings': this.ratings,
+    'yourRating': this.yourRating,
       };
 
   int get ingredientCount {

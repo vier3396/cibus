@@ -24,7 +24,17 @@ class _PopupBodySearchIngredientsState
   String ingredientSearch;
   Map ingredientMap = Map();
   String ingredientId = '';
-  List<String> quantityTypeList = ['gram', 'kg', 'liters'];
+  List<String> quantityTypeList = [
+    'grams',
+    'kgs',
+    'liters',
+    'deciliters',
+    'pieces',
+    'cans',
+    'teaspoons',
+    'cups',
+    'cloves',
+  ];
   String dropDownValue = 'kg';
   int quantityValue = 5;
   WhatToShow whatToShow = WhatToShow.notYetSea;

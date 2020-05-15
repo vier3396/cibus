@@ -40,10 +40,45 @@ class DatabaseService {
       'username': username,
     }, merge: true);
   }
-
   Future<String> getUsername() async {
     var result = await userCollection.document(uid).get();
     return result.data['username'];
+  }
+
+  Future updateAverageRating({String recipeId}) async {
+    double averageRating = await getAverageRating(recipeId: recipeId);
+    recipeCollection.document(recipeId).setData({"rating": averageRating});
+    return null;
+  }
+
+  Future updateRatings({int ratings, String recipeId, String userId}) async {
+    Map<String, int> ratingsMap = {userId: ratings};
+    return await recipeCollection
+        .document(recipeId)
+        .collection("newRatings")
+        .document(userId)
+        .setData(ratingsMap);
+  }
+
+  Future<int> getYourRating({
+    String recipeId,
+    String userId,
+  }) async {
+    //HÄR PRINTAR VI JÄTTEMYCKET TODO: TA BORT PRINTS
+    QuerySnapshot querySnapshot = await recipeCollection
+        .document(recipeId)
+        .collection("newRatings")
+        .getDocuments();
+    final doc = querySnapshot.documents;
+    int value = doc[0].data[userId];
+    print("value i getyorrating " + value.toString());
+    if (value == null) {
+      print("myrating: 0");
+      return 0;
+    } else {
+      print("myrating " + value.toString());
+      return value;
+    }
   }
 
   Future<bool> isUsernameTaken({String username}) async {
@@ -163,6 +198,14 @@ class DatabaseService {
           .document(ingredientMap['ingredientName'])
           .setData(ingredientMap);
     }
+    Map<String, int> eMap = {};
+    var test = await recipeCollection
+        .document(result.documentID)
+        .collection("newRatings")
+        .document("throwAwayId")
+        .setData(eMap);
+
+    recipe.setRecipeId(result.documentID);
     print('result');
     print(result);
   }

@@ -65,25 +65,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ],
                     ),
                     SizedBox(height: 20.0),
-                    Text('Name'),
+                    Text(
+                      'Name',
+                      style: TextStyle(
+                        color: kCoral,
+                      ),
+                    ),
                     TextFormField(
                       initialValue: userData.name ?? "Cannot find name",
                       decoration: textInputDecoration,
                       validator: (val) =>
                           val.isEmpty ? 'Please enter a name' : null,
                       onChanged: (val) => setState(() => _currentName = val),
-                    ),
-                    SizedBox(height: 40.0),
-                    Text('Age: $_currentAge'),
-                    Slider(
-                      value: (_currentAge ?? userData.age).toDouble(),
-                      activeColor: Colors.brown[_currentAge ?? userData.age],
-                      inactiveColor: Colors.brown[_currentAge ?? userData.age],
-                      min: 1,
-                      max: 90,
-                      divisions: 90,
-                      onChanged: (val) =>
-                          setState(() => _currentAge = val.round()),
                     ),
                     SizedBox(height: 40.0),
                     //Text('Description'),
@@ -93,6 +86,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       minLines: 3,
                       maxLines: 20,
                       decoration: textInputDecoration,
+                      cursorColor: kCoral,
                       validator: (val) =>
                           val.isEmpty ? 'Please enter a description' : null,
                       onChanged: (val) =>
@@ -100,10 +94,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                     SizedBox(height: 20.0),
                     RaisedButton(
-                      color: kTurquoise,
+                      color: kCoral,
                       child: Text(
                         'Update',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.black),
                       ),
                       onPressed: () async {
                         if (_formKey.currentState.validate()) {

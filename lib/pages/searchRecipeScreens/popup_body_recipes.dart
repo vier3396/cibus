@@ -1,5 +1,3 @@
-import 'package:cibus/services/recipeList.dart';
-import 'package:cibus/widgets/recipe_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:getflutter/components/avatar/gf_avatar.dart';
 import 'package:getflutter/getflutter.dart';
@@ -16,7 +14,9 @@ import 'package:cibus/services/ingredients.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cibus/services/ingredientList.dart';
 import 'package:cibus/widgets/ingredientTileWithoutQuantity.dart';
-
+import 'package:cibus/services/recipeList.dart';
+import 'package:cibus/widgets/recipe_preview.dart';
+import 'package:cibus/services/login/auth.dart';
 const topMarginPopupIndividualRecipe = 0.0;
 
 class PopupBodyRecipes extends StatefulWidget {
@@ -35,6 +35,9 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
   WhatToShow whatToShow = WhatToShow.foundIngredient;
   List<Ingredient> ingredientList = [];
   List<DocumentSnapshot> recipeList = [];
+  List<Recipe> recipeClassList = [];
+
+  int _currentRating = 0;
 
   Widget foundIngredient({whatToShowenum, ingredientMap}) {
     if (whatToShowenum == WhatToShow.none) {
@@ -232,6 +235,99 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget addStarButtons({
+    int index,
+    User user,
+    int myRating,
+  }) {
+    myRating = myRating ?? 0;
+    return ButtonBar(
+      // stars for rating, the _currentRating should be linked to each recipe's rating
+      children: <Widget>[
+        GestureDetector(
+          child: Icon(
+            Icons.star,
+            color: myRating >= 1 ? Colors.amberAccent : Colors.grey,
+          ),
+          onTap: () {
+            setState(() {
+              myRating = 1;
+              recipeClassList[index].addYourRating(rating: myRating);
+            });
+            DatabaseService().updateRatings(
+                ratings: myRating,
+                recipeId: recipeClassList[index].recipeId,
+                userId: user.uid);
+          },
+        ),
+        GestureDetector(
+          child: Icon(
+            Icons.star,
+            color: myRating >= 2 ? Colors.amberAccent : Colors.grey,
+          ),
+          onTap: () {
+            setState(() {
+              myRating = 2;
+              recipeClassList[index].addYourRating(rating: myRating);
+            });
+            DatabaseService().updateRatings(
+                ratings: myRating,
+                recipeId: recipeClassList[index].recipeId,
+                userId: user.uid);
+          },
+        ),
+        GestureDetector(
+          child: Icon(
+            Icons.star,
+            color: myRating >= 3 ? Colors.amberAccent : Colors.grey,
+          ),
+          onTap: () {
+            setState(() {
+              myRating = 3;
+              recipeClassList[index].addYourRating(rating: myRating);
+            });
+            DatabaseService().updateRatings(
+                ratings: myRating,
+                recipeId: recipeClassList[index].recipeId,
+                userId: user.uid);
+          },
+        ),
+        GestureDetector(
+          child: Icon(
+            Icons.star,
+            color: myRating >= 4 ? Colors.amberAccent : Colors.grey,
+          ),
+          onTap: () {
+            setState(() {
+              myRating = 4;
+              recipeClassList[index].addYourRating(rating: myRating);
+            });
+            DatabaseService().updateRatings(
+                ratings: myRating,
+                recipeId: recipeClassList[index].recipeId,
+                userId: user.uid);
+          },
+        ),
+        GestureDetector(
+          child: Icon(
+            Icons.star,
+            color: myRating >= 5 ? Colors.amberAccent : Colors.grey,
+          ),
+          onTap: () {
+            setState(() {
+              myRating = 5;
+              recipeClassList[index].addYourRating(rating: myRating);
+            });
+            DatabaseService().updateRatings(
+                ratings: myRating,
+                recipeId: recipeClassList[index].recipeId,
+                userId: user.uid);
+          },
+        ),
+      ],
     );
   }
 }
