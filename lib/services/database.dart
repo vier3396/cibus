@@ -60,6 +60,7 @@ class DatabaseService {
     String recipeId,
     String userId,
   }) async {
+    //HÄR PRINTAR VI JÄTTEMYCKET TODO: TA BORT PRINTS
     QuerySnapshot querySnapshot = await recipeCollection
         .document(recipeId)
         .collection("newRatings")
@@ -85,9 +86,13 @@ class DatabaseService {
     double sumRating = 0;
     if (doc.length > 0) {
       for (DocumentSnapshot snap in doc) {
-        snap.data.forEach((key, value) => sumRating += value);
+        snap.data.forEach((key, value) {
+          if (key != "throwAwayId") {
+            sumRating += value;
+          }
+        }); //=> sumRating += value);
       }
-      return sumRating / doc.length;
+      return sumRating / (doc.length - 1);
     } else {
       return null;
     }
@@ -185,14 +190,13 @@ class DatabaseService {
           .document(ingredientMap['ingredientName'])
           .setData(ingredientMap);
     }
+    Map<String, int> eMap = {};
+    var test = await recipeCollection
+        .document(result.documentID)
+        .collection("newRatings")
+        .document("throwAwayId")
+        .setData(eMap);
 
-    Map<String, int> ratingsMap = {};
-    await recipeCollection.add(ratingsMap);
-    await recipeCollection
-        .document(recipe.recipeId)
-        .collection('newRatings')
-        .document(uid)
-        .setData(ratingsMap);
     recipe.setRecipeId(result.documentID);
     print('result');
     print(result);

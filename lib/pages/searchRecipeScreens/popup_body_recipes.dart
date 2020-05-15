@@ -206,12 +206,13 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                                     Text(recipeList[index]
                                         .data['time']
                                         .toString()),
+                                    /*
                                     FlatButton(
                                       child: Text(recipeClassList[index]
                                           .rating
                                           .toStringAsFixed(1)),
                                       onPressed: () {/* ... */},
-                                    ),
+                                    ), */
                                   ],
                                 ),
                                 addStarButtons(
