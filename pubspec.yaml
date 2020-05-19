@@ -42,6 +42,7 @@ dev_dependencies:
   image_picker: ^0.6.5+2
   flutter_staggered_animations: ^0.1.2
   firebase_user_stream: ^1.0.0
+  cached_network_image: ^2.2.0+1
 
 
 

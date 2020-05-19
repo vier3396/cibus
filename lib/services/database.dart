@@ -41,17 +41,23 @@ class DatabaseService {
     }, merge: true);
   }
 
+  Future<String> getUsername() async {
+    var result = await userCollection.document(uid).get();
+    return result.data['username'];
+  }
+
   Future updateAverageRating({String recipeId}) async {
     double averageRating = await getAverageRating(recipeId: recipeId);
-    recipeCollection.document(recipeId).setData({"rating": averageRating});
+    recipeCollection.document(recipeId).collection('Ratings').getDocuments();
     return null;
   }
 
-  Future updateRatings({int ratings, String recipeId, String userId}) async {
-    Map<String, int> ratingsMap = {userId: ratings};
+  Future updateRatings({String recipeId, String userId, int rating}) async {
+    print(recipeId);
+    Map<String, dynamic> ratingsMap = {'userId': userId, 'rating': rating};
     return await recipeCollection
         .document(recipeId)
-        .collection("newRatings")
+        .collection('Ratings')
         .document(userId)
         .setData(ratingsMap);
   }
@@ -60,21 +66,20 @@ class DatabaseService {
     String recipeId,
     String userId,
   }) async {
+    print('recipeid: $recipeId');
+    print('userId: $userId');
     //HÄR PRINTAR VI JÄTTEMYCKET TODO: TA BORT PRINTS
-    QuerySnapshot querySnapshot = await recipeCollection
+    var querySnapshot = await recipeCollection
         .document(recipeId)
-        .collection("newRatings")
+        .collection("Ratings")
+        .where('userId', isEqualTo: userId)
         .getDocuments();
-    final doc = querySnapshot.documents;
-
-    int value = doc[0].data[userId];
-    print("value i getyorrating " + value.toString());
-    if (value == null) {
-      print("myrating: 0");
+    final documents = querySnapshot.documents;
+    if (documents.isEmpty) {
+      print('document is empty');
       return 0;
     } else {
-      print("myrating " + value.toString());
-      return value;
+      return querySnapshot.documents[0].data['rating'];
     }
   }
 
@@ -104,7 +109,7 @@ class DatabaseService {
 //        .where('username', isEqualTo: username)
 //        .limit(1).snapshots();
 //    print(_query.toString());
-
+    //if (username != '' && username != ' ' && username != null) {
     final result = await Firestore.instance
         .collection('Users')
         .where('username', isEqualTo: username)
@@ -114,12 +119,19 @@ class DatabaseService {
         print(result.data);
       });
     });*/
+    for (DocumentSnapshot document in result.documents) {
+      print(document.data);
+    }
+
     print(result.documents.isNotEmpty); //isEmpty
     return result.documents.isNotEmpty;
+    //}
+    return true;
   }
 
   //userData from snapshot
   UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
+    print(snapshot.data['favoriteList']);
     return UserData(
         uid: uid,
         name: snapshot.data['name'],
@@ -127,17 +139,19 @@ class DatabaseService {
         age: snapshot.data['age'],
         username: snapshot.data['username'],
         profilePic: snapshot.data['profilePic'],
-        isEmail: snapshot.data['isEmail']);
+        isEmail: snapshot.data['isEmail'],
+        favoriteList: snapshot.data['favoriteList']);
   }
 
   //get user doc stream
   Stream<UserData> get userData {
+    print(userCollection.document(uid).snapshots());
     return userCollection.document(uid).snapshots().map(_userDataFromSnapshot);
   }
 
   Future<Map> getIngredient(String ingredient) async {
     Map mapWithNameAndId = {'ingredientName': ' ', 'ingredientId': ' '};
-    if (ingredient != '' && ingredient != null) {
+    if (ingredient != '' && ingredient != null && ingredient != ' ') {
       final result = await ingredientCollection
           .where('Livsmedelsnamn', isEqualTo: ingredient)
           .getDocuments();
@@ -159,20 +173,59 @@ class DatabaseService {
   }
 
   Future<List> findRecipes(List<Ingredient> ingredientList) async {
-    List<String> ingredientIdList = [];
-    List<DocumentSnapshot> recipeList = [];
-    for (Ingredient ingredient in ingredientList) {
-      ingredientIdList.add(ingredient.ingredientId);
-    }
-    var result = await recipeCollection
-        .where('ingredientsArray', arrayContainsAny: ingredientIdList)
-        .getDocuments();
-    if (result.documents.isNotEmpty) {
-      final documents = result.documents;
-      for (DocumentSnapshot document in documents) {
-        recipeList.add(document);
+    if (ingredientList.isNotEmpty && ingredientList != null) {
+      List<String> ingredientIdList = [];
+      for (Ingredient ingredient in ingredientList) {
+        ingredientIdList.add(ingredient.ingredientId);
       }
-      return recipeList;
+      var result = await recipeCollection
+          .where('ingredientsArray', arrayContainsAny: ingredientIdList)
+          .getDocuments();
+      final documents = result.documents;
+      if (documents.isNotEmpty) {
+        List<int> removeIndexList = [];
+        for (String ingredient in ingredientIdList) {
+          for (var index = 0; index < documents.length; index++) {
+            if (!documents[index]
+                .data['ingredientsArray']
+                .contains(ingredient)) {
+              removeIndexList.add(index);
+            }
+          }
+        }
+        if (removeIndexList.isNotEmpty) {
+          for (var index = 0; index < removeIndexList.length; index++) {
+            documents.removeAt(removeIndexList[index] - index);
+          }
+        }
+        List<Map> mapList = [];
+        for (DocumentSnapshot document in documents) {
+          String id = document.documentID;
+          var ratingResult = await recipeCollection
+              .document(id)
+              .collection('Ratings')
+              .getDocuments();
+          var ratingDocuments = ratingResult.documents;
+          print(ratingDocuments.isEmpty);
+          double rating = 0;
+          for (DocumentSnapshot ratingDocument in ratingDocuments) {
+            rating = rating + ratingDocument.data['rating'];
+          }
+          double averageRating = rating / ratingDocuments.length;
+          print(averageRating);
+          document.data['averageRating'] = averageRating;
+          print(document.data['averageRating']);
+          documents[0].data['averageRating'] = averageRating;
+          var map = document.data;
+          map['averageRating'] = averageRating;
+          map['recipeId'] = document.documentID;
+          mapList.add(map);
+        }
+
+        return mapList;
+      }
+
+      return null;
     }
     return null;
   }
@@ -201,5 +254,33 @@ class DatabaseService {
     recipe.setRecipeId(result.documentID);
     print('result');
     print(result);
+  }
+
+  Future<List<Ingredient>> getIngredientCollectionFromRecipe(
+      String documentID) async {
+    List<Ingredient> ingredientList = [];
+    if (documentID != null && documentID != '') {
+      var result = await recipeCollection
+          .document(documentID)
+          .collection('Ingredients')
+          .getDocuments();
+      if (result == null) {
+        return null;
+      }
+      var documents = result.documents;
+      if (documents.isEmpty) {
+        return null;
+      }
+      for (DocumentSnapshot document in documents) {
+        ingredientList.add(Ingredient(
+            ingredientName: document.data['ingredientName'],
+            quantity: document.data['quantity'],
+            quantityType: document.data['quantityType'],
+            ingredientId: document.data['ingredientID']));
+      }
+      return ingredientList;
+    } else {
+      return null;
+    }
   }
 }
