@@ -66,6 +66,7 @@ class DatabaseService {
         .collection("newRatings")
         .getDocuments();
     final doc = querySnapshot.documents;
+
     int value = doc[0].data[userId];
     print("value i getyorrating " + value.toString());
     if (value == null) {
