@@ -25,3 +25,9 @@ class UserData {
       this.profilePic,
       this.isEmail});
 }
+
+class AdminData {
+  final String role;
+
+  AdminData({this.role});
+}

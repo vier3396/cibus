@@ -1,3 +1,4 @@
+import 'package:cibus/pages/adminScreens/admin_screen.dart';
 import 'package:cibus/pages/loginScreens/username_screen.dart';
 import 'package:cibus/pages/loginScreens/verify_screen.dart';
 import 'package:cibus/pages/settings_screen.dart';
@@ -47,6 +48,7 @@ class MyApp extends StatelessWidget {
             '/recipePreview': (context) => RecipePreview(),
             '/verifyscreen': (context) => VerifyScreen(),
             '/usernamescreen': (context) => UsernameScreen(),
+            '/adminscreen': (context) => AdminScreen(),
           },
         ),
       ),

@@ -21,6 +21,9 @@ class DatabaseService {
   final CollectionReference ingredientRecipeCollection =
       Firestore.instance.collection('IngredientRecipes');
 
+  final CollectionReference adminCollection =
+      Firestore.instance.collection('Admin');
+
   Future updateUserData({String name, String description, int age}) async {
     return await userCollection.document(uid).setData({
       'name': name,
@@ -120,18 +123,34 @@ class DatabaseService {
   //userData from snapshot
   UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
     return UserData(
-        uid: uid,
-        name: snapshot.data['name'],
-        description: snapshot.data['description'],
-        age: snapshot.data['age'],
-        username: snapshot.data['username'],
-        profilePic: snapshot.data['profilePic'],
-        isEmail: snapshot.data['isEmail']);
+      uid: uid,
+      name: snapshot.data['name'],
+      description: snapshot.data['description'],
+      age: snapshot.data['age'],
+      username: snapshot.data['username'],
+      profilePic: snapshot.data['profilePic'],
+      isEmail: snapshot.data['isEmail'],
+    );
   }
 
   //get user doc stream
   Stream<UserData> get userData {
     return userCollection.document(uid).snapshots().map(_userDataFromSnapshot);
+  }
+
+  //adminData from snapshot
+  AdminData _adminDataFromSnapshot(DocumentSnapshot snapshot) {
+    return AdminData(
+      role: snapshot.data['role'],
+    );
+  }
+
+  //get admin doc stream
+  Stream<AdminData> get adminData {
+    return adminCollection
+        .document(uid)
+        .snapshots()
+        .map(_adminDataFromSnapshot);
   }
 
   Future<Map> getIngredient(String ingredient) async {

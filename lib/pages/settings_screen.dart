@@ -1,3 +1,4 @@
+import 'package:cibus/pages/adminScreens/admin_screen.dart';
 import 'package:cibus/pages/camera_screen.dart';
 import 'package:cibus/pages/loading_screen.dart';
 import 'package:cibus/services/my_text_form_field.dart';
@@ -109,6 +110,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           );
                           Navigator.pop(context);
                         }
+                      },
+                    ),
+                    SizedBox(height: 100.0),
+                    RaisedButton(
+                      color: kCoral,
+                      child: Text(
+                        'Admin',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      onPressed: () async {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return AdminScreen();
+                            },
+                          ),
+                        );
                       },
                     )
                   ],
