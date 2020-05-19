@@ -1,4 +1,3 @@
-import 'package:cibus/services/login/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:getflutter/components/avatar/gf_avatar.dart';
 import 'package:getflutter/getflutter.dart';
@@ -15,6 +14,9 @@ import 'package:cibus/services/ingredients.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cibus/services/ingredientList.dart';
 import 'package:cibus/widgets/ingredientTileWithoutQuantity.dart';
+import 'package:cibus/services/recipeList.dart';
+import 'package:cibus/widgets/recipe_preview.dart';
+import 'package:cibus/services/login/auth.dart';
 
 const topMarginPopupIndividualRecipe = 0.0;
 
@@ -33,7 +35,7 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
   int quantityValue = 5;
   WhatToShow whatToShow = WhatToShow.foundIngredient;
   List<Ingredient> ingredientList = [];
-  List<DocumentSnapshot> recipeList = [];
+  List<Map> recipeList = [];
   List<Recipe> recipeClassList = [];
 
   int _currentRating = 0;
@@ -50,281 +52,248 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
   }
 
   @override
+  void dispose() {
+    print('nu disposas');
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  void updateRecipe() {}
+  @override
   Widget build(BuildContext context) {
     User user = Provider.of<User>(context);
     DatabaseService database = DatabaseService(uid: user.uid);
-    final String currentUserId = user.uid;
-    print("user.uid: " + user.uid.toString());
-    print("currentUserId: " + currentUserId);
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+            color: Color(0xff757575),
+            border: Border.all(color: Color(0xff757575))),
+        height: 550.0,
+        child: Container(
+          padding: EdgeInsets.all(20.0),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20.0),
+              topRight: Radius.circular(20.0),
+            ),
+          ),
+          child: ListView(
+            physics: AlwaysScrollableScrollPhysics(),
+            padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
+            children: <Widget>[
+              TextField(
+                onChanged: (toSearch) {
+                  ingredientSearch = toSearch;
+                  ingredientSearch =
+                      "${ingredientSearch[0].toUpperCase()}${ingredientSearch.substring(1)}";
+                  print(ingredientSearch);
+                },
+              ),
+              FlatButton(
+                  onPressed: () async {
+                    Map ingredientMapFromDatabase =
+                        await database.getIngredient(ingredientSearch);
 
-    return ChangeNotifierProvider<IngredientList>(
-        create: (context) => IngredientList(),
-        child:
-            Consumer<IngredientList>(builder: (context, ingredientList, child) {
-          return Scaffold(
-            body: Container(
-              decoration: BoxDecoration(
-                  color: Color(0xff757575),
-                  border: Border.all(color: Color(0xff757575))),
-              height: 550.0,
-              child: Container(
-                padding: EdgeInsets.all(20.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20.0),
-                    topRight: Radius.circular(20.0),
-                  ),
-                ),
-                child: ListView(
-                  physics: AlwaysScrollableScrollPhysics(),
-                  padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
-                  children: <Widget>[
-                    TextField(
-                      onChanged: (toSearch) {
-                        ingredientSearch = toSearch;
-                        ingredientSearch =
-                            "${ingredientSearch[0].toUpperCase()}${ingredientSearch.substring(1)}";
-                        print(ingredientSearch);
-                      },
-                    ),
-                    FlatButton(
-                        onPressed: () async {
-                          Map ingredientMapFromDatabase =
-                              await database.getIngredient(ingredientSearch);
-
-                          ingredientList.addIngredient(Ingredient(
+                    if (ingredientMapFromDatabase != null) {
+                      Provider.of<IngredientList>(context, listen: false)
+                          .addIngredient(Ingredient(
                               ingredientId:
                                   ingredientMapFromDatabase['ingredientId'],
                               ingredientName:
                                   ingredientMapFromDatabase['ingredientName']));
-                          List<DocumentSnapshot> recipeListFromDatabase =
-                              await database
-                                  .findRecipes(ingredientList.ingredientList);
-                          print(recipeListFromDatabase[0].data['title']);
+                      List<Map> recipeListFromDatabase = await database
+                          .findRecipes(Provider.of<IngredientList>(context,
+                                  listen: false)
+                              .ingredientList);
+                      //print(recipeListFromDatabase[0].data['title']);
 
-                          if (ingredientMapFromDatabase != null) {
-                            //hoppas det här funkar
-                            for (int i = 0;
-                                i < recipeListFromDatabase.length;
-                                i++) {
-                              Recipe tempRecipe = Recipe();
-                              tempRecipe.addTitle(
-                                  recipeListFromDatabase[i].data["title"]);
-
-                              tempRecipe.addDescription(
-                                  recipeListFromDatabase[i]
-                                      .data["description"]);
-
-                              tempRecipe.addUserId(
-                                  recipeListFromDatabase[i].data["userId"]);
-
-                              tempRecipe.setRecipeId(
-                                  recipeListFromDatabase[i].documentID);
-
-                              print("hej här kommer " + currentUserId);
-
-                              tempRecipe.addYourRating(
-                                  rating: await DatabaseService().getYourRating(
-                                      recipeId:
-                                          recipeListFromDatabase[i].documentID,
-                                      userId: currentUserId.toString()));
-
-                              tempRecipe.rating = await DatabaseService()
-                                  .getAverageRating(
-                                      recipeId:
-                                          recipeListFromDatabase[i].documentID);
-
-                              recipeClassList.add(tempRecipe);
-
-                              print("userId på recept " + i.toString());
-                              print(recipeClassList[i].userId);
-                            }
-                            //print("len(recipeClassList) = " +
-                            //  recipeClassList.length.toString());
-                            print(recipeListFromDatabase);
-
-                            setState(() {
-                              recipeList = recipeListFromDatabase;
-                              whatToShow = WhatToShow.foundIngredient;
-                              FocusScope.of(context).requestFocus(FocusNode());
-                            });
-                          } else if (ingredientMap == null) {
-                            setState(() {
-                              whatToShow = WhatToShow.none;
-                            });
-                          }
-                        },
-                        child: Text('Search')),
-                    foundIngredient(
-                        whatToShowenum: whatToShow,
-                        ingredientMap: ingredientMap),
-                    AnimationLimiter(
-                      child: GridView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3),
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return AnimationConfiguration.staggeredGrid(
-                            columnCount: 3,
-                            position: index,
-                            duration: const Duration(milliseconds: 500),
-                            child: ScaleAnimation(
-                              child: FadeInAnimation(
-                                child:
-                                    IngredientTileWithoutQuantity(index: index),
-                              ),
-                            ),
-                          );
-                        },
-                        itemCount: (Provider.of<IngredientList>(context)
-                            .ingredientCount),
+                      setState(() {
+                        Provider.of<RecipeList>(context, listen: false)
+                            .addEntireRecipeList(recipeListFromDatabase);
+                        //recipeList = recipeListFromDatabase;
+                        whatToShow = WhatToShow.foundIngredient;
+                        FocusScope.of(context).requestFocus(FocusNode());
+                      });
+                    } else if (ingredientMap == null) {
+                      setState(() {
+                        whatToShow = WhatToShow.none;
+                      });
+                    }
+                  },
+                  child: Text('Search')),
+              foundIngredient(
+                  whatToShowenum: whatToShow, ingredientMap: ingredientMap),
+              AnimationLimiter(
+                child: GridView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3),
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return AnimationConfiguration.staggeredGrid(
+                      columnCount: 3,
+                      position: index,
+                      duration: const Duration(milliseconds: 500),
+                      child: ScaleAnimation(
+                        child: FadeInAnimation(
+                          child: IngredientTileWithoutQuantity(
+                              index: index, parentContext: context),
+                        ),
                       ),
-                    ),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return Card(
-                          child: InkWell(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                ListTile(
-                                  leading: Image(
-                                    image: NetworkImage(recipeList[index]
-                                            .data['imageURL'] ??
-                                        'https://firebasestorage.googleapis.com/v0/b/independent-project-7edde.appspot.com/o/images%2F2020-05-08%2011%3A32%3A16.330607.png?alt=media&token=1e4bff1d-c08b-4afa-a1f3-a975e46e89c5'),
-                                  ),
-                                  title: Text(recipeList[index].data['title']),
-                                  subtitle: Text(
-                                      recipeList[index].data['description'] ??
-                                          "no title"),
-                                ),
-                                ButtonBar(
-                                  children: <Widget>[
-                                    Text(recipeList[index]
-                                        .data['time']
-                                        .toString()),
-                                    /*
-                                    FlatButton(
-                                      child: Text(recipeClassList[index]
-                                          .rating
-                                          .toStringAsFixed(1)),
-                                      onPressed: () {/* ... */},
-                                    ), */
-                                  ],
-                                ),
-                                addStarButtons(
-                                    index: index,
-                                    user: user,
-                                    myRating:
-                                        recipeClassList[index].yourRating),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                      itemCount: recipeList.length,
-                    ),
-                  ],
+                    );
+                  },
+                  itemCount:
+                      (Provider.of<IngredientList>(context).ingredientCount),
                 ),
               ),
-            ),
-          );
-        }));
+              ListView.builder(
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  return Card(
+                    child: InkWell(
+                      onTap: () async {
+                        print(Provider.of<RecipeList>(context, listen: false)
+                            .recipeList[index]['title']);
+
+                        Provider.of<Recipe>(context, listen: false)
+                            .addAllIngredientsFromDocument(
+                                recipe: Provider.of<RecipeList>(context,
+                                        listen: false)
+                                    .recipeList[index],
+                                recipeID: Provider.of<RecipeList>(context,
+                                        listen: false)
+                                    .recipeList[index]['recipeId']);
+
+                        User user = Provider.of<User>(context, listen: false);
+                        DatabaseService database =
+                            DatabaseService(uid: user.uid);
+
+                        int myRating = await database.getYourRating(
+                            recipeId:
+                                Provider.of<RecipeList>(context, listen: false)
+                                    .recipeList[index]['recipeId'],
+                            userId: user.uid);
+                        Provider.of<Recipe>(context, listen: false)
+                            .addYourRating(rating: myRating);
+                        print(Provider.of<Recipe>(context, listen: false)
+                            .yourRating);
+
+                        final popProvider =
+                            Provider.of<Recipe>(context, listen: false);
+                        final recipeListProvider =
+                            Provider.of<RecipeList>(context, listen: false);
+
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) {
+                              //TODO fixa navigator till något bättre?
+                              return ChangeNotifierProvider.value(
+                                value: recipeListProvider,
+                                child: ChangeNotifierProvider.value(
+                                    value: popProvider,
+                                    child: RecipePreview(
+                                      preview: false,
+                                      index: index,
+                                    )),
+                              );
+                              ;
+                            },
+                          ),
+                        );
+                        //ta rätt recept från recipeList och hämta ingredienserna
+                        // skapa ett recipe objekt och skicka till nästa sida
+                        //skicka in recipeList[index] i en funktion och där göra ett nytt recipe
+                      },
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          ListTile(
+                            leading: Image(
+                              image: NetworkImage(context
+                                      .read<RecipeList>()
+                                      .recipeList[index]['imageURL'] ??
+                                  'https://firebasestorage.googleapis.com/v0/b/independent-project-7edde.appspot.com/o/images%2F2020-05-08%2011%3A32%3A16.330607.png?alt=media&token=1e4bff1d-c08b-4afa-a1f3-a975e46e89c5'),
+                            ),
+                            title: Text(context
+                                    .read<RecipeList>()
+                                    .recipeList[index]['title'] ??
+                                '??'),
+                            subtitle: Text(context
+                                    .read<RecipeList>()
+                                    .recipeList[index]['desctription'] ??
+                                '??'),
+                          ),
+                          ButtonBar(
+                            children: <Widget>[
+                              Text(context
+                                      .read<RecipeList>()
+                                      .recipeList[index]['time']
+                                      .toString() ??
+                                  '??'),
+                              Text(context
+                                      .read<RecipeList>()
+                                      .recipeList[index]['averageRating']
+                                      .toString() ??
+                                  '??'),
+                              showRatingCibus(
+                                  rating: context
+                                      .read<RecipeList>()
+                                      .recipeList[index]['averageRating'],
+                                  imageHeight: 20.0),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+                itemCount: Provider.of<RecipeList>(context).recipeList.length,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
-  Widget addStarButtons({
-    int index,
-    User user,
-    int myRating,
-  }) {
-    myRating = myRating ?? 0;
-    return ButtonBar(
-      // stars for rating, the _currentRating should be linked to each recipe's rating
-      children: <Widget>[
-        GestureDetector(
-          child: Icon(
-            Icons.star,
-            color: myRating >= 1 ? Colors.amberAccent : Colors.grey,
-          ),
-          onTap: () {
-            setState(() {
-              myRating = 1;
-              recipeClassList[index].addYourRating(rating: myRating);
-            });
-            DatabaseService().updateRatings(
-                ratings: myRating,
-                recipeId: recipeClassList[index].recipeId,
-                userId: user.uid);
-          },
-        ),
-        GestureDetector(
-          child: Icon(
-            Icons.star,
-            color: myRating >= 2 ? Colors.amberAccent : Colors.grey,
-          ),
-          onTap: () {
-            setState(() {
-              myRating = 2;
-              recipeClassList[index].addYourRating(rating: myRating);
-            });
-            DatabaseService().updateRatings(
-                ratings: myRating,
-                recipeId: recipeClassList[index].recipeId,
-                userId: user.uid);
-          },
-        ),
-        GestureDetector(
-          child: Icon(
-            Icons.star,
-            color: myRating >= 3 ? Colors.amberAccent : Colors.grey,
-          ),
-          onTap: () {
-            setState(() {
-              myRating = 3;
-              recipeClassList[index].addYourRating(rating: myRating);
-            });
-            DatabaseService().updateRatings(
-                ratings: myRating,
-                recipeId: recipeClassList[index].recipeId,
-                userId: user.uid);
-          },
-        ),
-        GestureDetector(
-          child: Icon(
-            Icons.star,
-            color: myRating >= 4 ? Colors.amberAccent : Colors.grey,
-          ),
-          onTap: () {
-            setState(() {
-              myRating = 4;
-              recipeClassList[index].addYourRating(rating: myRating);
-            });
-            DatabaseService().updateRatings(
-                ratings: myRating,
-                recipeId: recipeClassList[index].recipeId,
-                userId: user.uid);
-          },
-        ),
-        GestureDetector(
-          child: Icon(
-            Icons.star,
-            color: myRating >= 5 ? Colors.amberAccent : Colors.grey,
-          ),
-          onTap: () {
-            setState(() {
-              myRating = 5;
-              recipeClassList[index].addYourRating(rating: myRating);
-            });
-            DatabaseService().updateRatings(
-                ratings: myRating,
-                recipeId: recipeClassList[index].recipeId,
-                userId: user.uid);
-          },
-        ),
-      ],
-    );
+  double roundForStars(double x) {
+    // 2.1 => 2.5; 2.5 => 2.5; 2.6 => 3.0; 3.0 => 3.0;
+    print("x: $x");
+    int xWhole = x.toInt();
+    print("xWhole: $xWhole");
+    double xDecimal = x - xWhole;
+    double decimalToAdd;
+    if (xDecimal < 0.1) {
+      decimalToAdd = 0.0;
+    } else if (xDecimal < 0.5) {
+      decimalToAdd = 0.5;
+    } else {
+      decimalToAdd = 1.0;
+    }
+    return xWhole + decimalToAdd;
+  }
+
+  Widget showRatingCibus({double rating, double imageHeight}) {
+    double roundedRating = roundForStars(rating);
+
+    List<Widget> listOfCibus = List<Widget>();
+
+    for (var i = 0; i < roundedRating.toInt(); i++) {
+      Image star = Image(
+        image: AssetImage("assets/cibus_filled.png"),
+        height: imageHeight,
+      );
+      listOfCibus.add(star);
+    }
+    if (roundedRating - roundedRating.toInt() > 0.1) {
+      // there should be a half cibus
+      Image halfStar = Image(
+        image: AssetImage("assets/cibus_filled_half.png"),
+        height: imageHeight,
+      );
+      listOfCibus.add(halfStar);
+    }
+    return Row(children: listOfCibus);
   }
 }

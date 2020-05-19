@@ -15,6 +15,7 @@ class UserData {
   final String username;
   final String profilePic;
   bool isEmail;
+  final List<dynamic> favoriteList;
 
   UserData(
       {this.uid,
@@ -23,7 +24,8 @@ class UserData {
       this.age,
       this.username,
       this.profilePic,
-      this.isEmail});
+      this.isEmail,
+      this.favoriteList});
 }
 
 class AdminData {

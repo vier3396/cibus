@@ -43,6 +43,7 @@ dev_dependencies:
   flutter_staggered_animations: ^0.1.2
   firebase_user_stream: ^1.0.0
   firebase_admin: ^0.1.2
+  cached_network_image: ^2.2.0+1
 
 
 

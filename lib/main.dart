@@ -21,36 +21,33 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<Recipe>(
-      create: (context) => Recipe(),
-      child: StreamProvider<User>(
-        lazy: false,
-        create: (context) => AuthService().user,
-        child: MaterialApp(
-          theme: ThemeData(
-            backgroundColor: Colors.white,
-            primaryColor: kCoral, //Appbar
-            accentColor: kCoral,
-            appBarTheme: AppBarTheme(
-              color: Colors.white,
-              elevation: 0.0,
-            ),
+    return StreamProvider<User>(
+      lazy: false,
+      create: (context) => AuthService().user,
+      child: MaterialApp(
+        theme: ThemeData(
+          backgroundColor: Colors.white,
+          primaryColor: kCoral, //Appbar
+          accentColor: kCoral,
+          appBarTheme: AppBarTheme(
+            color: Colors.white,
+            elevation: 0.0,
           ),
-          initialRoute: '/loginPage',
-          routes: {
-            '/': (context) => LoadingScreen(),
-            //'/add': (context) => AddRecipe(),
-            '/profile': (context) => Profile(),
-            '/loginPage': (context) => LoginPage(),
-            '/firstScreen': (context) => MyPageView(),
-            '/settingsScreen': (context) => SettingsScreen(),
-            'camerscreen': (context) => ImageCapture(),
-            '/recipePreview': (context) => RecipePreview(),
-            '/verifyscreen': (context) => VerifyScreen(),
-            '/usernamescreen': (context) => UsernameScreen(),
-            '/adminscreen': (context) => AdminScreen(),
-          },
         ),
+        initialRoute: '/loginPage',
+        routes: {
+          '/': (context) => LoadingScreen(),
+          //'/add': (context) => AddRecipe(),
+          '/profile': (context) => Profile(),
+          '/loginPage': (context) => LoginPage(),
+          '/firstScreen': (context) => MyPageView(),
+          '/settingsScreen': (context) => SettingsScreen(),
+          'camerscreen': (context) => ImageCapture(),
+          '/recipePreview': (context) => RecipePreview(),
+          '/verifyscreen': (context) => VerifyScreen(),
+          '/usernamescreen': (context) => UsernameScreen(),
+          '/adminscreen': (context) => AdminScreen(),
+        },
       ),
     );
   }

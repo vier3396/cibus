@@ -1,3 +1,4 @@
+import 'package:cibus/services/my_page_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/services/colors.dart';
@@ -5,6 +6,8 @@ import 'package:cibus/services/recipe.dart';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/database.dart';
 import 'package:cibus/services/login/user.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cibus/services/recipeList.dart';
 
 //TODO fixa så att det går att gå fram och tillbaka ordentligt, steps krånglar.
 //TODO fixa så att när man submittar så ska man skickas till homepage
@@ -12,15 +15,28 @@ import 'package:cibus/services/login/user.dart';
 //TODO Städa upp
 
 class RecipePreview extends StatefulWidget {
+  int index;
   @override
   _RecipePreviewState createState() => _RecipePreviewState();
+  final bool preview;
+
+  RecipePreview({this.preview, this.index});
 }
 
 class _RecipePreviewState extends State<RecipePreview> {
   List<String> textList = ['step 1', 'step 2', 'step3', 'step 4'];
 
+  void getRecipe({user, database}) async {}
+
   @override
   Widget build(BuildContext context) {
+    User user = Provider.of<User>(context);
+    DatabaseService database = DatabaseService(uid: user.uid);
+
+    print(
+        ' recipe ID in recipe: ${Provider.of<Recipe>(context, listen: false).recipeId}');
+    getRecipe(user: user, database: database);
+    final popProvider = Provider.of<Recipe>(context);
     return Consumer<Recipe>(builder: (context, recipe, child) {
       return Scaffold(
         body: Container(
@@ -55,48 +71,24 @@ class _RecipePreviewState extends State<RecipePreview> {
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: NetworkImage(recipe.imageURL ??
+                      fit: BoxFit.fill,
+                      image: CachedNetworkImageProvider(recipe.imageURL ??
                           'https://firebasestorage.googleapis.com/v0/b/independent-project-7edde.appspot.com/o/images%2F2020-05-08%2011%3A32%3A16.330607.png?alt=media&token=1e4bff1d-c08b-4afa-a1f3-a975e46e89c5')),
                 ),
               ),
               Positioned(
-                top: 30,
-                left: 10,
-                child: InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    'edit',
-                    style: TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white),
-                  ),
-                ),
-              ),
+                  top: 30,
+                  left: 10,
+                  child: widget.preview
+                      ? EditButton()
+                      : AddStarButtons(
+                          recipeID: recipe.recipeId,
+                          user: user,
+                          myRating: Provider.of<Recipe>(context).yourRating)),
               Positioned(
                 top: 30,
                 right: 10,
-                child: InkWell(
-                  onTap: () {
-                    User user = Provider.of<User>(context, listen: false);
-                    recipe.addUserId(user.uid);
-                    DatabaseService(uid: user.uid).uploadRecipe(recipe);
-                    // send it here to avoid overwrite loss
-                    print("Success");
-                    // formKey.currentState.reset();
-                    //TODO: clear all fields
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    'submit',
-                    style: TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white),
-                  ),
-                ),
+                child: widget.preview ? SubmitButton() : AuthorWidget(),
               ),
               Container(
                 padding:
@@ -205,6 +197,185 @@ class _RecipePreviewState extends State<RecipePreview> {
         ),
       );
     });
+  }
+}
+
+class AddStarButtons extends StatelessWidget {
+  String recipeID;
+  User user;
+  int myRating;
+  AddStarButtons({this.user, this.myRating, this.recipeID});
+
+  Widget build(BuildContext context) {
+    myRating = myRating ?? 0;
+    return ButtonBar(
+      // stars for rating, the _currentRating should be linked to each recipe's rating
+      children: <Widget>[
+        GestureDetector(
+          child: Icon(
+            Icons.star,
+            color: myRating >= 1 ? Colors.amberAccent : Colors.grey,
+          ),
+          onTap: () {
+            print(recipeID);
+            myRating = 1;
+            Provider.of<Recipe>(context, listen: false)
+                .addYourRating(rating: myRating, userId: user.uid);
+            DatabaseService().updateRatings(
+              recipeId: Provider.of<Recipe>(context, listen: false).recipeId,
+              rating: myRating,
+              userId: user.uid,
+            );
+          },
+        ),
+        GestureDetector(
+          child: Icon(
+            Icons.star,
+            color: myRating >= 2 ? Colors.amberAccent : Colors.grey,
+          ),
+          onTap: () {
+            myRating = 2;
+            Provider.of<Recipe>(context, listen: false)
+                .addYourRating(rating: myRating);
+
+            DatabaseService().updateRatings(
+                rating: myRating,
+                recipeId: Provider.of<Recipe>(context, listen: false).recipeId,
+                userId: user.uid);
+          },
+        ),
+        GestureDetector(
+          child: Icon(
+            Icons.star,
+            color: myRating >= 3 ? Colors.amberAccent : Colors.grey,
+          ),
+          onTap: () {
+            myRating = 3;
+            Provider.of<Recipe>(context, listen: false)
+                .addYourRating(rating: myRating);
+            DatabaseService().updateRatings(
+                rating: myRating,
+                recipeId: Provider.of<Recipe>(context, listen: false).recipeId,
+                userId: user.uid);
+          },
+        ),
+        GestureDetector(
+          child: Icon(
+            Icons.star,
+            color: myRating >= 4 ? Colors.amberAccent : Colors.grey,
+          ),
+          onTap: () {
+            myRating = 4;
+            Provider.of<Recipe>(context, listen: false)
+                .addYourRating(rating: myRating);
+
+            DatabaseService().updateRatings(
+                rating: myRating,
+                recipeId: Provider.of<Recipe>(context, listen: false).recipeId,
+                userId: user.uid);
+          },
+        ),
+        GestureDetector(
+          child: Icon(
+            Icons.star,
+            color: myRating >= 5 ? Colors.amberAccent : Colors.grey,
+          ),
+          onTap: () {
+            myRating = 5;
+            Provider.of<Recipe>(context, listen: false)
+                .addYourRating(rating: myRating);
+
+            DatabaseService().updateRatings(
+                rating: myRating,
+                recipeId: Provider.of<Recipe>(context, listen: false).recipeId,
+                userId: user.uid);
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class RatingWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        Navigator.pop(context);
+      },
+      child: Text(
+        Provider.of<Recipe>(context).rating ?? 'Not yet rated',
+        style: TextStyle(
+            fontSize: 20.0, fontWeight: FontWeight.w500, color: Colors.white),
+      ),
+    );
+  }
+}
+
+class EditButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        Provider.of<Recipe>(context, listen: false).setListOfStepsToZero();
+        Navigator.pop(context);
+      },
+      child: Text(
+        'edit',
+        style: TextStyle(
+            fontSize: 20.0, fontWeight: FontWeight.w500, color: Colors.white),
+      ),
+    );
+  }
+}
+
+class AuthorWidget extends StatelessWidget {
+  //TODO implement userPage
+  //TODO save userName to recipe when creating
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      child: Text(
+        Provider.of<Recipe>(context).username ?? 'userName',
+        style: TextStyle(
+            fontSize: 20.0, fontWeight: FontWeight.w500, color: Colors.white),
+      ),
+    );
+  }
+}
+
+class SubmitButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () async {
+        //TODO lägga till någon form av popup i stilen great job
+        User user = Provider.of<User>(context, listen: false);
+        DatabaseService database = DatabaseService(uid: user.uid);
+        String username = await database.getUsername();
+        Provider.of<Recipe>(context, listen: false)
+            .addUserIdAndUsername(uid: user.uid, username: username);
+        database.uploadRecipe(Provider.of<Recipe>(context, listen: false));
+        // send it here to avoid overwrite loss
+        print("Success");
+
+        // Provider.of<Recipe>(context, listen: false).dispose();
+
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) {
+              return MyPageView();
+            },
+          ),
+        );
+        // formKey.currentState.reset();
+      },
+      child: Text(
+        'submit',
+        style: TextStyle(
+            fontSize: 20.0, fontWeight: FontWeight.w500, color: Colors.white),
+      ),
+    );
   }
 }
 //Column(
