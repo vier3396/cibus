@@ -26,7 +26,6 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   List<bool> _boldButtons = [false, true, false];
   Container wallOfText = yourRecipes();
-  bool firstTime = true;
   Stream dataBaseStream;
   //int karma;
 
