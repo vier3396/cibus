@@ -40,6 +40,7 @@ class DatabaseService {
       'username': username,
     }, merge: true);
   }
+
   Future<String> getUsername() async {
     var result = await userCollection.document(uid).get();
     return result.data['username'];
@@ -47,15 +48,16 @@ class DatabaseService {
 
   Future updateAverageRating({String recipeId}) async {
     double averageRating = await getAverageRating(recipeId: recipeId);
-    recipeCollection.document(recipeId).setData({"rating": averageRating});
+    recipeCollection.document(recipeId).collection('Ratings').getDocuments();
     return null;
   }
 
-  Future updateRatings({int ratings, String recipeId, String userId}) async {
-    Map<String, int> ratingsMap = {userId: ratings};
+  Future updateRatings({String recipeId, String userId, int rating}) async {
+    print(recipeId);
+    Map<String, dynamic> ratingsMap = {'userId': userId, 'rating': rating};
     return await recipeCollection
         .document(recipeId)
-        .collection("newRatings")
+        .collection('Ratings')
         .document(userId)
         .setData(ratingsMap);
   }
@@ -64,20 +66,41 @@ class DatabaseService {
     String recipeId,
     String userId,
   }) async {
+    print('recipeid: $recipeId');
+    print('userId: $userId');
     //HÄR PRINTAR VI JÄTTEMYCKET TODO: TA BORT PRINTS
+    var querySnapshot = await recipeCollection
+        .document(recipeId)
+        .collection("Ratings")
+        .where('userId', isEqualTo: userId)
+        .getDocuments();
+    final documents = querySnapshot.documents;
+    if (documents.isEmpty) {
+      print('document is empty');
+      return 0;
+    } else {
+      return querySnapshot.documents[0].data['rating'];
+    }
+  }
+
+  Future<double> getAverageRating({String recipeId}) async {
     QuerySnapshot querySnapshot = await recipeCollection
         .document(recipeId)
         .collection("newRatings")
         .getDocuments();
     final doc = querySnapshot.documents;
-    int value = doc[0].data[userId];
-    print("value i getyorrating " + value.toString());
-    if (value == null) {
-      print("myrating: 0");
-      return 0;
+    double sumRating = 0;
+    if (doc.length > 0) {
+      for (DocumentSnapshot snap in doc) {
+        snap.data.forEach((key, value) {
+          if (key != "throwAwayId") {
+            sumRating += value;
+          }
+        }); //=> sumRating += value);
+      }
+      return sumRating / (doc.length - 1);
     } else {
-      print("myrating " + value.toString());
-      return value;
+      return null;
     }
   }
 
@@ -158,9 +181,8 @@ class DatabaseService {
       var result = await recipeCollection
           .where('ingredientsArray', arrayContainsAny: ingredientIdList)
           .getDocuments();
-      if (result.documents.isNotEmpty) {
-        final documents = result.documents;
-
+      final documents = result.documents;
+      if (documents.isNotEmpty) {
         List<int> removeIndexList = [];
         for (String ingredient in ingredientIdList) {
           for (var index = 0; index < documents.length; index++) {
@@ -176,7 +198,31 @@ class DatabaseService {
             documents.removeAt(removeIndexList[index] - index);
           }
         }
-        return documents;
+        List<Map> mapList = [];
+        for (DocumentSnapshot document in documents) {
+          String id = document.documentID;
+          var ratingResult = await recipeCollection
+              .document(id)
+              .collection('Ratings')
+              .getDocuments();
+          var ratingDocuments = ratingResult.documents;
+          print(ratingDocuments.isEmpty);
+          double rating = 0;
+          for (DocumentSnapshot ratingDocument in ratingDocuments) {
+            rating = rating + ratingDocument.data['rating'];
+          }
+          double averageRating = rating / ratingDocuments.length;
+          print(averageRating);
+          document.data['averageRating'] = averageRating;
+          print(document.data['averageRating']);
+          documents[0].data['averageRating'] = averageRating;
+          var map = document.data;
+          map['averageRating'] = averageRating;
+          map['recipeId'] = document.documentID;
+          mapList.add(map);
+        }
+
+        return mapList;
       }
 
       return null;

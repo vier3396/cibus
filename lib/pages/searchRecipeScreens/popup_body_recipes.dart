@@ -17,6 +17,7 @@ import 'package:cibus/widgets/ingredientTileWithoutQuantity.dart';
 import 'package:cibus/services/recipeList.dart';
 import 'package:cibus/widgets/recipe_preview.dart';
 import 'package:cibus/services/login/auth.dart';
+
 const topMarginPopupIndividualRecipe = 0.0;
 
 class PopupBodyRecipes extends StatefulWidget {
@@ -34,7 +35,7 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
   int quantityValue = 5;
   WhatToShow whatToShow = WhatToShow.foundIngredient;
   List<Ingredient> ingredientList = [];
-  List<DocumentSnapshot> recipeList = [];
+  List<Map> recipeList = [];
   List<Recipe> recipeClassList = [];
 
   int _currentRating = 0;
@@ -50,6 +51,14 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
         ingredientId: ingredientMap['ingredientId']);
   }
 
+  @override
+  void dispose() {
+    print('nu disposas');
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  void updateRecipe() {}
   @override
   Widget build(BuildContext context) {
     User user = Provider.of<User>(context);
@@ -93,11 +102,10 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                                   ingredientMapFromDatabase['ingredientId'],
                               ingredientName:
                                   ingredientMapFromDatabase['ingredientName']));
-                      List<DocumentSnapshot> recipeListFromDatabase =
-                          await database.findRecipes(
-                              Provider.of<IngredientList>(context,
-                                      listen: false)
-                                  .ingredientList);
+                      List<Map> recipeListFromDatabase = await database
+                          .findRecipes(Provider.of<IngredientList>(context,
+                                  listen: false)
+                              .ingredientList);
                       //print(recipeListFromDatabase[0].data['title']);
 
                       setState(() {
@@ -144,35 +152,51 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                 itemBuilder: (context, index) {
                   return Card(
                     child: InkWell(
-                      onTap: () {
+                      onTap: () async {
                         print(Provider.of<RecipeList>(context, listen: false)
-                            .recipeList[index]
-                            .data['title']);
+                            .recipeList[index]['title']);
+
                         Provider.of<Recipe>(context, listen: false)
                             .addAllIngredientsFromDocument(
                                 recipe: Provider.of<RecipeList>(context,
                                         listen: false)
-                                    .recipeList[index]
-                                    .data,
+                                    .recipeList[index],
                                 recipeID: Provider.of<RecipeList>(context,
                                         listen: false)
-                                    .recipeList[index]
-                                    .documentID);
+                                    .recipeList[index]['recipeId']);
+
+                        User user = Provider.of<User>(context, listen: false);
+                        DatabaseService database =
+                            DatabaseService(uid: user.uid);
+
+                        int myRating = await database.getYourRating(
+                            recipeId:
+                                Provider.of<RecipeList>(context, listen: false)
+                                    .recipeList[index]['recipeId'],
+                            userId: user.uid);
+                        Provider.of<Recipe>(context, listen: false)
+                            .addYourRating(rating: myRating);
                         print(Provider.of<Recipe>(context, listen: false)
-                            .recipeID);
+                            .yourRating);
 
                         final popProvider =
                             Provider.of<Recipe>(context, listen: false);
+                        final recipeListProvider =
+                            Provider.of<RecipeList>(context, listen: false);
 
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) {
                               //TODO fixa navigator till något bättre?
                               return ChangeNotifierProvider.value(
-                                  value: popProvider,
-                                  child: RecipePreview(
-                                    preview: false,
-                                  ));
+                                value: recipeListProvider,
+                                child: ChangeNotifierProvider.value(
+                                    value: popProvider,
+                                    child: RecipePreview(
+                                      preview: false,
+                                      index: index,
+                                    )),
+                              );
                               ;
                             },
                           ),
@@ -188,40 +212,35 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                             leading: Image(
                               image: NetworkImage(context
                                       .read<RecipeList>()
-                                      .recipeList[index]
-                                      .data['imageURL'] ??
+                                      .recipeList[index]['imageURL'] ??
                                   'https://firebasestorage.googleapis.com/v0/b/independent-project-7edde.appspot.com/o/images%2F2020-05-08%2011%3A32%3A16.330607.png?alt=media&token=1e4bff1d-c08b-4afa-a1f3-a975e46e89c5'),
                             ),
                             title: Text(context
                                     .read<RecipeList>()
-                                    .recipeList[index]
-                                    .data['title'] ??
+                                    .recipeList[index]['title'] ??
                                 '??'),
                             subtitle: Text(context
                                     .read<RecipeList>()
-                                    .recipeList[index]
-                                    .data['desctription'] ??
+                                    .recipeList[index]['desctription'] ??
                                 '??'),
                           ),
                           ButtonBar(
                             children: <Widget>[
                               Text(context
                                       .read<RecipeList>()
-                                      .recipeList[index]
-                                      .data['time']
+                                      .recipeList[index]['time']
                                       .toString() ??
                                   '??'),
-                              FlatButton(
-                                child: Text(context
-                                        .read<RecipeList>()
-                                        .recipeList[index]
-                                        .data['rating']
-                                        .toString() ??
-                                    '??'),
-                                onPressed: () {
-                                  /* ... */
-                                },
-                              ),
+                              Text(context
+                                      .read<RecipeList>()
+                                      .recipeList[index]['averageRating']
+                                      .toString() ??
+                                  '??'),
+                              showRatingCibus(
+                                  rating: context
+                                      .read<RecipeList>()
+                                      .recipeList[index]['averageRating'],
+                                  imageHeight: 20.0),
                             ],
                           ),
                         ],
@@ -238,96 +257,43 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
     );
   }
 
-  Widget addStarButtons({
-    int index,
-    User user,
-    int myRating,
-  }) {
-    myRating = myRating ?? 0;
-    return ButtonBar(
-      // stars for rating, the _currentRating should be linked to each recipe's rating
-      children: <Widget>[
-        GestureDetector(
-          child: Icon(
-            Icons.star,
-            color: myRating >= 1 ? Colors.amberAccent : Colors.grey,
-          ),
-          onTap: () {
-            setState(() {
-              myRating = 1;
-              recipeClassList[index].addYourRating(rating: myRating);
-            });
-            DatabaseService().updateRatings(
-                ratings: myRating,
-                recipeId: recipeClassList[index].recipeId,
-                userId: user.uid);
-          },
-        ),
-        GestureDetector(
-          child: Icon(
-            Icons.star,
-            color: myRating >= 2 ? Colors.amberAccent : Colors.grey,
-          ),
-          onTap: () {
-            setState(() {
-              myRating = 2;
-              recipeClassList[index].addYourRating(rating: myRating);
-            });
-            DatabaseService().updateRatings(
-                ratings: myRating,
-                recipeId: recipeClassList[index].recipeId,
-                userId: user.uid);
-          },
-        ),
-        GestureDetector(
-          child: Icon(
-            Icons.star,
-            color: myRating >= 3 ? Colors.amberAccent : Colors.grey,
-          ),
-          onTap: () {
-            setState(() {
-              myRating = 3;
-              recipeClassList[index].addYourRating(rating: myRating);
-            });
-            DatabaseService().updateRatings(
-                ratings: myRating,
-                recipeId: recipeClassList[index].recipeId,
-                userId: user.uid);
-          },
-        ),
-        GestureDetector(
-          child: Icon(
-            Icons.star,
-            color: myRating >= 4 ? Colors.amberAccent : Colors.grey,
-          ),
-          onTap: () {
-            setState(() {
-              myRating = 4;
-              recipeClassList[index].addYourRating(rating: myRating);
-            });
-            DatabaseService().updateRatings(
-                ratings: myRating,
-                recipeId: recipeClassList[index].recipeId,
-                userId: user.uid);
-          },
-        ),
-        GestureDetector(
-          child: Icon(
-            Icons.star,
-            color: myRating >= 5 ? Colors.amberAccent : Colors.grey,
-          ),
-          onTap: () {
-            setState(() {
-              myRating = 5;
-              recipeClassList[index].addYourRating(rating: myRating);
-            });
-            DatabaseService().updateRatings(
-                ratings: myRating,
-                recipeId: recipeClassList[index].recipeId,
-                userId: user.uid);
-          },
-        ),
-      ],
-    );
+  double roundForStars(double x) {
+    // 2.1 => 2.5; 2.5 => 2.5; 2.6 => 3.0; 3.0 => 3.0;
+    print("x: $x");
+    int xWhole = x.toInt();
+    print("xWhole: $xWhole");
+    double xDecimal = x - xWhole;
+    double decimalToAdd;
+    if (xDecimal < 0.1) {
+      decimalToAdd = 0.0;
+    } else if (xDecimal < 0.5) {
+      decimalToAdd = 0.5;
+    } else {
+      decimalToAdd = 1.0;
+    }
+    return xWhole + decimalToAdd;
+  }
+
+  Widget showRatingCibus({double rating, double imageHeight}) {
+    double roundedRating = roundForStars(rating);
+
+    List<Widget> listOfCibus = List<Widget>();
+
+    for (var i = 0; i < roundedRating.toInt(); i++) {
+      Image star = Image(
+        image: AssetImage("assets/cibus_filled.png"),
+        height: imageHeight,
+      );
+      listOfCibus.add(star);
+    }
+    if (roundedRating - roundedRating.toInt() > 0.1) {
+      // there should be a half cibus
+      Image halfStar = Image(
+        image: AssetImage("assets/cibus_filled_half.png"),
+        height: imageHeight,
+      );
+      listOfCibus.add(halfStar);
+    }
+    return Row(children: listOfCibus);
   }
 }

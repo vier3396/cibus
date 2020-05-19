@@ -24,18 +24,23 @@ class _SearchRecipeState extends State<SearchRecipe> {
         child: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: MyTextFormField(
-                maxLength: 20,
-                labelText: "Add ingredient",
-                onTap: () {
-                  PopupLayout().showPopup(
-                      context, WidgetToFixProvider(), 'Add Ingredient');
-                },
-                //TODO:  onSaved: save ingredients to recipe object
-                //TODO: validator: validate ingredients
-              ),
-            ),
+                padding: const EdgeInsets.all(8.0),
+                child: MyTextFormField(
+                    maxLength: 20,
+                    labelText: "Add ingredient",
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) {
+                            //TODO fixa navigator till något bättre?
+                            return WidgetToFixProvider();
+                          },
+                          //TODO:  onSaved: save ingredients to recipe object
+                          //TODO: validator: validate ingredients
+                        ),
+                      );
+                    })),
+
             //TODO View chosen ingredients
             ListView(
               shrinkWrap: true, //to solve overflow problem

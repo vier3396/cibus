@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RecipeList extends ChangeNotifier {
-  List<DocumentSnapshot> recipeList = [];
+  List<Map> recipeList = [];
 
-  void addEntireRecipeList(List<DocumentSnapshot> recipeList) {
+  void addEntireRecipeList(List<Map> recipeList) {
     this.recipeList = recipeList;
     notifyListeners();
   }

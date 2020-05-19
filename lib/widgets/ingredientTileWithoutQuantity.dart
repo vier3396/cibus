@@ -45,9 +45,8 @@ class IngredientTileWithoutQuantity extends StatelessWidget {
                 //When remove ingredient update to another query and update the recipelist, if empty clear the list
                 Provider.of<IngredientList>(parentContext, listen: false)
                     .removeIngredient(index);
-                List<DocumentSnapshot> recipeListFromDatabase = await database
-                    .findRecipes(Provider.of<IngredientList>(parentContext,
-                            listen: false)
+                List<Map> recipeListFromDatabase = await database.findRecipes(
+                    Provider.of<IngredientList>(parentContext, listen: false)
                         .ingredientList);
                 if (recipeListFromDatabase == null) {
                   Provider.of<RecipeList>(parentContext, listen: false)

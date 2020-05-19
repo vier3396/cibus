@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Recipe extends ChangeNotifier {
-  String recipeID;
   String title;
   String description;
   List<Ingredient> ingredients = [];
@@ -21,7 +20,7 @@ class Recipe extends ChangeNotifier {
   String username;
   String recipeId;
   int yourRating;
-  Map ratings = Map();
+  Map ratings;
 
   void addIngredient(
       {String ingredientId,
@@ -70,11 +69,13 @@ class Recipe extends ChangeNotifier {
 
   void addRating(double newRating) {
     this.rating = newRating;
+    notifyListeners();
   }
 
   void addUserIdAndUsername({String uid, String username}) {
     this.userId = uid;
     this.username = username;
+    notifyListeners();
   }
 
   void removeIngredient(int index) {
@@ -90,13 +91,11 @@ class Recipe extends ChangeNotifier {
         'listOfSteps': this.listOfSteps,
         'imageURL': this.imageURL,
         'time': this.time,
-        'rating': this.rating,
         'userId': this.userId,
         'ingredientsArray': this.ingredientList,
         'username': this.username,
-    'recipeId': this.recipeId,
-    'ratings': this.ratings,
-    'yourRating': this.yourRating,
+        'recipeId': this.recipeId,
+        'ratings': this.ratings,
       };
 
   int get ingredientCount {
@@ -110,17 +109,28 @@ class Recipe extends ChangeNotifier {
     this.ingredients =
         await DatabaseService().getIngredientCollectionFromRecipe(recipeID);
     this.imageURL = recipe['imageURL'];
-    this.rating = recipe['rating'];
     this.userId = recipe['userId'];
     this.time = recipe['time'];
     this.listOfSteps = recipe['listOfSteps'];
     this.description = recipe['description'];
-    this.recipeID = recipeID;
+    this.recipeId = recipeID;
+    this.ratings = recipe['ratings'];
     notifyListeners();
   }
 
   void setListOfStepsToZero() {
     this.listOfSteps = [];
+    notifyListeners();
+  }
+
+  void rateRecipe({String userId, int rating}) {
+    ratings[userId] = rating;
+    notifyListeners();
+  }
+
+  void addYourRating({int rating, String userId}) {
+    this.yourRating = rating;
+    //this.ratings[userId] = rating;
     notifyListeners();
   }
 }

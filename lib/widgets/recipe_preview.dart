@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:cibus/services/database.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cibus/services/recipeList.dart';
 
 //TODO fixa så att det går att gå fram och tillbaka ordentligt, steps krånglar.
 //TODO fixa så att när man submittar så ska man skickas till homepage
@@ -14,18 +15,28 @@ import 'package:cached_network_image/cached_network_image.dart';
 //TODO Städa upp
 
 class RecipePreview extends StatefulWidget {
+  int index;
   @override
   _RecipePreviewState createState() => _RecipePreviewState();
   final bool preview;
 
-  RecipePreview({this.preview});
+  RecipePreview({this.preview, this.index});
 }
 
 class _RecipePreviewState extends State<RecipePreview> {
   List<String> textList = ['step 1', 'step 2', 'step3', 'step 4'];
 
+  void getRecipe({user, database}) async {}
+
   @override
   Widget build(BuildContext context) {
+    User user = Provider.of<User>(context);
+    DatabaseService database = DatabaseService(uid: user.uid);
+
+    print(
+        ' recipe ID in recipe: ${Provider.of<Recipe>(context, listen: false).recipeId}');
+    getRecipe(user: user, database: database);
+    final popProvider = Provider.of<Recipe>(context);
     return Consumer<Recipe>(builder: (context, recipe, child) {
       return Scaffold(
         body: Container(
@@ -66,10 +77,14 @@ class _RecipePreviewState extends State<RecipePreview> {
                 ),
               ),
               Positioned(
-                top: 30,
-                left: 10,
-                child: widget.preview ? EditButton() : RatingWidget(),
-              ),
+                  top: 30,
+                  left: 10,
+                  child: widget.preview
+                      ? EditButton()
+                      : AddStarButtons(
+                          recipeID: recipe.recipeId,
+                          user: user,
+                          myRating: Provider.of<Recipe>(context).yourRating)),
               Positioned(
                 top: 30,
                 right: 10,
@@ -185,6 +200,102 @@ class _RecipePreviewState extends State<RecipePreview> {
   }
 }
 
+class AddStarButtons extends StatelessWidget {
+  String recipeID;
+  User user;
+  int myRating;
+  AddStarButtons({this.user, this.myRating, this.recipeID});
+
+  Widget build(BuildContext context) {
+    myRating = myRating ?? 0;
+    return ButtonBar(
+      // stars for rating, the _currentRating should be linked to each recipe's rating
+      children: <Widget>[
+        GestureDetector(
+          child: Icon(
+            Icons.star,
+            color: myRating >= 1 ? Colors.amberAccent : Colors.grey,
+          ),
+          onTap: () {
+            print(recipeID);
+            myRating = 1;
+            Provider.of<Recipe>(context, listen: false)
+                .addYourRating(rating: myRating, userId: user.uid);
+            DatabaseService().updateRatings(
+              recipeId: Provider.of<Recipe>(context, listen: false).recipeId,
+              rating: myRating,
+              userId: user.uid,
+            );
+          },
+        ),
+        GestureDetector(
+          child: Icon(
+            Icons.star,
+            color: myRating >= 2 ? Colors.amberAccent : Colors.grey,
+          ),
+          onTap: () {
+            myRating = 2;
+            Provider.of<Recipe>(context, listen: false)
+                .addYourRating(rating: myRating);
+
+            DatabaseService().updateRatings(
+                rating: myRating,
+                recipeId: Provider.of<Recipe>(context, listen: false).recipeId,
+                userId: user.uid);
+          },
+        ),
+        GestureDetector(
+          child: Icon(
+            Icons.star,
+            color: myRating >= 3 ? Colors.amberAccent : Colors.grey,
+          ),
+          onTap: () {
+            myRating = 3;
+            Provider.of<Recipe>(context, listen: false)
+                .addYourRating(rating: myRating);
+            DatabaseService().updateRatings(
+                rating: myRating,
+                recipeId: Provider.of<Recipe>(context, listen: false).recipeId,
+                userId: user.uid);
+          },
+        ),
+        GestureDetector(
+          child: Icon(
+            Icons.star,
+            color: myRating >= 4 ? Colors.amberAccent : Colors.grey,
+          ),
+          onTap: () {
+            myRating = 4;
+            Provider.of<Recipe>(context, listen: false)
+                .addYourRating(rating: myRating);
+
+            DatabaseService().updateRatings(
+                rating: myRating,
+                recipeId: Provider.of<Recipe>(context, listen: false).recipeId,
+                userId: user.uid);
+          },
+        ),
+        GestureDetector(
+          child: Icon(
+            Icons.star,
+            color: myRating >= 5 ? Colors.amberAccent : Colors.grey,
+          ),
+          onTap: () {
+            myRating = 5;
+            Provider.of<Recipe>(context, listen: false)
+                .addYourRating(rating: myRating);
+
+            DatabaseService().updateRatings(
+                rating: myRating,
+                recipeId: Provider.of<Recipe>(context, listen: false).recipeId,
+                userId: user.uid);
+          },
+        ),
+      ],
+    );
+  }
+}
+
 class RatingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -248,7 +359,7 @@ class SubmitButton extends StatelessWidget {
         // send it here to avoid overwrite loss
         print("Success");
 
-        Provider.of<Recipe>(context, listen: false).dispose();
+        // Provider.of<Recipe>(context, listen: false).dispose();
 
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
