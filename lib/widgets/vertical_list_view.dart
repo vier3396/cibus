@@ -1,8 +1,7 @@
+import 'package:cibus/services/recipe.dart';
 import 'package:cibus/widgets/recipe_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cibus/services/recipe.dart';
-//import 'favorite_button.dart';
 
 TextStyle textStyleTitle = TextStyle(
   fontSize: 22.0,
@@ -10,20 +9,12 @@ TextStyle textStyleTitle = TextStyle(
   letterSpacing: 1.2,
 );
 
-class ListViewRecipes extends StatefulWidget {
-  String title;
-  List<Recipe> recipes;
+class VerticalListView extends StatelessWidget {
+  final String title;
+  final List<Recipe> recipes;
 
-  ListViewRecipes({
-    this.title,
-    this.recipes,
-  });
+  VerticalListView({this.title, this.recipes});
 
-  @override
-  _ListViewRecipesState createState() => _ListViewRecipesState();
-}
-
-class _ListViewRecipesState extends State<ListViewRecipes> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -34,7 +25,7 @@ class _ListViewRecipesState extends State<ListViewRecipes> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                widget.title,
+                title,
                 style: TextStyle(
                   fontSize: 22.0,
                   fontWeight: FontWeight.bold,
@@ -47,12 +38,12 @@ class _ListViewRecipesState extends State<ListViewRecipes> {
         ChangeNotifierProvider<Recipe>(
           create: (context) => Recipe(),
           child: Container(
-            height: 300.0,
+            height: 500.0,
             child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: widget.recipes.length,
+              scrollDirection: Axis.vertical,
+              itemCount: recipes.length,
               itemBuilder: (BuildContext context, int index) {
-                Recipe currentRecipe = widget.recipes[index];
+                Recipe currentRecipe = recipes[index];
                 return GestureDetector(
                   onTap: () {
                     Provider.of<Recipe>(context, listen: false)
@@ -76,42 +67,10 @@ class _ListViewRecipesState extends State<ListViewRecipes> {
                   child: Container(
                     margin: EdgeInsets.all(10.0),
                     width: 210.0,
+                    //height: 200,
                     child: Stack(
-                      alignment: Alignment.topCenter,
+                      alignment: Alignment.centerLeft,
                       children: <Widget>[
-                        Positioned(
-                          bottom: 15.0,
-                          child: Container(
-                            height: 120.0,
-                            width: 200.0,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.all(10.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    currentRecipe.title ??
-                                        'Could not find title',
-                                    style: textStyleTitle,
-                                  ),
-                                  Text(
-                                    currentRecipe.description ??
-                                        'Could not find description',
-                                    style: TextStyle(
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
                         Container(
                           decoration: BoxDecoration(
                             color: Colors.white,
@@ -148,7 +107,41 @@ class _ListViewRecipesState extends State<ListViewRecipes> {
                                */
                             ],
                           ),
-                        )
+                        ),
+                        Positioned(
+                          top: 0.0,
+                          right: 0.0,
+                          child: Container(
+                            height: 120.0,
+                            width: 200.0,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(10.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment:
+                                CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    currentRecipe.title ??
+                                        'Could not find title',
+                                    style: textStyleTitle,
+                                  ),
+                                  Text(
+                                    currentRecipe.description ??
+                                        'Could not find description',
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -160,5 +153,4 @@ class _ListViewRecipesState extends State<ListViewRecipes> {
       ],
     );
   }
-
 }

@@ -4,7 +4,6 @@ import 'package:cibus/services/recipe.dart';
 //import 'package:cibus/widgets/favorite_button.dart';
 import 'package:cibus/widgets/spin_kit_ripple.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'inspo_page.dart';
 import 'package:cibus/widgets/list_view_recipes.dart';
 
@@ -143,7 +142,6 @@ class HomePage extends StatelessWidget {
                           {
                             if (futureSnapshot.hasData) {
                               List<Recipe> favorites = futureSnapshot.data;
-                              print('favorites = $favorites');
                               if (favorites.isNotEmpty) {
                                 return ListViewRecipes(
                                   title: 'Your favorites',
@@ -151,7 +149,7 @@ class HomePage extends StatelessWidget {
                                 );
                               } else {
                                 return Text(
-                                    'You have no favorites yet'); //TODO styla denna
+                                    'Checkout our large database of recipes!'); //TODO styla denna
                               }
                             }
                             return Text('There\'s no available data.');

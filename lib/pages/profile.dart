@@ -2,6 +2,8 @@ import 'package:cibus/services/constants.dart';
 import 'package:cibus/pages/settings_screen.dart';
 import 'package:cibus/services/database.dart';
 import 'package:cibus/services/login/user.dart';
+import 'package:cibus/widgets/list_view_recipes.dart';
+import 'package:cibus/widgets/vertical_list_view.dart';
 import 'package:flutter/material.dart';
 import 'settings_screen.dart';
 import 'package:cibus/services/recipe.dart';
@@ -93,7 +95,6 @@ class Profile extends StatelessWidget {
                       ),
                     ),
                     Divider(),
-                    /*
                   FutureBuilder(
                     future: getUserRecipes(snapshot.data),
                     builder: (context, futureSnapshot) {
@@ -110,13 +111,15 @@ class Profile extends StatelessWidget {
                           {
                             if (futureSnapshot.hasData) {
                               List<Recipe> myRecipes = futureSnapshot.data;
-                              return Column(
-                                children: <Widget>[
-                                  //widgets using userData
-                                  ifHasRecipes(myRecipes),
-                                  TODO: kalla på funktion som ska bygga listview
-                                ],
-                              );
+                              if (myRecipes.isNotEmpty) {
+                                return VerticalListView(
+                                  title: 'Your recipes',
+                                  recipes: myRecipes,
+                                );
+                              } else {
+                                return Text(
+                                    'Sharing is caring<3 feel free to upload some of your own recipes'); //TODO styla denna
+                              }
                             }
                             return Text('There\'s no available data.');
                           }
@@ -124,8 +127,6 @@ class Profile extends StatelessWidget {
                       return null;
                     },
                   ),
-
-                   */
                   ],
                 ),
               ),

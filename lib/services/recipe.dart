@@ -47,6 +47,20 @@ class Recipe extends ChangeNotifier {
     print(ingredients);
   }
 
+  void addRecipeProperties(Recipe recipe){
+    this.recipeId = recipe.recipeId;
+    this.title = recipe.title;
+    this.description = recipe.description;
+    this.ingredients = recipe.ingredients;
+    this.listOfSteps = recipe.listOfSteps;
+    this.imageURL = recipe.imageURL;
+    this.time = recipe.time;
+    this.rating = recipe.rating;
+    this.userId = recipe.userId;
+    this.ingredientList = recipe.ingredientList;
+    notifyListeners();
+  }
+
   void setRecipeId(String documentId) {
     recipeId = documentId;
     notifyListeners();
