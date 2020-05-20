@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cibus/services/colors.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-
+import 'package:cibus/widgets/spin_kit_ripple.dart';
 // final halfMedianWidth = MediaQuery.of(context).size.width / 2.0; //(for different screens)
 
 TextStyle cibusLogoTextStyle = TextStyle(
@@ -43,11 +42,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: SpinKitRipple(
-                  color: kDarkerkBackgroundColor,
-                  size: 90.0,
-                  duration: Duration(milliseconds: 2000),
-                ),
+                child: MySpinKitRipple(),
               ),
             ],
           ),
