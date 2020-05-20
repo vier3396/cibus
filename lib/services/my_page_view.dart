@@ -1,5 +1,5 @@
+import 'package:cibus/widgets/toFixProviderInPopupRecipe.dart';
 import 'package:flutter/material.dart';
-import 'package:cibus/pages/searchRecipeScreens/search_recipe.dart';
 import 'package:cibus/pages/profile.dart';
 import 'package:cibus/pages/home.dart';
 import 'package:cibus/pages/favorites.dart';
@@ -55,10 +55,10 @@ class _MyPageViewState extends State<MyPageView> {
         onPageChanged: onPageChanged,
         children: <Widget>[
           HomePage(userDataStream: checkIfFirstLoad(context)),
-          SearchRecipe(),
+          WidgetToFixProvider(),
           Profile(userDataStream: checkIfFirstLoad(context)),
           AddRecipeFormProviderWidget(),
-          Favorites(),
+          FavoritesPage(userDataStream: checkIfFirstLoad(context)),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

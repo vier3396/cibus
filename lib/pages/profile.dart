@@ -2,7 +2,6 @@ import 'package:cibus/services/constants.dart';
 import 'package:cibus/pages/settings_screen.dart';
 import 'package:cibus/services/database.dart';
 import 'package:cibus/services/login/user.dart';
-import 'package:cibus/widgets/list_view_recipes.dart';
 import 'package:cibus/widgets/vertical_list_view.dart';
 import 'package:flutter/material.dart';
 import 'settings_screen.dart';

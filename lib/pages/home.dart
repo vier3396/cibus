@@ -7,19 +7,8 @@ import 'package:flutter/material.dart';
 import 'inspo_page.dart';
 import 'package:cibus/widgets/list_view_recipes.dart';
 
-TextStyle topArticleDescriptionTextStyle = TextStyle(
-  height: 2.5,
-  color: Colors.white,
-  fontSize: 18.0,
-);
-TextStyle topArticleTitleTextStyle = TextStyle(
-  height: 2.5,
-  color: Colors.white,
-  fontSize: 18.0,
-);
-
 class HomePage extends StatelessWidget {
-  Stream<UserData> userDataStream;
+  final Stream<UserData> userDataStream;
   HomePage({this.userDataStream});
 
   Future<List<Recipe>> getFavoriteRecipes(UserData userData) async {
@@ -148,8 +137,17 @@ class HomePage extends StatelessWidget {
                                   recipes: favorites,
                                 );
                               } else {
-                                return Text(
-                                    'Checkout our large database of recipes!'); //TODO styla denna
+                                return Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 20.0),
+                                  child: Text(
+                                    'Checkout our large database of recipes',
+                                    style: TextStyle(
+                                      fontSize: 22.0,
+                                      fontWeight: FontWeight.w600,
+                                      //letterSpacing: 1.1,
+                                    ),
+                                  ),
+                                ); //TODO styla denna
                               }
                             }
                             return Text('There\'s no available data.');
