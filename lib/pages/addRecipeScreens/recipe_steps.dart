@@ -49,7 +49,7 @@ class _RecipeStepsState extends State<RecipeSteps> {
         padding: const EdgeInsets.all(8.0),
         child: MyTextFormField(
           controller: controller,
-          maxLength: 300,
+          maxLength: 400,
           maxLines: 5,
           labelText: "Step $displayNumber",
           decoration: InputDecoration(),

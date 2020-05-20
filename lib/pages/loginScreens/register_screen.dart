@@ -48,7 +48,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String description = '';
   String _currentUsername;
   int age = 0;
-  int dropdownValue = null;
+  //int dropdownValue = null;
   final TextEditingController _pass = TextEditingController();
   final TextEditingController _confirmPass = TextEditingController();
 

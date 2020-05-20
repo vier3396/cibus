@@ -24,18 +24,7 @@ class _PopupBodySearchIngredientsState
   String ingredientSearch;
   Map ingredientMap = Map();
   String ingredientId = '';
-  List<String> quantityTypeList = [
-    'grams',
-    'kgs',
-    'liters',
-    'deciliters',
-    'pieces',
-    'cans',
-    'teaspoons',
-    'cups',
-    'cloves',
-  ];
-  String dropDownValue = 'kg';
+  //String dropDownValue = 'kg';
   int quantityValue = 5;
   WhatToShow whatToShow = WhatToShow.notYetSea;
 
@@ -76,9 +65,7 @@ class _PopupBodySearchIngredientsState
           children: <Widget>[
             TextField(
               onChanged: (toSearch) {
-                ingredientSearch = toSearch;
-                ingredientSearch =
-                    "${ingredientSearch[0].toUpperCase()}${ingredientSearch.substring(1)}";
+                ingredientSearch = toSearch.toLowerCase();
                 print(ingredientSearch);
               },
             ),

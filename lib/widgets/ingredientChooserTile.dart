@@ -3,17 +3,51 @@ import 'package:cibus/services/colors.dart';
 import 'package:cibus/services/recipe.dart';
 import 'package:provider/provider.dart';
 
-class IngredientChooserTile extends StatelessWidget {
+class IngredientChooserTile extends StatefulWidget {
   final String ingredientName;
   final String ingredientId;
-  final List<String> quantityTypeList = ['gram', 'kg', 'liters'];
 
   IngredientChooserTile({this.ingredientName, this.ingredientId});
 
   @override
+  _IngredientChooserTileState createState() => _IngredientChooserTileState();
+}
+
+class _IngredientChooserTileState extends State<IngredientChooserTile> {
+  int quantityValue;
+  TextEditingController quantityValueController;
+  final List<String> quantityTypeList = [
+    'grams',
+    'kgs',
+    'liters',
+    'deciliters',
+    'pieces',
+    'cans',
+    'teaspoons',
+    'cups',
+    'cloves',
+  ];
+
+  String dropDownValue = 'kgs';
+  @override
+  void initState() {
+    // TODO: implement initState
+    quantityValueController = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    quantityValueController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    int quantityValue;
-    String dropDownValue = 'kg';
+    //String dropDownValue = 'kgs';
+    print("dropdownValue i shuno build: $dropDownValue");
+
     return Hero(
       tag: 'ingredient',
       child: AnimatedContainer(
@@ -35,7 +69,7 @@ class IngredientChooserTile extends StatelessWidget {
         child: Column(
           children: <Widget>[
             Text(
-              ingredientName,
+              widget.ingredientName,
               style: TextStyle(fontSize: 20.0),
             ),
             Row(
@@ -43,6 +77,7 @@ class IngredientChooserTile extends StatelessWidget {
               children: <Widget>[
                 Expanded(
                   child: TextField(
+                    controller: quantityValueController,
                     keyboardType: TextInputType.numberWithOptions(),
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
@@ -55,24 +90,40 @@ class IngredientChooserTile extends StatelessWidget {
                     },
                   ),
                 ),
-                SizedBox(width: 30.0),
+                SizedBox(width: 10.0),
                 Expanded(
                   child: DropdownButton<String>(
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.black,
+                    ),
                     onChanged: (String newValue) {
-                      dropDownValue = newValue;
+                      setState(() {
+                        print("dropDownValue: $dropDownValue");
+                        print("newValue: $newValue");
+                        dropDownValue = newValue;
+                        print("dropDownValue = newValue;");
+                        print("newValue: $newValue");
+                        print("dropDownValue: $dropDownValue");
+                      });
                     },
                     items: quantityTypeList
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
-                        child: Text(value),
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            fontSize: 12,
+                          ),
+                        ),
                       );
                     }).toList(),
                     value: dropDownValue,
                   ),
                 ),
                 SizedBox(
-                  width: 20.0,
+                  width: 10.0,
                 ),
                 Expanded(
                     child: Padding(
@@ -86,13 +137,18 @@ class IngredientChooserTile extends StatelessWidget {
                         if (quantityValue != null && dropDownValue != null) {
                           Provider.of<Recipe>(context, listen: false)
                               .addIngredient(
-                            ingredientName: ingredientName,
-                            ingredientId: ingredientId,
+                            ingredientName: widget.ingredientName,
+                            ingredientId: widget.ingredientId,
                             quantityType: dropDownValue,
                             ingredientQuantity: quantityValue,
                           );
                           FocusScope.of(context).requestFocus(FocusNode());
                         }
+                        setState(() {
+                          // quantityValue = null;
+                          dropDownValue = 'kgs';
+                          quantityValueController.clear();
+                        });
                       },
                       minWidth: 200.0,
                       height: 42.0,

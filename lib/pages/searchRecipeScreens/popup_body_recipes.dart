@@ -31,7 +31,7 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
   Map ingredientMap = Map();
   String ingredientId = '';
   List<String> quantityTypeList = ['gram', 'kg', 'liters'];
-  String dropDownValue = 'kg';
+  // String dropDownValue = 'kg';
   int quantityValue = 5;
   WhatToShow whatToShow = WhatToShow.foundIngredient;
   List<Ingredient> ingredientList = [];
@@ -84,9 +84,7 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
             children: <Widget>[
               TextField(
                 onChanged: (toSearch) {
-                  ingredientSearch = toSearch;
-                  ingredientSearch =
-                      "${ingredientSearch[0].toUpperCase()}${ingredientSearch.substring(1)}";
+                  ingredientSearch = toSearch.toLowerCase();
                   print(ingredientSearch);
                 },
               ),
@@ -202,7 +200,7 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                           ),
                         );
                         //ta rätt recept från recipeList och hämta ingredienserna
-                        // skapa ett recipe objekt och skicka till nästa sida
+                        // skapa ett recipeobjekt och skicka till nästa sida
                         //skicka in recipeList[index] i en funktion och där göra ett nytt recipe
                       },
                       child: Column(
@@ -221,26 +219,39 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                                 '??'),
                             subtitle: Text(context
                                     .read<RecipeList>()
-                                    .recipeList[index]['desctription'] ??
+                                    .recipeList[index]['description'] ??
                                 '??'),
                           ),
                           ButtonBar(
+                            alignment: MainAxisAlignment.start,
                             children: <Widget>[
-                              Text(context
-                                      .read<RecipeList>()
-                                      .recipeList[index]['time']
-                                      .toString() ??
-                                  '??'),
-                              Text(context
-                                      .read<RecipeList>()
-                                      .recipeList[index]['averageRating']
-                                      .toString() ??
-                                  '??'),
-                              showRatingCibus(
-                                  rating: context
-                                      .read<RecipeList>()
-                                      .recipeList[index]['averageRating'],
-                                  imageHeight: 20.0),
+                              Column(
+                                children: <Widget>[
+                                  showRatingCibus(
+                                      rating: context
+                                                  .read<RecipeList>()
+                                                  .recipeList[index]
+                                              ['averageRating'] ??
+                                          0,
+                                      imageHeight: 20.0),
+                                  Text(context
+                                          .read<RecipeList>()
+                                          .recipeList[index]['averageRating']
+                                          .toString() ??
+                                      '??'),
+                                ],
+                              ),
+                              SizedBox(width: 50),
+                              Column(
+                                children: <Widget>[
+                                  Text(context
+                                          .read<RecipeList>()
+                                          .recipeList[index]['time']
+                                          .toString() ??
+                                      '??'),
+                                  Text("minutes"),
+                                ],
+                              ),
                             ],
                           ),
                         ],
@@ -248,7 +259,7 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                     ),
                   );
                 },
-                itemCount: Provider.of<RecipeList>(context).recipeList.length,
+                itemCount: Provider.of<RecipeList>(context).recipeCount,
               ),
             ],
           ),
@@ -259,14 +270,13 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
 
   double roundForStars(double x) {
     // 2.1 => 2.5; 2.5 => 2.5; 2.6 => 3.0; 3.0 => 3.0;
-    print("x: $x");
+
     int xWhole = x.toInt();
-    print("xWhole: $xWhole");
     double xDecimal = x - xWhole;
     double decimalToAdd;
     if (xDecimal < 0.1) {
       decimalToAdd = 0.0;
-    } else if (xDecimal < 0.5) {
+    } else if (xDecimal <= 0.5) {
       decimalToAdd = 0.5;
     } else {
       decimalToAdd = 1.0;
