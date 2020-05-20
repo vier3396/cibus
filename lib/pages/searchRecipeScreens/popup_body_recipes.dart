@@ -237,6 +237,7 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                                   Text(context
                                           .read<RecipeList>()
                                           .recipeList[index]['averageRating']
+                                          .toStringAsPrecision(2)
                                           .toString() ??
                                       '??'),
                                 ],

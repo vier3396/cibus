@@ -156,6 +156,7 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                         padding: const EdgeInsets.all(8.0),
                         child: MyTextFormField(
                           maxLines: 5,
+                          maxLength: 400,
                           labelText: "Describe your dish",
                           validator: (String description) {
                             if (description.isEmpty) {

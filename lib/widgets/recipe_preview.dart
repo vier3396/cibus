@@ -102,93 +102,139 @@ class _RecipePreviewState extends State<RecipePreview> {
                       topLeft: Radius.circular(30),
                       topRight: Radius.circular(30)),
                 ),
-                child: Row(
-                  // mainAxisAlignment: MainAxisAlignment.start,
+                child: Column(
                   children: <Widget>[
                     Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      flex: 10,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        // mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-                          Text(
-                            'Ingredients',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 20.0),
-                          ),
                           Expanded(
-                            child: ListView.builder(
-                              padding: EdgeInsets.only(
-                                top: 15.0,
-                              ),
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  child: Text(
-                                    '${recipe.ingredients[index].quantity ?? 'ingredient'} ${recipe.ingredients[index].quantityType} ${recipe.ingredients[index].ingredientName}',
-                                    style: TextStyle(
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.w500),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  'Ingredients',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 20.0),
+                                ),
+                                Expanded(
+                                  child: ListView.builder(
+                                    padding: EdgeInsets.only(
+                                      top: 15.0,
+                                    ),
+                                    itemBuilder: (context, index) {
+                                      return Container(
+                                        child: Text(
+                                          '${recipe.ingredients[index].quantity ?? 'ingredient'} ${recipe.ingredients[index].quantityType} ${recipe.ingredients[index].ingredientName}',
+                                          style: TextStyle(
+                                              fontSize: 20.0,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                        margin: EdgeInsets.only(bottom: 18.0),
+                                      );
+                                    },
+                                    itemCount: recipe.ingredients.length,
                                   ),
-                                  margin: EdgeInsets.only(bottom: 18.0),
-                                );
-                              },
-                              itemCount: recipe.ingredients.length,
+                                ),
+                              ],
                             ),
                           ),
+                          VerticalDivider(),
+                          Expanded(
+                              flex: 2,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    'Recipe steps',
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 20.0),
+                                  ),
+                                  Expanded(
+                                    child: ListView.builder(
+                                      padding: EdgeInsets.only(top: 15.0),
+                                      itemBuilder: (context, index) {
+                                        return Card(
+                                          elevation: 8.0,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                          ),
+                                          child: Column(
+                                            children: <Widget>[
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(10.0),
+                                                child: Text(
+                                                  "Step ${index + 1}",
+                                                  style: TextStyle(
+                                                    fontSize: 20.0,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    bottom: 15.0, top: 0),
+                                                child: Text(
+                                                  recipe.listOfSteps[index] ??
+                                                      'step',
+                                                  textAlign: TextAlign.left,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                      itemCount: recipe.listOfSteps.length,
+                                    ),
+                                  ),
+                                ],
+                              ))
                         ],
                       ),
                     ),
-                    VerticalDivider(),
-                    Expanded(
-                        flex: 2,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              'Recipe steps',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 20.0),
-                            ),
-                            Expanded(
-                              child: ListView.builder(
-                                padding: EdgeInsets.only(top: 15.0),
-                                itemBuilder: (context, index) {
-                                  return Card(
-                                    elevation: 8.0,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                    ),
-                                    child: Column(
-                                      children: <Widget>[
-                                        Padding(
-                                          padding: const EdgeInsets.all(10.0),
-                                          child: Text(
-                                            "Step ${index + 1}",
-                                            style: TextStyle(
-                                              fontSize: 20.0,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              bottom: 15.0, top: 0),
-                                          child: Text(
-                                            recipe.listOfSteps[index] ?? 'step',
-                                            textAlign: TextAlign.left,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
+                    Divider(
+                      color: kCoral,
+                    ),
+                    if (widget.preview)
+                      SizedBox()
+                    else
+                      Expanded(
+                          flex: 1,
+                          child: InkWell(
+                            child: Ink(
+                                color: kCoral,
+                                child: Text(
+                                  'Report Abuse',
+                                  style: TextStyle(
+                                    color: kCoral,
+                                  ),
+                                )),
+                            onTap: () {
+                              final popProvider =
+                                  Provider.of<Recipe>(context, listen: false);
+
+                              String recipeId =
+                                  Provider.of<Recipe>(context, listen: false)
+                                      .recipeId;
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return makeAlertDialog(
+                                      recipeId: recipeId,
+                                      context: context,
+                                      database: database);
                                 },
-                                itemCount: recipe.listOfSteps.length,
-                              ),
-                            ),
-                          ],
-                        ))
+                              );
+                            },
+                          )),
                   ],
                 ),
               ),
@@ -197,6 +243,36 @@ class _RecipePreviewState extends State<RecipePreview> {
         ),
       );
     });
+  }
+
+  AlertDialog makeAlertDialog(
+      {String recipeId, DatabaseService database, BuildContext context}) {
+    return AlertDialog(
+      title: Text('Report'),
+      content: SingleChildScrollView(
+        child: ListBody(
+          children: <Widget>[
+            Text('Do you want to report this recipe to the Cibus-Police')
+          ],
+        ),
+      ),
+      actions: <Widget>[
+        FlatButton(
+          textColor: kCoral,
+          child: Text("Cancel"),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        FlatButton(
+            textColor: kCoral,
+            onPressed: () {
+              database.reportRecipe(recipeId: recipeId);
+              Navigator.of(context).pop();
+            },
+            child: Text('Report'))
+      ],
+    );
   }
 }
 

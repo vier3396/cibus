@@ -145,7 +145,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('Aight bruh'),
+              child: Text('OK'),
               onPressed: () {
                 setState(() {
                   loading = false;
@@ -175,7 +175,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('Aight bruh'),
+              child: Text('OK'),
               onPressed: () {
                 loading = false;
                 Navigator.of(context).pop();

@@ -21,6 +21,9 @@ class DatabaseService {
   final CollectionReference ingredientRecipeCollection =
       Firestore.instance.collection('IngredientRecipes');
 
+  final CollectionReference reportedRecipesCollection =
+      Firestore.instance.collection("ReportedRecipes");
+
   Future updateUserData({String name, String description, int age}) async {
     return await userCollection.document(uid).setData({
       'name': name,
@@ -204,6 +207,13 @@ class DatabaseService {
       return null;
     }
     return null;
+  }
+
+  void reportRecipe({String recipeId}) async {
+    var result = await reportedRecipesCollection
+        .document(recipeId)
+        .setData({'recipeId': recipeId});
+    print('Uploaded');
   }
 
   void uploadRecipe(Recipe recipe) async {

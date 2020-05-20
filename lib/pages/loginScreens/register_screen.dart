@@ -335,7 +335,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('Aight bruh'),
+              child: Text('Ok'),
               onPressed: () {
                 setState(() {
                   loading = false;
@@ -367,7 +367,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('Aight bruh'),
+              child: Text('OK'),
               onPressed: () {
                 setState(() {
                   loading = false;

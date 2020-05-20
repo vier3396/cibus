@@ -121,7 +121,7 @@ class _UsernameScreenState extends State<UsernameScreen> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('Aight bruh'),
+              child: Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -149,7 +149,7 @@ class _UsernameScreenState extends State<UsernameScreen> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('Aight bruh'),
+              child: Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
