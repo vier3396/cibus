@@ -1,26 +1,36 @@
 import 'package:cibus/services/database.dart';
 import 'package:flutter/cupertino.dart';
-
 import 'ingredients.dart';
 import 'dart:io';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Recipe extends ChangeNotifier {
+  String recipeId;
   String title;
   String description;
   List<Ingredient> ingredients = [];
   List<dynamic> listOfSteps = [];
-  //TODO: NetworkImage? imageFile;
-  String imageURL; //just to view temporary Recipe objects images
+  String imageURL;
   int time;
   double rating;
   String userId;
   List<String> ingredientList = [];
   String username;
-  String recipeId;
   int yourRating;
   Map ratings;
+
+  Recipe(
+      {this.recipeId,
+        this.title,
+        this.description,
+        this.ingredients,
+        this.listOfSteps,
+        this.imageURL,
+        this.time,
+        this.rating,
+        this.userId,
+        this.ingredientList});
 
   void addIngredient(
       {String ingredientId,

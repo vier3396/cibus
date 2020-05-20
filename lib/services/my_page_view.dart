@@ -55,7 +55,7 @@ class _MyPageViewState extends State<MyPageView> {
         controller: _pageController,
         onPageChanged: onPageChanged,
         children: <Widget>[
-          HomePage(),
+          HomePage(userDataStream: checkIfFirstLoad(context)),
           SearchRecipe(),
           Profile(userDataStream: checkIfFirstLoad(context)),
           AddRecipeFormProviderWidget(),

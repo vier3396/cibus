@@ -46,6 +46,106 @@ class DatabaseService {
     return result.data['username'];
   }
 
+  Future<List<Recipe>> findUserRecipes(String uid) async {
+    List<Recipe> userRecipes = [];
+    var recipeResult = await recipeCollection
+        .where('userId', isEqualTo: uid)
+        .getDocuments();
+
+    for (DocumentSnapshot document in recipeResult.documents) {
+      List<Ingredient> ingredientList = [];
+      var ingredientResult = await recipeCollection
+          .document(document.documentID)
+          .collection('Ingredients')
+          .getDocuments();
+
+      for (DocumentSnapshot ingredientDocument in ingredientResult.documents) {
+        Ingredient ingredient = Ingredient(
+            ingredientName: ingredientDocument.data['ingredientName'],
+            ingredientId: ingredientDocument.data['ingredientId'],
+            quantityType: ingredientDocument.data['quantityType'],
+            quantity: ingredientDocument.data['quantity']);
+        ingredientList.add(ingredient);
+      }
+
+      userRecipes.add(
+        Recipe(
+          recipeId: document.documentID,
+          title: document.data['title'],
+          description: document.data['description'],
+          ingredients: ingredientList,
+          listOfSteps: document.data['listOfSteps'],
+          imageURL: document.data['imageURL'],
+          time: document.data['time'],
+          rating: document.data['rating'],
+          userId: document.data['userId'],
+        ),
+      );
+    }
+
+    return userRecipes;
+  }
+
+  Future removeFromUserFavorites(
+      {List<dynamic> currentFavorites, String recipeId}) async {
+
+    //print('currentFavorites innan remove: $currentFavorites');
+    currentFavorites.remove(recipeId);
+    print('userData.favoriteList efter remove: $currentFavorites');
+    return await userCollection.document(uid).setData({
+      'favoriteList': currentFavorites,
+    }, merge: true);
+  }
+
+  Future addToUserFavorites(
+      {List<dynamic> currentFavorites, String recipeId}) async {
+    //print('currentFavorites innan add: $currentFavorites');
+    currentFavorites.add(recipeId);
+    print('userData.favoriteList efter add: $currentFavorites');
+    return await userCollection.document(uid).setData({
+      'favoriteList': currentFavorites,
+    }, merge: true);
+  }
+
+  Future<List<Recipe>> findFavoriteRecipes(List<dynamic> recipeList) async {
+    //print('Running method findFavoriteRecipes, favorit recept : $recipeList');
+    List<Recipe> favoriteRecipeList = [];
+
+    for (dynamic id in recipeList) {
+      List<Ingredient> ingredientList = [];
+      var result = await recipeCollection.document(id).get();
+      var ingredientResult = await recipeCollection
+          .document(id)
+          .collection('Ingredients')
+          .getDocuments();
+
+      for (DocumentSnapshot document in ingredientResult.documents) {
+        Ingredient ingredient = Ingredient(
+            ingredientName: document.data['ingredientName'],
+            ingredientId: document.data['ingredientId'],
+            quantityType: document.data['quantityType'],
+            quantity: document.data['quantity']);
+        ingredientList.add(ingredient);
+      }
+
+      favoriteRecipeList.add(
+        Recipe(
+          recipeId: result.documentID,
+          title: result.data['title'],
+          description: result.data['description'],
+          ingredients: ingredientList,
+          listOfSteps: result.data['listOfSteps'],
+          imageURL: result.data['imageURL'],
+          time: result.data['time'],
+          rating: result.data['rating'],
+          userId: result.data['userId'],
+        ),
+      );
+    }
+
+    return favoriteRecipeList;
+  }
+
   Future updateRatings({String recipeId, String userId, int rating}) async {
     print(recipeId);
     Map<String, dynamic> ratingsMap = {'userId': userId, 'rating': rating};

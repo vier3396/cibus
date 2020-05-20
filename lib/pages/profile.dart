@@ -11,15 +11,13 @@ class Profile extends StatelessWidget {
   Stream userDataStream;
   Profile({this.userDataStream});
 
-  /*
   Future<List<Recipe>> getUserRecipes(UserData userData) async {
     return await DatabaseService().findUserRecipes(userData.uid);
   }
 
-   */
 /*
   Widget ifHasRecipes(List<Recipe> myRecipes) {
-    if (myRecipes != null && myRecipes.isEmpty) {
+    if (myRecipes.isEmpty) {
       return ListViewRecipes(
         scrollDirection: Axis.vertical,
         title: 'Your recipes',
@@ -116,6 +114,7 @@ class Profile extends StatelessWidget {
                                 children: <Widget>[
                                   //widgets using userData
                                   ifHasRecipes(myRecipes),
+                                  TODO: kalla på funktion som ska bygga listview
                                 ],
                               );
                             }
