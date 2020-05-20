@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import '../../services/my_text_form_field.dart';
 import '../../services/recipe.dart';
+import 'package:provider/provider.dart';
 
 // needs to be StatefulWidget, so we can keep track of the count of the fields internally
 class RecipeSteps extends StatefulWidget {
@@ -48,13 +49,14 @@ class _RecipeStepsState extends State<RecipeSteps> {
         padding: const EdgeInsets.all(8.0),
         child: MyTextFormField(
           controller: controller,
-          maxLength: 20,
+          maxLength: 400,
+          maxLines: 5,
           labelText: "Step $displayNumber",
-          decoration: InputDecoration(
-          ),
+          decoration: InputDecoration(),
           suffixIcon: IconButton(
-            icon: Icon(Icons.clear,
-            color: Colors.grey,
+            icon: Icon(
+              Icons.clear,
+              color: Colors.grey,
             ),
             onPressed: () {
               // when removing a TextField, you must do two things:
@@ -68,32 +70,39 @@ class _RecipeStepsState extends State<RecipeSteps> {
           ),
           //validate input in MYTextFormField
           validator: (String step) {
-            //TODO: make this check of step work...
             if (step.isEmpty) {
-              print(controllers.length);
-              print(controllers);
-              return 'Enter a step';
-            }
-            else if (controllers.length < 1) {
-              print(controllers.length);
-              print(controllers);
-              return "Please add a step";
-            }
-            else if (controllers.length > 20) {
-              print(controllers.length);
-              print(controllers);
-              return "You've reached maximum nrOfsteps, bitch";
-            }
-            else {
-              print(controllers.length);
-              print(controllers);
-              widget.formkey.currentState.save();
+              return 'Enter a Description';
+            } else {
+              //widget.formkey.currentState.save();
               return null;
             }
+            //TODO: make this check of step work...
+            //if (step.isEmpty) {
+            //              print(controllers.length);
+            //              print(controllers);
+            //              return 'Enter a step';
+            //            } else if (controllers.length < 1) {
+            //              print(controllers.length);
+            //              print(controllers);
+            //              return "Please add a step";
+            //            } else if (controllers.length > 20) {
+            //              print(controllers.length);
+            //              print(controllers);
+            //              return "You've reached maximum nrOfsteps, bitch";
+            //            } else {
+            //              print(controllers.length);
+            //              print(controllers);
+            //              //widget.formkey.currentState.save();
+            //              return null;
+            //            }
           },
           //when pressing submit button to save form
           onSaved: (String step) {
-            widget.recipe.listOfSteps[displayNumber - 1] = step;
+            print('once');
+            //widget.recipe.listOfSteps[displayNumber - 1] = step;
+            Provider.of<Recipe>(context, listen: false)
+                .addSteps(step, displayNumber - 1);
+
             //widget.formkey.currentState.reset();
             /* for (i=0; i < controllers.length; i++) {
               controllers[i].clear();
@@ -103,7 +112,6 @@ class _RecipeStepsState extends State<RecipeSteps> {
       );
     }).toList(); // convert to a list
   }
-
 
   @override
   Widget build(BuildContext context) {

@@ -14,7 +14,7 @@ description: Independent project for STS
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.2 <3.0.0"
 
 dependencies:
   flutter:
@@ -35,11 +35,14 @@ dev_dependencies:
   firebase_auth: ^0.16.0
   google_sign_in: ^4.4.1
   flutter_facebook_login: ^3.0.0
-  provider: ^3.1.0
+  provider: ^4.1.1
   firebase_storage: ^3.1.5
   firebase_core: ^0.4.4+3
   image_cropper: ^1.2.1
   image_picker: ^0.6.5+2
+  flutter_staggered_animations: ^0.1.2
+  firebase_user_stream: ^1.0.0
+  cached_network_image: ^2.2.0+1
 
 
 

@@ -69,8 +69,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: _signInEmailButton(),
               ),
               SizedBox(height: 20.0),
-              Text('New to CIBUS?',
-              style: newUserTextStyle),
+              Text('New to CIBUS?', style: newUserTextStyle),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: _registerButton(),
@@ -94,8 +93,9 @@ class _LoginPageState extends State<LoginPage> {
               return UsernameScreen();
             }));
           } else if (signIn.isLoggedInGoogle) {
-            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                MyPageView()), (Route<dynamic> route) => false);
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => MyPageView()),
+                (Route<dynamic> route) => false);
           }
         });
       },
@@ -133,8 +133,9 @@ class _LoginPageState extends State<LoginPage> {
               return UsernameScreen();
             }));
           } else if (signIn.isLoggedInFacebook) {
-            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                MyPageView()), (Route<dynamic> route) => false);
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => MyPageView()),
+                (Route<dynamic> route) => false);
           }
         });
       },
@@ -183,10 +184,7 @@ class _LoginPageState extends State<LoginPage> {
           children: <Widget>[
             Padding(
               padding: loginPadding,
-              child: Text(
-                  'Sign in with email',
-                  style: loginTextStyle
-              ),
+              child: Text('Sign in with email', style: loginTextStyle),
             )
           ],
         ),
@@ -217,10 +215,7 @@ class _LoginPageState extends State<LoginPage> {
           children: <Widget>[
             Padding(
               padding: loginPadding,
-              child: Text(
-                'Register new user',
-                style: loginTextStyle
-              ),
+              child: Text('Register new user', style: loginTextStyle),
             )
           ],
         ),

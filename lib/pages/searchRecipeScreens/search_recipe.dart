@@ -5,6 +5,7 @@ import 'package:cibus/services/popup_layout.dart';
 import 'package:cibus/services/popup_body_search_ingredients.dart';
 import 'package:cibus/pages/searchRecipeScreens/popup_body_recipes.dart';
 import 'package:cibus/services/colors.dart';
+import 'package:cibus/widgets/toFixProviderInPopupRecipe.dart';
 
 const circleAvatarRadius = 30.0;
 const circleAvatarSize = 40.0;
@@ -18,37 +19,32 @@ class SearchRecipe extends StatefulWidget {
 class _SearchRecipeState extends State<SearchRecipe> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        primaryColor: kDarkerkBackgroundColor,
-        accentColor: kAccentColor,
-      ),
-      home: Scaffold(
-        /* appBar: AppBar(
-          title: Center(
-            child: Text('Search recipe'),
-          ),
-        ), */
-        body: SafeArea(
-          child: Column(
-            children: <Widget>[
-              Padding(
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: <Widget>[
+            Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: MyTextFormField(
-                  maxLength: 20,
-                  labelText: "Add ingredient",
-                  onTap: () {
-                    PopupLayout().showPopup(
-                        context, popupBodySearchIngredients(), 'Add Ingredient');
-                  },
-                  //TODO:  onSaved: save ingredients to recipe object
-                  //TODO: validator: validate ingredients
-                ),
-              ),
-              //TODO View chosen ingredients
-              ListView(
-                shrinkWrap: true, //to solve overflow problem
-                children: <Widget>[
+                    maxLength: 20,
+                    labelText: "Add ingredient",
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) {
+                            //TODO fixa navigator till något bättre?
+                            return WidgetToFixProvider();
+                          },
+                          //TODO:  onSaved: save ingredients to recipe object
+                          //TODO: validator: validate ingredients
+                        ),
+                      );
+                    })),
+
+            //TODO View chosen ingredients
+            ListView(
+              shrinkWrap: true, //to solve overflow problem
+              children: <Widget>[
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
@@ -59,7 +55,8 @@ class _SearchRecipeState extends State<SearchRecipe> {
                           CircleAvatar(
                             backgroundColor: Colors.teal[800],
                             radius: circleAvatarRadius,
-                            child: Icon(Icons.fastfood,
+                            child: Icon(
+                              Icons.fastfood,
                               size: circleAvatarSize,
                               color: Colors.white,
                             ),
@@ -75,12 +72,13 @@ class _SearchRecipeState extends State<SearchRecipe> {
                           CircleAvatar(
                             backgroundColor: kPalePink,
                             radius: circleAvatarRadius,
-                            child: Icon(Icons.adb,
+                            child: Icon(
+                              Icons.fastfood,
                               size: circleAvatarSize,
                               color: Colors.white,
                             ),
                           ),
-                          Text("Robot"),
+                          Text("Lactose"),
                         ],
                       ),
                     ),
@@ -91,12 +89,13 @@ class _SearchRecipeState extends State<SearchRecipe> {
                           CircleAvatar(
                             backgroundColor: kVibrantYellow,
                             radius: circleAvatarRadius,
-                            child: Icon(Icons.airline_seat_recline_normal,
+                            child: Icon(
+                              Icons.fastfood,
                               size: circleAvatarSize,
                               color: Colors.white,
                             ),
                           ),
-                          Text("Flygplan"),
+                          Text("Gluten"),
                         ],
                       ),
                     ),
@@ -107,43 +106,43 @@ class _SearchRecipeState extends State<SearchRecipe> {
                           CircleAvatar(
                             backgroundColor: kSkyBlue,
                             radius: circleAvatarRadius,
-                            child: Icon(Icons.face,
+                            child: Icon(
+                              Icons.fastfood,
                               size: circleAvatarSize,
                               color: Colors.white,
                             ),
                           ),
-                          Text("Face"),
+                          Text("Other"),
                         ],
                       ),
                     ),
                   ],
                 )
               ],
-              ),
-              Expanded(
-                child: Align(
-                  alignment: FractionalOffset.bottomCenter,
-                  child: MaterialButton(
-                    color: kWarmOrange,
-                    height: 55.0,
-                    child: Row(children: <Widget>[
+            ),
+            Expanded(
+              child: Align(
+                alignment: FractionalOffset.bottomCenter,
+                child: MaterialButton(
+                  color: kWarmOrange,
+                  height: 55.0,
+                  child: Row(
+                    children: <Widget>[
                       Text("Number of recipes"),
                       //TODO: Count number of recipes found
                       Icon(Icons.arrow_forward_ios),
                     ],
-                    ),
-                    onPressed: () {
-                      PopupLayout(top: topMarginPopupRecipes).showPopup(context,
-                          PopupBodyRecipes(), 'Recipes');
-                    },
                   ),
+                  onPressed: () {
+                    PopupLayout(top: topMarginPopupRecipes)
+                        .showPopup(context, PopupBodyRecipes(), 'Recipes');
+                  },
                 ),
               ),
-              ],
             ),
+          ],
         ),
-        ),
+      ),
     );
   }
-
 }

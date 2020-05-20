@@ -60,30 +60,28 @@ class _PopupBodyIndividualRecipeState extends State<PopupBodyIndividualRecipe> {
         }),
         actions: [
           //add/remove from favorites button
-          Builder(
-            builder: (context) {
-              return IconButton(
-                icon: isFavorite ? favoriteFilledIcon : favoriteBorderIcon,
-                //tooltip: isFavorite ? "Add to favorites" : "Remove from favorites",
-                onPressed: () {
-                  setState(() {
-                    isFavorite = !isFavorite;
+          Builder(builder: (context) {
+            return IconButton(
+              icon: isFavorite ? favoriteFilledIcon : favoriteBorderIcon,
+              //tooltip: isFavorite ? "Add to favorites" : "Remove from favorites",
+              onPressed: () {
+                setState(() {
+                  isFavorite = !isFavorite;
 
-                    snackBarFavoritesContent = isFavorite
-                        ? "Added to favorites"
-                        : "Removed from favorites";
+                  snackBarFavoritesContent = isFavorite
+                      ? "Added to favorites"
+                      : "Removed from favorites";
 
-                    Scaffold.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(snackBarFavoritesContent),
-                        duration: Duration(seconds: 3),
-                      ),
-                    );
-                  });
-                },
-              );
-            }
-          ),
+                  Scaffold.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(snackBarFavoritesContent),
+                      duration: Duration(seconds: 3),
+                    ),
+                  );
+                });
+              },
+            );
+          }),
         ],
         //brightness: Brightness.light,
       ),
@@ -91,24 +89,21 @@ class _PopupBodyIndividualRecipeState extends State<PopupBodyIndividualRecipe> {
       body: ListView(
         children: <Widget>[
           Image.asset(
-            widget.recipe.imageFile,
+            widget.recipe.imageURL,
             width: MediaQuery.of(context).size.width,
             //TODO: image size problem
           ),
-          Row(children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Icon(
-                Icons.star,
-                color: Colors.orangeAccent,
+          Row(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Icon(
+                  Icons.star,
+                  color: Colors.orangeAccent,
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text((widget.recipe.rating).toString()),
-            ),
-            //TODO: add the number of ratings
-          ],
+              //TODO: add the number of ratings
+            ],
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -117,8 +112,9 @@ class _PopupBodyIndividualRecipeState extends State<PopupBodyIndividualRecipe> {
           divider,
           Padding(
             padding: const EdgeInsets.only(left: 8.0),
-            child: Text("Ingredients",
-            style: ingredientsTitleStyle,
+            child: Text(
+              "Ingredients",
+              style: ingredientsTitleStyle,
             ),
           ),
           //getTextWidgets(widget.recipe.listOfSteps),

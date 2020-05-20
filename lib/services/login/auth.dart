@@ -7,7 +7,9 @@ class AuthService {
 
   //create user object based on firebase user
   User _userFromFirebaseUser(FirebaseUser user) {
-    return user != null ? User(uid: user.uid) : null;
+    return user != null
+        ? User(uid: user.uid, isEmail: user.isEmailVerified)
+        : null;
   }
 
   //auth change user stream
@@ -37,6 +39,10 @@ class AuthService {
           email: email, password: password);
       FirebaseUser user = result.user;
 
+      user.sendEmailVerification();
+      user.isEmailVerified; //vill komma åt på annat ställe för att kolla om det stämmer
+      print('Email verification sent?');
+
       //create a new document for the user with the uid
       await DatabaseService(uid: user.uid)
           .updateUserData(name: name, description: description, age: age);
@@ -48,6 +54,14 @@ class AuthService {
       print(e.toString());
       return null;
     }
+  }
+
+  //isEmailVerified
+
+  Future<bool> isEmailVerified(FirebaseUser user) async {
+    await user.reload();
+    user = await _auth.currentUser();
+    return user.isEmailVerified;
   }
 
   //sign out

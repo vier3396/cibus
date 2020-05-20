@@ -6,11 +6,14 @@ import 'package:flutter/widgets.dart';
 import 'dart:core';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/login/user.dart';
+import 'package:cibus/services/recipe.dart';
+import 'package:cibus/services/colors.dart';
 
 class Uploader extends StatefulWidget {
   final File file;
+  final bool recipePhoto;
 
-  Uploader({Key key, this.file}) : super(key: key);
+  Uploader({Key key, this.file, @required this.recipePhoto}) : super(key: key);
 
   createState() => _UploaderState();
 }
@@ -22,6 +25,8 @@ class _UploaderState extends State<Uploader> {
 
   StorageUploadTask _uploadTask;
 
+  bool urlResult = false;
+
   /// Starts an upload task
   void _startUpload() {
     /// Unique file name for the file
@@ -32,17 +37,32 @@ class _UploaderState extends State<Uploader> {
   }
 
   void getuRL(String filePath, BuildContext context) async {
-    print('kompis');
+    //print('kompis');
     var uRL = await _storage.ref().child(filePath).getDownloadURL();
-    print(uRL);
-    final user = Provider.of<User>(context);
-    DatabaseService(uid: user.uid).updateUserPicture(pictureURL: uRL);
+    //print(uRL);
+    final user = Provider.of<User>(context, listen: false);
+    DatabaseService(uid: user.uid)
+        .updateUserPicture(pictureURL: uRL)
+        .whenComplete(() => Navigator.of(context).pop());
+  }
+
+  void getuRLRecipe(String filePath, BuildContext context) async {
+    //print('kompis recipe');
+    var uRL = await _storage.ref().child(filePath).getDownloadURL();
+    //print(uRL);
+    Provider.of<Recipe>(context, listen: false).addImage(uRL);
+
+    if (uRL != null &&
+        Provider.of<Recipe>(context, listen: false).imageURL != null) {
+      //print('kom hit');
+      urlResult = true;
+      Navigator.of(context).pop();
+      //print("vi poppar");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
-
     if (_uploadTask != null) {
       /// Manage the task state and event subscription with a StreamBuilder
       return StreamBuilder<StorageTaskEvent>(
@@ -54,8 +74,12 @@ class _UploaderState extends State<Uploader> {
                 ? event.bytesTransferred / event.totalByteCount
                 : 0;
 
-            if (_uploadTask.isComplete) {
-              getuRL(filePath, context);
+            if (_uploadTask.isComplete && !urlResult) {
+              if (widget.recipePhoto) {
+                getuRLRecipe(filePath, context);
+              } else if (!widget.recipePhoto) {
+                getuRL(filePath, context);
+              }
             }
             return Column(
               children: [
@@ -82,8 +106,11 @@ class _UploaderState extends State<Uploader> {
     } else {
       // Allows user to decide when to start the upload
       return FlatButton.icon(
-        label: Text('Upload to Firebase'),
-        icon: Icon(Icons.cloud_upload),
+        label: Text('Upload Image', style: TextStyle(color: kCoral)),
+        icon: Icon(
+          Icons.cloud_upload,
+          color: kCoral,
+        ),
         onPressed: _startUpload,
       );
     }
