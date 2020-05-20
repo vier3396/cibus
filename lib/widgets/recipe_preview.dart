@@ -44,9 +44,9 @@ class _RecipePreviewState extends State<RecipePreview> {
             children: <Widget>[
               Container(
                 padding: EdgeInsets.only(left: 20, top: 130),
-                height: 219,
+                height: 250,
                 child: Padding(
-                  padding: const EdgeInsets.only(bottom: 25.0, left: 10),
+                  padding: const EdgeInsets.only(bottom: 25.0, left: 5),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
@@ -56,7 +56,7 @@ class _RecipePreviewState extends State<RecipePreview> {
                               fontSize: 25.0,
                               fontWeight: FontWeight.w500)),
                       Padding(
-                        padding: const EdgeInsets.only(right: 10.0),
+                        padding: const EdgeInsets.only(right: 20.0),
                         child: Text(
                           '${recipe.time ?? '?'} minutes',
                           style: TextStyle(
@@ -73,11 +73,11 @@ class _RecipePreviewState extends State<RecipePreview> {
                   image: DecorationImage(
                       fit: BoxFit.fill,
                       image: CachedNetworkImageProvider(recipe.imageURL ??
-                          'https://firebasestorage.googleapis.com/v0/b/independent-project-7edde.appspot.com/o/images%2F2020-05-08%2011%3A32%3A16.330607.png?alt=media&token=1e4bff1d-c08b-4afa-a1f3-a975e46e89c5')),
+                          'https://firebasestorage.googleapis.com/v0/b/independent-project-7edde.appspot.com/o/blank_profile_picture.png?alt=media&token=49efb712-d543-40ca-8e33-8c0fdb029ea5')),
                 ),
               ),
               Positioned(
-                  top: 30,
+                  top: 40,
                   left: 10,
                   child: widget.preview
                       ? EditButton()
@@ -86,16 +86,16 @@ class _RecipePreviewState extends State<RecipePreview> {
                           user: user,
                           myRating: Provider.of<Recipe>(context).yourRating)),
               Positioned(
-                top: 30,
+                top: 40,
                 right: 10,
                 child: widget.preview ? SubmitButton() : AuthorWidget(),
               ),
               Container(
                 padding:
                     EdgeInsets.only(left: 20, bottom: 20, right: 20, top: 20),
-                margin: EdgeInsets.only(top: 180),
+                margin: EdgeInsets.only(top: 200),
                 constraints: BoxConstraints.expand(
-                    height: MediaQuery.of(context).size.height - 219),
+                    height: MediaQuery.of(context).size.height - 250),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(

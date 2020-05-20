@@ -103,230 +103,231 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
   Widget build(BuildContext context) {
     // final halfMedianWidth = MediaQuery.of(context).size.width / 2.0; (for different screens)
 
-    return ChangeNotifierProvider<Recipe>(
-      create: (context) => Recipe(),
-      child: Consumer<Recipe>(
-        builder: (
-          context,
-          recipe,
-          child,
-        ) {
-          return MaterialApp(
-            home: Scaffold(
-              resizeToAvoidBottomPadding: false, // solves keyboard problems
-              appBar: AppBar(
-                backgroundColor: kDarkerkBackgroundColor,
-                title: Center(
-                  child: Text(
-                    'Add a recipe',
-                    style: TextStyle(
-                      color: kCibusTextColor,
-                    ),
-                  ),
-                ),
-              ),
-              body: GestureDetector(
-                onTap: () {
-                  FocusScope.of(context).requestFocus(new FocusNode());
-                }, //When tapping outside form/text input fields, keyboard disappears
-                child: Form(
-                  key: formKey,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: <Widget>[
-                        //Title
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: MyTextFormField(
-                            maxLength: 50,
-                            labelText: "Recipe Title",
-                            validator: (String title) {
-                              if (title.isEmpty) {
-                                return 'Enter a Title';
-                              } else {
-                                // formKey.currentState.save();
-                                return null;
-                              }
-                            },
-                            onSaved: (String title) {
-                              recipe.addTitle(title);
-                            },
-                          ),
-                        ),
-                        //Description
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: MyTextFormField(
-                            maxLines: 5,
-                            labelText: "Describe your dish",
-                            validator: (String description) {
-                              if (description.isEmpty) {
-                                return 'Enter a Description';
-                              } else {
-                                //formKey.currentState.save();
-                                return null;
-                              }
-                            },
-                            onSaved: (String description) {
-                              recipe.addDescription(description);
-                            },
-                          ),
-                        ),
-                        //Ingredients
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              Expanded(
-                                child: MyTextFormField(
-                                  validator: (String ingredients) {
-                                    if (Provider.of<Recipe>(context,
-                                                listen: false)
-                                            .ingredientCount ==
-                                        0) {
-                                      return 'choose ingredients';
-                                    }
-                                    return null;
-                                  },
-                                  maxLength: 20,
-                                  labelText: 'Add ingredient',
-                                  onTap: () {
-                                    final popProvider = Provider.of<Recipe>(
-                                        context,
-                                        listen: false);
-                                    showModalBottomSheet(
-                                      isScrollControlled: true,
-                                      context: context,
-                                      builder: (context) =>
-                                          ChangeNotifierProvider.value(
-                                        value: popProvider,
-                                        child: SingleChildScrollView(
-                                          child: PopupBodySearchIngredients(),
-                                        ),
-                                      ),
-                                    );
-                                    FocusScope.of(context)
-                                        .requestFocus(FocusNode());
-                                  },
-
-                                  //TODO:  onSaved: save ingredients to recipe object
-                                  //TODO: validator: validate ingredients
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        AnimationLimiter(
-                          child: GridView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 3),
-                            itemBuilder: (context, index) {
-                              return AnimationConfiguration.staggeredGrid(
-                                columnCount: 3,
-                                position: index,
-                                duration: const Duration(milliseconds: 500),
-                                child: ScaleAnimation(
-                                  child: FadeInAnimation(
-                                    child: IngredientTile(index: index),
-                                  ),
-                                ),
-                              );
-                            },
-                            itemCount:
-                                (Provider.of<Recipe>(context).ingredientCount),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: MyTextFormField(
-                            isAmount: true,
-                            maxLength: 10,
-                            labelText:
-                                "How many minutes does the recipe take to make?",
-                            validator: (String time) {
-                              if (time.isEmpty) {
-                                return 'Enter a time';
-                              } else {
-                                //formKey.currentState.save();
-                                return null;
-                              }
-                            },
-                            onSaved: (String time) {
-                              recipe.addTime(int.parse(time));
-                            },
-                          ),
-                        ),
-                        RecipeSteps(
-                          formkey: formKey,
-                          recipe: recipe,
-                        ),
-                        //No image selected/Selected image
-                        // decideImageView(), TODO: different method
-                        //Add image button
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            child: RaisedButton(
-                              child: Icon(Icons.add_a_photo),
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return ImageCapture(
-                                        recipePhoto: true,
-                                      );
-                                    },
-                                  ),
-                                );
-                                // showChoiceDialog(context, recipe); TODO: different method
-                              },
-                            ),
-                          ),
-                        ),
-                        //Submit form button
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: RaisedButton(
-                              child: Text("Review and submit recipe"),
-                              onPressed: () {
-                                if (formKey.currentState.validate()) {
-                                  print(recipe.listOfSteps);
-                                  formKey.currentState.save();
-                                  //if (isRecipesListNotNull()) {
-                                  //}
-
-                                  final popProvider = Provider.of<Recipe>(
-                                      context,
-                                      listen: false);
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) {
-                                        //TODO fixa navigator till något bättre?
-                                        return ChangeNotifierProvider.value(
-                                          value: popProvider,
-                                          child: RecipePreview(
-                                            preview: true,
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  );
-                                }
-                              }),
-                        ),
-                      ],
-                    ),
+    return Consumer<Recipe>(
+      builder: (
+        context,
+        recipe,
+        child,
+      ) {
+        return MaterialApp(
+          home: Scaffold(
+            resizeToAvoidBottomPadding: false, // solves keyboard problems
+            appBar: AppBar(
+              backgroundColor: kDarkerkBackgroundColor,
+              title: Center(
+                child: Text(
+                  'Add a recipe',
+                  style: TextStyle(
+                    color: kCibusTextColor,
                   ),
                 ),
               ),
             ),
-          );
-        },
-      ),
+            body: GestureDetector(
+              onTap: () {
+                FocusScope.of(context).requestFocus(new FocusNode());
+              }, //When tapping outside form/text input fields, keyboard disappears
+              child: Form(
+                key: formKey,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      //Title
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: MyTextFormField(
+                          maxLength: 50,
+                          labelText: "Recipe Title",
+                          validator: (String title) {
+                            if (title.isEmpty) {
+                              return 'Enter a Title';
+                            } else {
+                              // formKey.currentState.save();
+                              return null;
+                            }
+                          },
+                          onSaved: (String title) {
+                            recipe.addTitle(title);
+                          },
+                        ),
+                      ),
+                      //Description
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: MyTextFormField(
+                          maxLines: 5,
+                          labelText: "Describe your dish",
+                          validator: (String description) {
+                            if (description.isEmpty) {
+                              return 'Enter a Description';
+                            } else {
+                              //formKey.currentState.save();
+                              return null;
+                            }
+                          },
+                          onSaved: (String description) {
+                            recipe.addDescription(description);
+                          },
+                        ),
+                      ),
+                      //Ingredients
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Expanded(
+                              child: MyTextFormField(
+                                validator: (String ingredients) {
+                                  if (Provider.of<Recipe>(context,
+                                              listen: false)
+                                          .ingredientCount ==
+                                      0) {
+                                    return 'choose ingredients';
+                                  }
+                                  return null;
+                                },
+                                maxLength: 20,
+                                labelText: 'Add ingredient',
+                                onTap: () {
+                                  final popProvider = Provider.of<Recipe>(
+                                      context,
+                                      listen: false);
+                                  showModalBottomSheet(
+                                    isScrollControlled: true,
+                                    context: context,
+                                    builder: (context) =>
+                                        ChangeNotifierProvider.value(
+                                      value: popProvider,
+                                      child: SingleChildScrollView(
+                                        child: PopupBodySearchIngredients(),
+                                      ),
+                                    ),
+                                  );
+                                  FocusScope.of(context)
+                                      .requestFocus(FocusNode());
+                                },
+
+                                //TODO:  onSaved: save ingredients to recipe object
+                                //TODO: validator: validate ingredients
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      AnimationLimiter(
+                        child: GridView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3),
+                          itemBuilder: (context, index) {
+                            return AnimationConfiguration.staggeredGrid(
+                              columnCount: 3,
+                              position: index,
+                              duration: const Duration(milliseconds: 500),
+                              child: ScaleAnimation(
+                                child: FadeInAnimation(
+                                  child: IngredientTile(index: index),
+                                ),
+                              ),
+                            );
+                          },
+                          itemCount:
+                              (Provider.of<Recipe>(context).ingredientCount),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: MyTextFormField(
+                          isAmount: true,
+                          maxLength: 10,
+                          labelText:
+                              "How many minutes does the recipe take to make?",
+                          validator: (String time) {
+                            if (time.isEmpty) {
+                              return 'Enter a time';
+                            } else {
+                              //formKey.currentState.save();
+                              return null;
+                            }
+                          },
+                          onSaved: (String time) {
+                            recipe.addTime(int.parse(time));
+                          },
+                        ),
+                      ),
+                      RecipeSteps(
+                        formkey: formKey,
+                        recipe: recipe,
+                      ),
+                      //No image selected/Selected image
+                      // decideImageView(), TODO: different method
+                      //Add image button
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          child: RaisedButton(
+                            child: Icon(Icons.add_a_photo),
+                            onPressed: () {
+                              final popProvider =
+                                  Provider.of<Recipe>(context, listen: false);
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return ChangeNotifierProvider.value(
+                                      value: popProvider,
+                                      child: ImageCapture(
+                                        recipePhoto: true,
+                                      ),
+                                    );
+                                  },
+                                ),
+                              );
+                              // showChoiceDialog(context, recipe); TODO: different method
+                            },
+                          ),
+                        ),
+                      ),
+                      //Submit form button
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: RaisedButton(
+                            child: Text("Review and submit recipe"),
+                            onPressed: () {
+                              if (formKey.currentState.validate()) {
+                                print(recipe.listOfSteps);
+                                formKey.currentState.save();
+                                //if (isRecipesListNotNull()) {
+                                //}
+
+                                final popProvider =
+                                    Provider.of<Recipe>(context, listen: false);
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      //TODO fixa navigator till något bättre?
+                                      return ChangeNotifierProvider.value(
+                                        value: popProvider,
+                                        child: RecipePreview(
+                                          preview: true,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                );
+                              }
+                            }),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 

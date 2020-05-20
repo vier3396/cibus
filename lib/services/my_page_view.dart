@@ -8,6 +8,7 @@ import 'package:cibus/services/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/database.dart';
 import 'package:cibus/services/login/user.dart';
+import 'package:cibus/widgets/addRecipeFormAddProvider.dart';
 
 const TextStyle bottomBarTextStyle = TextStyle(fontSize: 18.0);
 
@@ -57,7 +58,7 @@ class _MyPageViewState extends State<MyPageView> {
           HomePage(),
           SearchRecipe(),
           Profile(userDataStream: checkIfFirstLoad(context)),
-          AddRecipeForm(),
+          AddRecipeFormProviderWidget(),
           Favorites(),
         ],
       ),

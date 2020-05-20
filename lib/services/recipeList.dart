@@ -5,12 +5,18 @@ class RecipeList extends ChangeNotifier {
   List<Map> recipeList = [];
 
   void addEntireRecipeList(List<Map> recipeList) {
-    this.recipeList = recipeList;
-    notifyListeners();
+    if (recipeList != null) {
+      this.recipeList = recipeList;
+      notifyListeners();
+    }
   }
 
   void removeRecipeInList(int index) {
     recipeList.removeAt(index);
     notifyListeners();
+  }
+
+  int get recipeCount {
+    return recipeList.length;
   }
 }
