@@ -24,7 +24,8 @@ class _PopupBodySearchIngredientsState
   String ingredientSearch;
   Map ingredientMap = Map();
   String ingredientId = '';
-
+  //String dropDownValue = 'kg';
+  int quantityValue = 5;
   WhatToShow whatToShow = WhatToShow.notYetSea;
 
   Widget foundIngredient({whatToShowenum, ingredientMap}) {

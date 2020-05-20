@@ -46,12 +46,6 @@ class DatabaseService {
     return result.data['username'];
   }
 
-  Future updateAverageRating({String recipeId}) async {
-    double averageRating = await getAverageRating(recipeId: recipeId);
-    recipeCollection.document(recipeId).collection('Ratings').getDocuments();
-    return null;
-  }
-
   Future updateRatings({String recipeId, String userId, int rating}) async {
     print(recipeId);
     Map<String, dynamic> ratingsMap = {'userId': userId, 'rating': rating};
@@ -80,27 +74,6 @@ class DatabaseService {
       return 0;
     } else {
       return querySnapshot.documents[0].data['rating'];
-    }
-  }
-
-  Future<double> getAverageRating({String recipeId}) async {
-    QuerySnapshot querySnapshot = await recipeCollection
-        .document(recipeId)
-        .collection("newRatings")
-        .getDocuments();
-    final doc = querySnapshot.documents;
-    double sumRating = 0;
-    if (doc.length > 0) {
-      for (DocumentSnapshot snap in doc) {
-        snap.data.forEach((key, value) {
-          if (key != "throwAwayId") {
-            sumRating += value;
-          }
-        }); //=> sumRating += value);
-      }
-      return sumRating / (doc.length - 1);
-    } else {
-      return null;
     }
   }
 

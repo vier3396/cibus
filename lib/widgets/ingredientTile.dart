@@ -38,12 +38,14 @@ class _IngredientTileState extends State<IngredientTile> {
               .ingredientName),
           Text(
               '${Provider.of<Recipe>(context).ingredients[widget.index].quantity} ${Provider.of<Recipe>(context).ingredients[widget.index].quantityType}'),
-          IconButton(
-              icon: Icon(Icons.clear),
-              onPressed: () {
-                Provider.of<Recipe>(context, listen: false)
-                    .removeIngredient(widget.index);
-              })
+          Expanded(
+            child: IconButton(
+                icon: Icon(Icons.clear),
+                onPressed: () {
+                  Provider.of<Recipe>(context, listen: false)
+                      .removeIngredient(widget.index);
+                }),
+          )
         ],
       ),
     );
