@@ -13,7 +13,7 @@ String step2 =
 String step3 =
     '3. Put the eggs gently and cook as usual. Let the eggs cool in the water and leave them for at least an hour in the refrigerator, preferably overnight.';
 String endingDescription =
-    'Depending on the length of time you leave the eggs in the water, the color may deepen and change the hue. Feel free to experiment! Since these are natural ingredients, the color can vary greatly from time to time. Just have fun with it !';
+    'Feel free to experiment! Since these are natural ingredients, the color can vary greatly from time to time. Just have fun with it !';
 
 class InspoPage extends StatelessWidget {
   @override

@@ -23,6 +23,10 @@ class DatabaseService {
   final CollectionReference reportedRecipesCollection =
       Firestore.instance.collection("ReportedRecipes");
 
+  //TODO: metoder för att hämta innehållet
+  final CollectionReference articleCollection =
+  Firestore.instance.collection("Articles");
+
   Future<List> returnReportedRecipes() async {
     var result = await reportedRecipesCollection.getDocuments();
     var documents = result.documents;
@@ -172,9 +176,6 @@ class DatabaseService {
     String recipeId,
     String userId,
   }) async {
-    print('recipeid: $recipeId');
-    print('userId: $userId');
-    //HÄR PRINTAR VI JÄTTEMYCKET TODO: TA BORT PRINTS
     var querySnapshot = await recipeCollection
         .document(recipeId)
         .collection("Ratings")
@@ -182,7 +183,6 @@ class DatabaseService {
         .getDocuments();
     final documents = querySnapshot.documents;
     if (documents.isEmpty) {
-      print('document is empty');
       return 0;
     } else {
       return querySnapshot.documents[0].data['rating'];

@@ -1,4 +1,4 @@
-import 'package:cibus/pages/profile.dart';
+import 'package:cibus/pages/user_page.dart';
 import 'package:cibus/services/my_page_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -85,7 +85,9 @@ class _RecipePreviewState extends State<RecipePreview> {
               Positioned(
                 top: 40,
                 right: 10,
-                child: widget.preview ? SubmitButton() : AuthorWidget(userId: Provider.of<Recipe>(context).userId),
+                child: widget.preview
+                    ? SubmitButton()
+                    : AuthorWidget(userId: Provider.of<Recipe>(context).userId),
               ),
               Container(
                 padding:
@@ -271,40 +273,35 @@ class _RecipePreviewState extends State<RecipePreview> {
       ],
     );
   }
-
 }
 
 class AuthorWidget extends StatelessWidget {
   final String userId;
   AuthorWidget({this.userId});
 
-  Future<UserData> getUser() async {
-    return await DatabaseService().getUserData(userId);
-  }
-
   @override
   Widget build(BuildContext context) {
     return InkWell(
-        onTap: () {
-          /*
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => UserPage()));
+      onTap: () async {
+        UserData userData = await DatabaseService().getUserData(userId);
+        List<Recipe> recipes = await DatabaseService().findUserRecipes(userId);
 
-           */
-        },
-        child: Text(
-          Provider
-              .of<Recipe>(context)
-              .username ?? 'userName',
-          style: TextStyle(
-              fontSize: 20.0, fontWeight: FontWeight.w500, color: Colors.white),
-        ),
-      );
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => UserPage(
+                      recipes: recipes,
+                      userData: userData,
+                    )));
+      },
+      child: Text(
+        Provider.of<Recipe>(context).username ?? 'userName',
+        style: TextStyle(
+            fontSize: 20.0, fontWeight: FontWeight.w500, color: Colors.white),
+      ),
+    );
   }
 }
-
 
 class AddStarButtons extends StatelessWidget {
   String recipeID;
