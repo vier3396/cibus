@@ -5,7 +5,7 @@ import 'package:cibus/services/recipe.dart';
 import 'package:cibus/widgets/spin_kit_ripple.dart';
 import 'package:flutter/material.dart';
 import 'inspo_page.dart';
-import 'package:cibus/widgets/list_view_recipes.dart';
+import 'package:cibus/widgets/horizontal_list_view.dart';
 
 class HomePage extends StatelessWidget {
   final Stream<UserData> userDataStream;
@@ -132,7 +132,7 @@ class HomePage extends StatelessWidget {
                             if (futureSnapshot.hasData) {
                               List<Recipe> favorites = futureSnapshot.data;
                               if (favorites.isNotEmpty) {
-                                return ListViewRecipes(
+                                return HorizontalListView(
                                   title: 'Your favorites',
                                   recipes: favorites,
                                 );

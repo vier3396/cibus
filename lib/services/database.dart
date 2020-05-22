@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cibus/services/login/user.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:cibus/services/recipe.dart';
 import 'package:cibus/services/ingredients.dart';
 
@@ -97,7 +96,6 @@ class DatabaseService {
 
     for (DocumentSnapshot document in recipeResult.documents) {
       Map<String, dynamic> recipeMap = document.data;
-
       Recipe recipe = Recipe();
       recipe.addAllPropertiesFromDocument(
           recipe: recipeMap, recipeID: document.documentID);
@@ -133,7 +131,6 @@ class DatabaseService {
     List<Recipe> favoriteRecipeList = [];
 
     for (dynamic id in recipeList) {
-      List<Ingredient> ingredientList = [];
       var result = await recipeCollection.document(id).get();
 
       Map<String, dynamic> recipeMap = result.data;
@@ -197,10 +194,9 @@ class DatabaseService {
       print(document.data);
     }
 
-    print(result.documents.isNotEmpty); //isEmpty
+    print(result.documents.isNotEmpty);
     return result.documents.isNotEmpty;
-    //}
-    return true;
+
   }
 
   //userData from snapshot
