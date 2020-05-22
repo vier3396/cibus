@@ -7,12 +7,10 @@ import 'package:flutter/material.dart';
 import 'settings_screen.dart';
 import 'package:cibus/services/recipe.dart';
 import 'package:cibus/widgets/spin_kit_ripple.dart';
-import 'package:cibus/widgets/show_rating.dart';
 
 class Profile extends StatelessWidget {
   final Stream userDataStream;
-  final bool currentUser;
-  Profile({this.userDataStream, this.currentUser});
+  Profile({this.userDataStream});
 
   Future<List<Recipe>> getUserRecipes(UserData userData) async {
     return await DatabaseService().findUserRecipes(userData.uid);
@@ -64,20 +62,7 @@ class Profile extends StatelessWidget {
                             ),
                           ),
                           SizedBox(width: 40.0),
-                          IconButton(
-                            icon: Icon(Icons.settings),
-                            iconSize: 50,
-                            color: Colors.grey,
-                            onPressed: () {
-
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SettingsScreen(),
-                                ),
-                              );
-                            },
-                          ),
+                          SettingsButton(),
                         ],
                       ),
                     ),
@@ -128,4 +113,24 @@ class Profile extends StatelessWidget {
         });
   }
 
+}
+
+class SettingsButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.settings),
+      iconSize: 50,
+      color: Colors.grey,
+      onPressed: () {
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SettingsScreen(),
+          ),
+        );
+      },
+    );
+  }
 }

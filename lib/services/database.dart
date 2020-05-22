@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cibus/services/login/user.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:cibus/services/recipe.dart';
 import 'package:cibus/services/ingredients.dart';
 
@@ -22,7 +21,7 @@ class DatabaseService {
       Firestore.instance.collection('IngredientRecipes');
 
   final CollectionReference reportedRecipesCollection =
-  Firestore.instance.collection("ReportedRecipes");
+      Firestore.instance.collection("ReportedRecipes");
 
   Future<List> returnReportedRecipes() async {
     var result = await reportedRecipesCollection.getDocuments();
@@ -65,7 +64,8 @@ class DatabaseService {
     return mapList;
   }
 
-  Future updateUserData({String name, String description, List<Recipe> favoriteList}) async {
+  Future updateUserData(
+      {String name, String description, List<Recipe> favoriteList}) async {
     return await userCollection.document(uid).setData({
       'name': name,
       'description': description,
@@ -90,21 +90,16 @@ class DatabaseService {
     return result.data['username'];
   }
 
-  Future<UserData> getUserData(String username) async {
-    UserData _userData;
-    final userResult = await userCollection.where('username', isEqualTo: username)
-        .getDocuments();
-
-    for (DocumentSnapshot user in userResult.documents) {
-      _userData = UserData(uid: user.data['uid'],
-          name: user.data['name'],
-          description: user.data['description'],
-          username: username,
-          profilePic: user.data['profilePic'],
-          isEmail: user.data['isEmail'],
-          favoriteList: user.data['favoriteList']);
-    }
-
+  Future<UserData> getUserData(String userID) async {
+    final user = await userCollection.document(userID).get();
+    UserData _userData = UserData(
+        uid: userID,
+        name: user.data['name'],
+        description: user.data['description'],
+        username: user.data['username'],
+        profilePic: user.data['profilePic'],
+        isEmail: user.data['isEmail'],
+        favoriteList: user.data['favoriteList']);
     return _userData;
   }
 
@@ -215,7 +210,6 @@ class DatabaseService {
 
     print(result.documents.isNotEmpty);
     return result.documents.isNotEmpty;
-
   }
 
   //userData from snapshot

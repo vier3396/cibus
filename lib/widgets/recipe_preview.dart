@@ -1,3 +1,4 @@
+import 'package:cibus/pages/profile.dart';
 import 'package:cibus/services/my_page_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +8,6 @@ import 'package:provider/provider.dart';
 import 'package:cibus/services/database.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cibus/services/recipeList.dart';
 
 //TODO fixa så att det går att gå fram och tillbaka ordentligt, steps krånglar.
 //TODO fixa så att när man submittar så ska man skickas till homepage
@@ -24,8 +24,6 @@ class RecipePreview extends StatefulWidget {
 }
 
 class _RecipePreviewState extends State<RecipePreview> {
-  List<String> textList = ['step 1', 'step 2', 'step3', 'step 4'];
-
   void getRecipe({user, database}) async {}
 
   @override
@@ -87,7 +85,7 @@ class _RecipePreviewState extends State<RecipePreview> {
               Positioned(
                 top: 40,
                 right: 10,
-                child: widget.preview ? SubmitButton() : AuthorWidget(),
+                child: widget.preview ? SubmitButton() : AuthorWidget(userId: Provider.of<Recipe>(context).userId),
               ),
               Container(
                 padding:
@@ -273,44 +271,40 @@ class _RecipePreviewState extends State<RecipePreview> {
       ],
     );
   }
+
 }
 
 class AuthorWidget extends StatelessWidget {
-  //TODO implement userPage
-  //TODO save userName to recipe when creating
+  final String userId;
+  AuthorWidget({this.userId});
+
+  Future<UserData> getUser() async {
+    return await DatabaseService().getUserData(userId);
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){
-        Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => UserPage(username: Provider.of<Recipe>(context).username)));
+        onTap: () {
+          /*
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => UserPage()));
 
-      },
-      child: Text(
-        Provider.of<Recipe>(context).username ?? 'userName',
-        style: TextStyle(
-            fontSize: 20.0, fontWeight: FontWeight.w500, color: Colors.white),
-      ),
-    );
+           */
+        },
+        child: Text(
+          Provider
+              .of<Recipe>(context)
+              .username ?? 'userName',
+          style: TextStyle(
+              fontSize: 20.0, fontWeight: FontWeight.w500, color: Colors.white),
+        ),
+      );
   }
 }
 
-Future<UserData> getUser(String username) async {
-  return await DatabaseService().getUserData(username);
-}
-
-class UserPage extends StatelessWidget {
-  String username;
-  UserPage({this.username});
-
-
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold();
-  }
-}
 
 class AddStarButtons extends StatelessWidget {
   String recipeID;
