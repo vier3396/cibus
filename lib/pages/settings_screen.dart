@@ -36,6 +36,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
             UserData userData = snapshot.data;
 
             return Scaffold(
+              appBar: AppBar(
+                title: Text('Settings'),
+              ),
               body: Form(
                 key: _formKey,
                 child: Column(
