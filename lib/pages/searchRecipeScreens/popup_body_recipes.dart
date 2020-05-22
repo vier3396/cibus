@@ -155,7 +155,7 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                             .recipeList[index]['title']);
 
                         Provider.of<Recipe>(context, listen: false)
-                            .addAllIngredientsFromDocument(
+                            .addAllPropertiesFromDocument(
                                 recipe: Provider.of<RecipeList>(context,
                                         listen: false)
                                     .recipeList[index],

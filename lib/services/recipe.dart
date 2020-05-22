@@ -20,18 +20,6 @@ class Recipe extends ChangeNotifier {
   int yourRating;
   Map ratings;
 
-  Recipe(
-      {this.recipeId,
-        this.title,
-        this.description,
-        this.ingredients,
-        this.listOfSteps,
-        this.imageURL,
-        this.time,
-        this.rating,
-        this.userId,
-        this.ingredientList});
-
   void addIngredient(
       {String ingredientId,
       String ingredientName,
@@ -47,7 +35,7 @@ class Recipe extends ChangeNotifier {
     print(ingredients);
   }
 
-  void addRecipeProperties(Recipe recipe){
+  void addRecipeProperties(Recipe recipe) {
     this.recipeId = recipe.recipeId;
     this.title = recipe.title;
     this.description = recipe.description;
@@ -127,7 +115,7 @@ class Recipe extends ChangeNotifier {
     return ingredients.length;
   }
 
-  void addAllIngredientsFromDocument(
+  void addAllPropertiesFromDocument(
       {Map<String, dynamic> recipe, String recipeID}) async {
     print(recipe['title']);
     this.title = recipe['title'];

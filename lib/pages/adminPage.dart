@@ -40,7 +40,7 @@ class _AdminPageState extends State<AdminPage> {
                   .recipeList[index]['title']);
 
               Provider.of<Recipe>(context, listen: false)
-                  .addAllIngredientsFromDocument(
+                  .addAllPropertiesFromDocument(
                       recipe: Provider.of<RecipeList>(context, listen: false)
                           .recipeList[index],
                       recipeID: Provider.of<RecipeList>(context, listen: false)
