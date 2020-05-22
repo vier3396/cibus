@@ -9,6 +9,7 @@ import 'package:cibus/services/constants.dart';
 import 'package:flutter/widgets.dart';
 import 'package:cibus/services/imageServices.dart';
 import 'package:cibus/services/colors.dart';
+import 'package:cibus/widgets/toFixProviderInPopupRecipe.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -110,6 +111,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           Navigator.pop(context);
                         }
                       },
+                    ),
+                    RaisedButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) {
+                              //TODO fixa navigator till något bättre?
+                              return WidgetToFixProvider(
+                                admin: true,
+                              );
+                            },
+                          ),
+                        );
+                      },
+                      child: Text('Admin page'),
                     )
                   ],
                 ),

@@ -33,7 +33,9 @@ class _SearchRecipeState extends State<SearchRecipe> {
                         MaterialPageRoute(
                           builder: (context) {
                             //TODO fixa navigator till något bättre?
-                            return WidgetToFixProvider();
+                            return WidgetToFixProvider(
+                              admin: false,
+                            );
                           },
                           //TODO:  onSaved: save ingredients to recipe object
                           //TODO: validator: validate ingredients

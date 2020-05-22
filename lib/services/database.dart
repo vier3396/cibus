@@ -24,6 +24,47 @@ class DatabaseService {
   final CollectionReference reportedRecipesCollection =
       Firestore.instance.collection("ReportedRecipes");
 
+  Future<List> returnReportedRecipes() async {
+    var result = await reportedRecipesCollection.getDocuments();
+    var documents = result.documents;
+    List<DocumentSnapshot> recipeList = [];
+
+    for (DocumentSnapshot document in documents) {
+      var recipeResult =
+          await recipeCollection.document(document.documentID).get();
+      recipeList.add(recipeResult);
+    }
+
+    List<Map> mapList = [];
+    for (DocumentSnapshot document in recipeList) {
+      String id = document.documentID;
+      var ratingResult = await recipeCollection
+          .document(id)
+          .collection('Ratings')
+          .getDocuments();
+      var ratingDocuments = ratingResult.documents;
+      print(ratingDocuments.isEmpty);
+      double rating = 0;
+      for (DocumentSnapshot ratingDocument in ratingDocuments) {
+        rating = rating + ratingDocument.data['rating'];
+      }
+      double averageRating = rating / ratingDocuments.length;
+      if (averageRating.isNaN) {
+        averageRating = 0.0;
+      }
+      print(averageRating);
+      //document.data['averageRating'] = averageRating;
+      //print(document.data['averageRating']);
+      //recipeList[0].data['averageRating'] = averageRating;
+      var map = document.data;
+      map['averageRating'] = averageRating ?? 0;
+      map['recipeId'] = document.documentID;
+      mapList.add(map);
+    }
+
+    return mapList;
+  }
+
   Future updateUserData({String name, String description, int age}) async {
     return await userCollection.document(uid).setData({
       'name': name,
@@ -194,7 +235,7 @@ class DatabaseService {
           print(averageRating);
           document.data['averageRating'] = averageRating;
           print(document.data['averageRating']);
-          documents[0].data['averageRating'] = averageRating;
+          //documents[0].data['averageRating'] = averageRating;
           var map = document.data;
           map['averageRating'] = averageRating;
           map['recipeId'] = document.documentID;
