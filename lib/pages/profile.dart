@@ -7,28 +7,16 @@ import 'package:flutter/material.dart';
 import 'settings_screen.dart';
 import 'package:cibus/services/recipe.dart';
 import 'package:cibus/widgets/spin_kit_ripple.dart';
+import 'package:cibus/widgets/show_rating.dart';
 
 class Profile extends StatelessWidget {
-  Stream userDataStream;
-  Profile({this.userDataStream});
+  final Stream userDataStream;
+  final bool currentUser;
+  Profile({this.userDataStream, this.currentUser});
 
   Future<List<Recipe>> getUserRecipes(UserData userData) async {
     return await DatabaseService().findUserRecipes(userData.uid);
   }
-
-/*
-  Widget ifHasRecipes(List<Recipe> myRecipes) {
-    if (myRecipes.isEmpty) {
-      return ListViewRecipes(
-        scrollDirection: Axis.vertical,
-        title: 'Your recipes',
-      );
-    } else {
-      return Text('You have no favorites yet'); //TODO styla denna
-    }
-  }
-
- */
 
   @override
   Widget build(BuildContext context) {

@@ -21,11 +21,11 @@ class DatabaseService {
   final CollectionReference ingredientRecipeCollection =
       Firestore.instance.collection('IngredientRecipes');
 
-  Future updateUserData({String name, String description, int age}) async {
+  Future updateUserData({String name, String description, List<Recipe> favoriteList}) async {
     return await userCollection.document(uid).setData({
       'name': name,
       'description': description,
-      'age': age,
+      'favoriteList': favoriteList,
     }, merge: true);
   }
 
@@ -44,6 +44,24 @@ class DatabaseService {
   Future<String> getUsername() async {
     var result = await userCollection.document(uid).get();
     return result.data['username'];
+  }
+
+  Future<UserData> getUserData(String username) async {
+    UserData _userData;
+    final userResult = await userCollection.where('username', isEqualTo: username)
+        .getDocuments();
+
+    for (DocumentSnapshot user in userResult.documents) {
+      _userData = UserData(uid: user.data['uid'],
+          name: user.data['name'],
+          description: user.data['description'],
+          username: username,
+          profilePic: user.data['profilePic'],
+          isEmail: user.data['isEmail'],
+          favoriteList: user.data['favoriteList']);
+    }
+
+    return _userData;
   }
 
   Future<List<Recipe>> findUserRecipes(String uid) async {
@@ -91,7 +109,7 @@ class DatabaseService {
 
     //print('currentFavorites innan remove: $currentFavorites');
     currentFavorites.remove(recipeId);
-    print('userData.favoriteList efter remove: $currentFavorites');
+    //print('userData.favoriteList efter remove: $currentFavorites');
     return await userCollection.document(uid).setData({
       'favoriteList': currentFavorites,
     }, merge: true);
@@ -101,7 +119,7 @@ class DatabaseService {
       {List<dynamic> currentFavorites, String recipeId}) async {
     //print('currentFavorites innan add: $currentFavorites');
     currentFavorites.add(recipeId);
-    print('userData.favoriteList efter add: $currentFavorites');
+    //print('userData.favoriteList efter add: $currentFavorites');
     return await userCollection.document(uid).setData({
       'favoriteList': currentFavorites,
     }, merge: true);
@@ -204,12 +222,10 @@ class DatabaseService {
 
   //userData from snapshot
   UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
-    print(snapshot.data['favoriteList']);
     return UserData(
         uid: uid,
         name: snapshot.data['name'],
         description: snapshot.data['description'],
-        age: snapshot.data['age'],
         username: snapshot.data['username'],
         profilePic: snapshot.data['profilePic'],
         isEmail: snapshot.data['isEmail'],

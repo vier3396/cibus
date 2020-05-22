@@ -56,7 +56,7 @@ class _MyPageViewState extends State<MyPageView> {
         children: <Widget>[
           HomePage(userDataStream: checkIfFirstLoad(context)),
           WidgetToFixProvider(),
-          Profile(userDataStream: checkIfFirstLoad(context)),
+          Profile(userDataStream: checkIfFirstLoad(context), currentUser: true,),
           AddRecipeFormProviderWidget(),
           FavoritesPage(userDataStream: checkIfFirstLoad(context)),
         ],

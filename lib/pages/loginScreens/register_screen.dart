@@ -47,7 +47,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String name = '';
   String description = '';
   String _currentUsername;
-  int age = 0;
   //int dropdownValue = null;
   final TextEditingController _pass = TextEditingController();
   final TextEditingController _confirmPass = TextEditingController();
@@ -225,7 +224,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             if (!isUsernameFree) {
                               dynamic result =
                                   await _auth.registerWithEmailAndPassword(
-                                      email, password, name, description, age);
+                                      email, password, name, description);
                               if (result == null) {
                                 setState(() {
                                   error = 'Email is already registered';
