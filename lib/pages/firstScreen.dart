@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:cibus/services/login/sign_in.dart';
 import 'package:cibus/pages/loginScreens/login_screen.dart';
 import 'package:cibus/services/database.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:provider/provider.dart';
 import 'package:cibus/pages/settings_screen.dart';
-import 'package:cibus/main.dart';
 
 class FirstScreen extends StatefulWidget {
   @override
@@ -45,7 +43,6 @@ class _FirstScreenState extends State<FirstScreen> {
                     Text(userData?.name ?? ''),
                     Text(userData?.username ?? ''),
                     Text(userData?.description ?? ''),
-                    Text(userData?.age.toString() ?? ''),
                     IconButton(
                       icon: Icon(Icons.settings),
                       onPressed: () {

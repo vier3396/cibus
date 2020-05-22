@@ -21,7 +21,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   //form values
   String _currentName;
-  int _currentAge;
   String _currentDescription;
   String image;
 
@@ -109,7 +108,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             name: _currentName ?? userData.name,
                             description:
                                 _currentDescription ?? userData.description,
-                            age: _currentAge ?? userData.age,
                           );
                           Navigator.pop(context);
                         }

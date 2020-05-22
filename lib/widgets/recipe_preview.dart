@@ -32,11 +32,10 @@ class _RecipePreviewState extends State<RecipePreview> {
   Widget build(BuildContext context) {
     User user = Provider.of<User>(context);
     DatabaseService database = DatabaseService(uid: user.uid);
-
-    print(
-        ' recipe ID in recipe: ${Provider.of<Recipe>(context, listen: false).recipeId}');
+    //print(' recipe ID in recipe: ${Provider.of<Recipe>(context, listen: false).recipeId}');
     getRecipe(user: user, database: database);
     final popProvider = Provider.of<Recipe>(context);
+
     return Consumer<Recipe>(builder: (context, recipe, child) {
       return Scaffold(
         body: Container(
@@ -276,6 +275,43 @@ class _RecipePreviewState extends State<RecipePreview> {
   }
 }
 
+class AuthorWidget extends StatelessWidget {
+  //TODO implement userPage
+  //TODO save userName to recipe when creating
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: (){
+        Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => UserPage(username: Provider.of<Recipe>(context).username)));
+
+      },
+      child: Text(
+        Provider.of<Recipe>(context).username ?? 'userName',
+        style: TextStyle(
+            fontSize: 20.0, fontWeight: FontWeight.w500, color: Colors.white),
+      ),
+    );
+  }
+}
+
+Future<UserData> getUser(String username) async {
+  return await DatabaseService().getUserData(username);
+}
+
+class UserPage extends StatelessWidget {
+  String username;
+  UserPage({this.username});
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold();
+  }
+}
+
 class AddStarButtons extends StatelessWidget {
   String recipeID;
   User user;
@@ -398,21 +434,6 @@ class EditButton extends StatelessWidget {
       },
       child: Text(
         'edit',
-        style: TextStyle(
-            fontSize: 20.0, fontWeight: FontWeight.w500, color: Colors.white),
-      ),
-    );
-  }
-}
-
-class AuthorWidget extends StatelessWidget {
-  //TODO implement userPage
-  //TODO save userName to recipe when creating
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      child: Text(
-        Provider.of<Recipe>(context).username ?? 'userName',
         style: TextStyle(
             fontSize: 20.0, fontWeight: FontWeight.w500, color: Colors.white),
       ),
