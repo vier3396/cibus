@@ -1,3 +1,4 @@
+import 'package:cibus/services/article.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:cibus/services/recipe.dart';
@@ -23,9 +24,25 @@ class DatabaseService {
   final CollectionReference reportedRecipesCollection =
       Firestore.instance.collection("ReportedRecipes");
 
-  //TODO: metoder för att hämta innehållet
   final CollectionReference articleCollection =
-  Firestore.instance.collection("Articles");
+      Firestore.instance.collection("Articles");
+
+  //Database functions
+  Future<Article> findArticle(String articleId) async {
+    final _result = await articleCollection.document(articleId).get();
+    Article _article = Article(
+      articleID: articleId,
+      title: _result.data['title'],
+      subTitle: _result.data['subTitle'],
+      description: _result.data['description'],
+      steps: _result.data['steps'],
+      ending: _result.data['ending'],
+      greeting: _result.data['greeting'],
+      topImage: _result.data['topImage'],
+      bottomImage: _result.data['bottomImage'],
+    );
+    return _article;
+  }
 
   Future<List> returnReportedRecipes() async {
     var result = await reportedRecipesCollection.getDocuments();

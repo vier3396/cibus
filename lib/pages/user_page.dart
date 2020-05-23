@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:cibus/services/recipe.dart';
 import 'package:cibus/services/login/user.dart';
 
+const kNoRecipeText = 'Sharing is caring<3 feel free to upload some of your own recipes';
+
 class UserPage extends StatelessWidget {
   final List<Recipe> recipes;
   final UserData userData;
@@ -12,18 +14,21 @@ class UserPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0.0,
+      ),
       body: SafeArea(
         child: ListView(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: EdgeInsets.only(left: 20.0, top: 10.0, bottom: 20.0),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   CircleAvatar(
                     backgroundImage:
                     NetworkImage(userData.profilePic ?? kBackupProfilePic),
-                    radius: 40.0,
+                    radius: 50.0,
                   ),
                   SizedBox(width: 20.0),
                   Expanded(
@@ -57,8 +62,7 @@ class UserPage extends StatelessWidget {
               title: "More recipes",
               recipes: recipes,
             )
-                : Text(
-                'Sharing is caring<3 feel free to upload some of your own recipes'), //TODO styla denna
+                : Text(kNoRecipeText), //TODO styla denna
           ],
         ),
       ),

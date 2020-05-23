@@ -1,4 +1,3 @@
-import 'package:cibus/pages/user_page.dart';
 import 'package:cibus/services/my_page_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +8,10 @@ import 'package:cibus/services/database.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
+import 'author_widget.dart';
+
 //TODO fixa så att det går att gå fram och tillbaka ordentligt, steps krånglar.
-//TODO fixa så att när man submittar så ska man skickas till homepage
+//TODO fixa så att när man submittar så ska man få en bekräftelse/snackbar
 //TODO fixa så att ingredients skrivs med id i en array så att man enkelt kan göra queries
 //TODO Städa upp
 
@@ -251,7 +252,7 @@ class _RecipePreviewState extends State<RecipePreview> {
       content: SingleChildScrollView(
         child: ListBody(
           children: <Widget>[
-            Text('Do you want to report this recipe to the Cibus-Police')
+            Text('Do you want to report this recipe to the CIBUS Police?')
           ],
         ),
       ),
@@ -271,34 +272,6 @@ class _RecipePreviewState extends State<RecipePreview> {
             },
             child: Text('Report'))
       ],
-    );
-  }
-}
-
-class AuthorWidget extends StatelessWidget {
-  final String userId;
-  AuthorWidget({this.userId});
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () async {
-        UserData userData = await DatabaseService().getUserData(userId);
-        List<Recipe> recipes = await DatabaseService().findUserRecipes(userId);
-
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => UserPage(
-                      recipes: recipes,
-                      userData: userData,
-                    )));
-      },
-      child: Text(
-        Provider.of<Recipe>(context).username ?? 'userName',
-        style: TextStyle(
-            fontSize: 20.0, fontWeight: FontWeight.w500, color: Colors.white),
-      ),
     );
   }
 }
