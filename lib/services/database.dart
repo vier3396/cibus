@@ -1,6 +1,6 @@
+import 'package:cibus/services/article.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cibus/services/login/user.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:cibus/services/recipe.dart';
 import 'package:cibus/services/ingredients.dart';
 
@@ -24,11 +24,73 @@ class DatabaseService {
   final CollectionReference reportedRecipesCollection =
       Firestore.instance.collection("ReportedRecipes");
 
-  Future updateUserData({String name, String description, int age}) async {
+  final CollectionReference articleCollection =
+      Firestore.instance.collection("Articles");
+
+  //Database functions
+  Future<Article> findArticle(String articleId) async {
+    final _result = await articleCollection.document(articleId).get();
+    Article _article = Article(
+      articleID: articleId,
+      title: _result.data['title'],
+      subTitle: _result.data['subTitle'],
+      description: _result.data['description'],
+      steps: _result.data['steps'],
+      ending: _result.data['ending'],
+      greeting: _result.data['greeting'],
+      topImage: _result.data['topImage'],
+      bottomImage: _result.data['bottomImage'],
+    );
+    return _article;
+  }
+
+  Future<List> returnReportedRecipes() async {
+    var result = await reportedRecipesCollection.getDocuments();
+    var documents = result.documents;
+    List<DocumentSnapshot> recipeList = [];
+
+    for (DocumentSnapshot document in documents) {
+      var recipeResult =
+          await recipeCollection.document(document.documentID).get();
+      recipeList.add(recipeResult);
+    }
+
+    List<Map> mapList = [];
+    for (DocumentSnapshot document in recipeList) {
+      String id = document.documentID;
+      var ratingResult = await recipeCollection
+          .document(id)
+          .collection('Ratings')
+          .getDocuments();
+      var ratingDocuments = ratingResult.documents;
+      print(ratingDocuments.isEmpty);
+      double rating = 0;
+      for (DocumentSnapshot ratingDocument in ratingDocuments) {
+        rating = rating + ratingDocument.data['rating'];
+      }
+      double averageRating = rating / ratingDocuments.length;
+      if (averageRating.isNaN) {
+        averageRating = 0.0;
+      }
+      print(averageRating);
+      //document.data['averageRating'] = averageRating;
+      //print(document.data['averageRating']);
+      //recipeList[0].data['averageRating'] = averageRating;
+      var map = document.data;
+      map['averageRating'] = averageRating ?? 0;
+      map['recipeId'] = document.documentID;
+      mapList.add(map);
+    }
+
+    return mapList;
+  }
+
+  Future updateUserData(
+      {String name, String description, List<Recipe> favoriteList}) async {
     return await userCollection.document(uid).setData({
       'name': name,
       'description': description,
-      'age': age,
+      'favoriteList': favoriteList,
     }, merge: true);
   }
 
@@ -49,6 +111,74 @@ class DatabaseService {
     return result.data['username'];
   }
 
+  Future<UserData> getUserData(String userID) async {
+    final user = await userCollection.document(userID).get();
+    UserData _userData = UserData(
+        uid: userID,
+        name: user.data['name'],
+        description: user.data['description'],
+        username: user.data['username'],
+        profilePic: user.data['profilePic'],
+        isEmail: user.data['isEmail'],
+        favoriteList: user.data['favoriteList']);
+    return _userData;
+  }
+
+  Future<List<Recipe>> findUserRecipes(String uid) async {
+    List<Recipe> userRecipes = [];
+    var recipeResult =
+        await recipeCollection.where('userId', isEqualTo: uid).getDocuments();
+
+    for (DocumentSnapshot document in recipeResult.documents) {
+      Map<String, dynamic> recipeMap = document.data;
+      Recipe recipe = Recipe();
+      recipe.addAllPropertiesFromDocument(
+          recipe: recipeMap, recipeID: document.documentID);
+
+      userRecipes.add(recipe);
+    }
+
+    return userRecipes;
+  }
+
+  Future removeFromUserFavorites(
+      {List<dynamic> currentFavorites, String recipeId}) async {
+    //print('currentFavorites innan remove: $currentFavorites');
+    currentFavorites.remove(recipeId);
+    //print('userData.favoriteList efter remove: $currentFavorites');
+    return await userCollection.document(uid).setData({
+      'favoriteList': currentFavorites,
+    }, merge: true);
+  }
+
+  Future addToUserFavorites(
+      {List<dynamic> currentFavorites, String recipeId}) async {
+    //print('currentFavorites innan add: $currentFavorites');
+    currentFavorites.add(recipeId);
+    //print('userData.favoriteList efter add: $currentFavorites');
+    return await userCollection.document(uid).setData({
+      'favoriteList': currentFavorites,
+    }, merge: true);
+  }
+
+  Future<List<Recipe>> findFavoriteRecipes(List<dynamic> recipeList) async {
+    //print('Running method findFavoriteRecipes, favorit recept : $recipeList');
+    List<Recipe> favoriteRecipeList = [];
+
+    for (dynamic id in recipeList) {
+      var result = await recipeCollection.document(id).get();
+
+      Map<String, dynamic> recipeMap = result.data;
+      Recipe recipe = Recipe();
+      recipe.addAllPropertiesFromDocument(
+          recipe: recipeMap, recipeID: result.documentID);
+
+      favoriteRecipeList.add(recipe);
+    }
+
+    return favoriteRecipeList;
+  }
+
   Future updateRatings({String recipeId, String userId, int rating}) async {
     print(recipeId);
     Map<String, dynamic> ratingsMap = {'userId': userId, 'rating': rating};
@@ -63,9 +193,6 @@ class DatabaseService {
     String recipeId,
     String userId,
   }) async {
-    print('recipeid: $recipeId');
-    print('userId: $userId');
-    //HÄR PRINTAR VI JÄTTEMYCKET TODO: TA BORT PRINTS
     var querySnapshot = await recipeCollection
         .document(recipeId)
         .collection("Ratings")
@@ -73,7 +200,6 @@ class DatabaseService {
         .getDocuments();
     final documents = querySnapshot.documents;
     if (documents.isEmpty) {
-      print('document is empty');
       return 0;
     } else {
       return querySnapshot.documents[0].data['rating'];
@@ -99,20 +225,16 @@ class DatabaseService {
       print(document.data);
     }
 
-    print(result.documents.isNotEmpty); //isEmpty
+    print(result.documents.isNotEmpty);
     return result.documents.isNotEmpty;
-    //}
-    return true;
   }
 
   //userData from snapshot
   UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
-    print(snapshot.data['favoriteList']);
     return UserData(
         uid: uid,
         name: snapshot.data['name'],
         description: snapshot.data['description'],
-        age: snapshot.data['age'],
         username: snapshot.data['username'],
         profilePic: snapshot.data['profilePic'],
         isEmail: snapshot.data['isEmail'],
@@ -194,7 +316,7 @@ class DatabaseService {
           print(averageRating);
           document.data['averageRating'] = averageRating;
           print(document.data['averageRating']);
-          documents[0].data['averageRating'] = averageRating;
+          //documents[0].data['averageRating'] = averageRating;
           var map = document.data;
           map['averageRating'] = averageRating;
           map['recipeId'] = document.documentID;

@@ -16,8 +16,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cibus/services/ingredientList.dart';
 import 'package:cibus/widgets/ingredientTileWithoutQuantity.dart';
 import 'package:cibus/services/recipe.dart';
+import 'package:cibus/pages/adminPage.dart';
 
 class WidgetToFixProvider extends StatelessWidget {
+  final bool admin;
+
+  WidgetToFixProvider({this.admin});
   //TODO byt till multiprovider och byt namn
   @override
   Widget build(BuildContext context) {
@@ -27,7 +31,7 @@ class WidgetToFixProvider extends StatelessWidget {
         create: (context) => Recipe(),
         child: ChangeNotifierProvider<IngredientList>(
           create: (context) => IngredientList(),
-          child: PopupBodyRecipes(),
+          child: admin ? AdminPage() : PopupBodyRecipes(),
         ),
       ),
     );

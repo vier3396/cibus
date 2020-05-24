@@ -1,9 +1,8 @@
+import 'package:cibus/widgets/toFixProviderInPopupRecipe.dart';
 import 'package:flutter/material.dart';
-import 'package:cibus/pages/searchRecipeScreens/search_recipe.dart';
 import 'package:cibus/pages/profile.dart';
 import 'package:cibus/pages/home.dart';
 import 'package:cibus/pages/favorites.dart';
-import '../pages/addRecipeScreens/add_recipe_form.dart';
 import 'package:cibus/services/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/database.dart';
@@ -55,11 +54,13 @@ class _MyPageViewState extends State<MyPageView> {
         controller: _pageController,
         onPageChanged: onPageChanged,
         children: <Widget>[
-          HomePage(),
-          SearchRecipe(),
+          HomePage(userDataStream: checkIfFirstLoad(context)),
+          WidgetToFixProvider(
+            admin: false,
+          ),
           Profile(userDataStream: checkIfFirstLoad(context)),
           AddRecipeFormProviderWidget(),
-          Favorites(),
+          FavoritesPage(userDataStream: checkIfFirstLoad(context)),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

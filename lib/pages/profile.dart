@@ -1,273 +1,140 @@
+import 'package:cibus/services/constants.dart';
 import 'dart:convert';
 
 import 'package:cibus/pages/home.dart';
 import 'package:cibus/pages/loginScreens/login_screen.dart';
-import 'package:cibus/services/constants.dart';
 import 'package:cibus/pages/settings_screen.dart';
 import 'package:cibus/services/database.dart';
 import 'package:cibus/services/login/user.dart';
+import 'package:cibus/widgets/vertical_list_view.dart';
 import 'package:flutter/material.dart';
-import 'package:cibus/services/colors.dart';
-import 'package:cibus/services/popup_layout.dart';
-import 'package:provider/provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'settings_screen.dart';
+import 'package:cibus/services/recipe.dart';
+import 'package:cibus/widgets/spin_kit_ripple.dart';
 
-const topMarginPopupLayout = 0.0;
-
-class Profile extends StatefulWidget {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  Stream userDataStream;
-
+class Profile extends StatelessWidget {
+  final Stream userDataStream;
   Profile({this.userDataStream});
-  @override
-  _ProfileState createState() => _ProfileState();
-}
 
-class _ProfileState extends State<Profile> {
-  List<bool> _boldButtons = [false, true, false];
-  Container wallOfText = yourRecipes();
-  Stream dataBaseStream;
-  // bool listenBool = true;
-  //int karma;
+  Future<List<Recipe>> getUserRecipes(UserData userData) async {
+    return await DatabaseService().findUserRecipes(userData.uid);
+  }
 
   @override
   Widget build(BuildContext context) {
-    //final user = Provider.of<User>(context);
-    //print(user.uid);
-
-    StreamBuilder<UserData>(
-        stream: widget.userDataStream,
+    return StreamBuilder<UserData>(
+        stream: userDataStream,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             UserData userData = snapshot.data;
-            print(userData.favoriteList);
-            return !userData.loggedIn
-                ? LoginPage()
-                : Scaffold(
-                    body: SafeArea(
-                      child: Column(
+            return Scaffold(
+              body: SafeArea(
+                child: ListView(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Row(
+                          CircleAvatar(
+                            backgroundImage: NetworkImage(
+                                userData.profilePic ?? kBackupProfilePic),
+                            radius: 40.0,
+                          ),
+                          SizedBox(width: 20.0),
+                          Expanded(
+                            child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                CircleAvatar(
-                                  backgroundImage: NetworkImage(
-                                      userData.profilePic ?? kBackupProfilePic),
-                                  radius: 40.0,
-                                ),
-                                SizedBox(width: 20.0),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      SizedBox(height: 20.0),
-                                      Text(
-                                        userData.name ?? "Cannot find name",
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          fontSize: 20.0,
-                                        ),
-                                      ),
-                                      SizedBox(height: 5.0),
-                                      Text(
-                                        userData.description ??
-                                            "Cannot find description",
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 5,
-                                        style: TextStyle(),
-                                      ),
-                                    ],
+                                SizedBox(height: 20.0),
+                                Text(
+                                  userData.name ?? "Cannot find name",
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 20.0,
                                   ),
                                 ),
-                                SizedBox(width: 40.0),
-                                IconButton(
-                                  icon: Image.asset('assets/cogwheel.png'),
-                                  iconSize: 50,
-                                  onPressed: () {
-                                    PopupLayout(top: topMarginPopupLayout)
-                                        .showPopup(context, SettingsScreen(),
-                                            'Cibus Settings');
-                                  },
+                                SizedBox(height: 5.0),
+                                Text(
+                                  userData.description ??
+                                      "Cannot find description",
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 5,
+                                  style: TextStyle(),
                                 ),
                               ],
                             ),
                           ),
-                          Divider(color: kCibusTextColor),
-                          SizedBox(height: 40.0),
-                          buildProfileButtons(),
-                          SizedBox(height: 20.0),
-                          wallOfText,
+                          SizedBox(width: 40.0),
+                          SettingsButton(),
                         ],
                       ),
                     ),
-                  );
+                    Divider(),
+                  FutureBuilder(
+                    future: getUserRecipes(snapshot.data),
+                    builder: (context, futureSnapshot) {
+                      if (futureSnapshot.hasError)
+                        return Text('Error: ${futureSnapshot.error}');
+                      switch (futureSnapshot.connectionState) {
+                        case ConnectionState.none:
+                          return Center(child: CircularProgressIndicator());
+                        case ConnectionState.waiting:
+                          return Center(child: CircularProgressIndicator());
+                        case ConnectionState.active:
+                          return Center(child: CircularProgressIndicator());
+                        case ConnectionState.done:
+                          {
+                            if (futureSnapshot.hasData) {
+                              List<Recipe> myRecipes = futureSnapshot.data;
+                              if (myRecipes.isNotEmpty) {
+                                return VerticalListView(
+                                  title: 'Your recipes',
+                                  recipes: myRecipes,
+                                );
+                              } else {
+                                return Text(
+                                    'Sharing is caring<3 feel free to upload some of your own recipes'); //TODO styla denna
+                              }
+                            }
+                            return Text('There\'s no available data.');
+                          }
+                      }
+                      return null;
+                    },
+                  ),
+                  ],
+                ),
+              ),
+            );
           } else {
-            return HomePage();
+            return Scaffold(
+              body: Center(
+                child: MySpinKitRipple(),
+              ),
+            );
           }
         });
   }
 
-  Container buildProfileButtons() {
-    return Container(
-      color: kDarkerkBackgroundColor,
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: FlatButton(
-              child: Text(
-                "Notifications",
-                style: TextStyle(
-                    fontWeight:
-                        _boldButtons[0] ? FontWeight.bold : FontWeight.normal),
-              ),
-              onPressed: () {
-                wallOfText = _boldButtons[0] ? wallOfText : notifications();
-                setState(() {
-                  _boldButtons = [true, false, false];
-                });
-                // call function to display right kind of text
-              },
-            ),
-          ),
-          Expanded(
-            child: FlatButton(
-              child: Text(
-                "Your recipes",
-                style: TextStyle(
-                    fontWeight:
-                        _boldButtons[1] ? FontWeight.bold : FontWeight.normal),
-              ),
-              onPressed: () {
-                wallOfText = _boldButtons[1] ? wallOfText : yourRecipes();
-                setState(() {
-                  _boldButtons = [false, true, false];
-                });
-                // call function to display right kind of text
-              },
-            ),
-          ),
-          Expanded(
-            child: FlatButton(
-              child: Text(
-                "Favorites",
-                style: TextStyle(
-                    fontWeight:
-                        _boldButtons[2] ? FontWeight.bold : FontWeight.normal),
-              ),
-              onPressed: () {
-                wallOfText = _boldButtons[0] ? wallOfText : favorites();
-                setState(() {
-                  _boldButtons = [false, false, true];
-                });
-                // call function to display right kind of text
-                // wallOfText = Favorites();
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Container notifications() {
-    return Container(
-      child: Text("notifications"),
-    );
-  }
-
-  static Container yourRecipes() {
-    return Container(
-      child: Text("your recipes"),
-    );
-  }
-
-  Container favorites() {
-    return Container(
-      child: Text("favorites"),
-    );
-  }
-
-  /* Padding buildProfileHeader() {
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          CircleAvatar(
-            backgroundImage: NetworkImage(userData.profilePic),
-            radius: 40.0,
-          ),
-          SizedBox(width: 20.0),
-          Column(
-            children: <Widget>[
-              SizedBox(height: 20.0),
-              Text(
-                'YOUR NAME',
-                style: TextStyle(
-                  fontSize: 20.0,
-                ),
-              ),
-              SizedBox(height: 5.0),
-              Text(
-                'Karma points: $karma',
-                style: TextStyle(
-                ),
-              ),
-            ],
-          ),
-          SizedBox(width: 40.0),
-          IconButton(
-            icon: Image.asset('assets/cogwheel.png'),
-            iconSize: 50,
-            onPressed: () {
-              PopupLayout(top: topMarginPopupLayout).showPopup(context,
-                  popupBodySettings(), 'Settings');
-            },
-          ),
-        ],
-      ),
-    );
-
-  } */
-
-  Widget popupBodySettings() {
-    return Container(
-      child: Column(
-        children: <Widget>[
-          Expanded(
-            child: Row(
-              children: <Widget>[
-                Text("Account"),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
 
-class MyFavorites extends StatelessWidget {
+class SettingsButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container();
-  }
-}
+    return IconButton(
+      icon: Icon(Icons.settings),
+      iconSize: 50,
+      color: Colors.grey,
+      onPressed: () {
 
-class MyNotification extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
-
-class MyRecipes extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SettingsScreen(),
+          ),
+        );
+      },
+    );
   }
 }

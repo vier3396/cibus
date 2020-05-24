@@ -1,22 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:getflutter/components/avatar/gf_avatar.dart';
-import 'package:getflutter/getflutter.dart';
 import '../../services/recipe.dart';
-import 'popup_body_recipe_individual.dart';
 import 'package:cibus/services/database.dart';
 import 'package:cibus/services/constants.dart';
-import 'package:cibus/widgets/ingredientTile.dart';
 import 'package:cibus/widgets/ingredientChooserTile.dart';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:cibus/services/ingredients.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cibus/services/ingredientList.dart';
 import 'package:cibus/widgets/ingredientTileWithoutQuantity.dart';
 import 'package:cibus/services/recipeList.dart';
 import 'package:cibus/widgets/recipe_preview.dart';
-import 'package:cibus/services/login/auth.dart';
+import 'package:cibus/widgets/show_rating.dart';
 
 const topMarginPopupIndividualRecipe = 0.0;
 
@@ -31,14 +26,11 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
   Map ingredientMap = Map();
   String ingredientId = '';
   List<String> quantityTypeList = ['gram', 'kg', 'liters'];
-  // String dropDownValue = 'kg';
   int quantityValue = 5;
   WhatToShow whatToShow = WhatToShow.foundIngredient;
   List<Ingredient> ingredientList = [];
   List<Map> recipeList = [];
   List<Recipe> recipeClassList = [];
-
-  int _currentRating = 0;
 
   Widget foundIngredient({whatToShowenum, ingredientMap}) {
     if (whatToShowenum == WhatToShow.none) {
@@ -155,7 +147,7 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                             .recipeList[index]['title']);
 
                         Provider.of<Recipe>(context, listen: false)
-                            .addAllIngredientsFromDocument(
+                            .addAllPropertiesFromDocument(
                                 recipe: Provider.of<RecipeList>(context,
                                         listen: false)
                                     .recipeList[index],
@@ -227,13 +219,11 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                             children: <Widget>[
                               Column(
                                 children: <Widget>[
-                                  showRatingCibus(
-                                      rating: context
+                                  ShowRating(rating: context
                                                   .read<RecipeList>()
                                                   .recipeList[index]
                                               ['averageRating'] ??
-                                          0,
-                                      imageHeight: 20.0),
+                                          0, imageHeight: 20.0),
                                   Text(context
                                           .read<RecipeList>()
                                           .recipeList[index]['averageRating']
@@ -267,44 +257,5 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
         ),
       ),
     );
-  }
-
-  double roundForStars(double x) {
-    // 2.1 => 2.5; 2.5 => 2.5; 2.6 => 3.0; 3.0 => 3.0;
-
-    int xWhole = x.toInt();
-    double xDecimal = x - xWhole;
-    double decimalToAdd;
-    if (xDecimal < 0.1) {
-      decimalToAdd = 0.0;
-    } else if (xDecimal <= 0.5) {
-      decimalToAdd = 0.5;
-    } else {
-      decimalToAdd = 1.0;
-    }
-    return xWhole + decimalToAdd;
-  }
-
-  Widget showRatingCibus({double rating, double imageHeight}) {
-    double roundedRating = roundForStars(rating);
-
-    List<Widget> listOfCibus = List<Widget>();
-
-    for (var i = 0; i < roundedRating.toInt(); i++) {
-      Image star = Image(
-        image: AssetImage("assets/cibus_filled.png"),
-        height: imageHeight,
-      );
-      listOfCibus.add(star);
-    }
-    if (roundedRating - roundedRating.toInt() > 0.1) {
-      // there should be a half cibus
-      Image halfStar = Image(
-        image: AssetImage("assets/cibus_filled_half.png"),
-        height: imageHeight,
-      );
-      listOfCibus.add(halfStar);
-    }
-    return Row(children: listOfCibus);
   }
 }

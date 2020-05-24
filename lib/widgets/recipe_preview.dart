@@ -7,10 +7,11 @@ import 'package:provider/provider.dart';
 import 'package:cibus/services/database.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cibus/services/recipeList.dart';
+
+import 'author_widget.dart';
 
 //TODO fixa så att det går att gå fram och tillbaka ordentligt, steps krånglar.
-//TODO fixa så att när man submittar så ska man skickas till homepage
+//TODO fixa så att när man submittar så ska man få en bekräftelse/snackbar
 //TODO fixa så att ingredients skrivs med id i en array så att man enkelt kan göra queries
 //TODO Städa upp
 
@@ -24,19 +25,16 @@ class RecipePreview extends StatefulWidget {
 }
 
 class _RecipePreviewState extends State<RecipePreview> {
-  List<String> textList = ['step 1', 'step 2', 'step3', 'step 4'];
-
   void getRecipe({user, database}) async {}
 
   @override
   Widget build(BuildContext context) {
     User user = Provider.of<User>(context);
     DatabaseService database = DatabaseService(uid: user.uid);
-
-    print(
-        ' recipe ID in recipe: ${Provider.of<Recipe>(context, listen: false).recipeId}');
+    //print(' recipe ID in recipe: ${Provider.of<Recipe>(context, listen: false).recipeId}');
     getRecipe(user: user, database: database);
     final popProvider = Provider.of<Recipe>(context);
+
     return Consumer<Recipe>(builder: (context, recipe, child) {
       return Scaffold(
         body: Container(
@@ -88,7 +86,9 @@ class _RecipePreviewState extends State<RecipePreview> {
               Positioned(
                 top: 40,
                 right: 10,
-                child: widget.preview ? SubmitButton() : AuthorWidget(),
+                child: widget.preview
+                    ? SubmitButton()
+                    : AuthorWidget(userId: Provider.of<Recipe>(context).userId),
               ),
               Container(
                 padding:
@@ -252,7 +252,7 @@ class _RecipePreviewState extends State<RecipePreview> {
       content: SingleChildScrollView(
         child: ListBody(
           children: <Widget>[
-            Text('Do you want to report this recipe to the Cibus-Police')
+            Text('Do you want to report this recipe to the CIBUS Police?')
           ],
         ),
       ),
@@ -398,21 +398,6 @@ class EditButton extends StatelessWidget {
       },
       child: Text(
         'edit',
-        style: TextStyle(
-            fontSize: 20.0, fontWeight: FontWeight.w500, color: Colors.white),
-      ),
-    );
-  }
-}
-
-class AuthorWidget extends StatelessWidget {
-  //TODO implement userPage
-  //TODO save userName to recipe when creating
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      child: Text(
-        Provider.of<Recipe>(context).username ?? 'userName',
         style: TextStyle(
             fontSize: 20.0, fontWeight: FontWeight.w500, color: Colors.white),
       ),

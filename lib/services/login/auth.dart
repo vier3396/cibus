@@ -33,7 +33,7 @@ class AuthService {
 
   //register with email & password
   Future registerWithEmailAndPassword(String email, String password,
-      String name, String description, int age) async {
+      String name, String description) async {
     try {
       AuthResult result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
@@ -45,7 +45,7 @@ class AuthService {
 
       //create a new document for the user with the uid
       await DatabaseService(uid: user.uid)
-          .updateUserData(name: name, description: description, age: age);
+          .updateUserData(name: name, description: description, favoriteList: []);
       await DatabaseService(uid: user.uid).updateUserPicture(
           pictureURL:
               'https://firebasestorage.googleapis.com/v0/b/independent-project-7edde.appspot.com/o/blank_profile_picture.png?alt=media&token=49efb712-d543-40ca-8e33-8c0fdb029ea5');
