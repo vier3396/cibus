@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cibus/pages/home.dart';
+import 'package:cibus/pages/loginScreens/login_screen.dart';
 import 'package:cibus/services/constants.dart';
 import 'package:cibus/pages/settings_screen.dart';
 import 'package:cibus/services/database.dart';
@@ -27,6 +28,7 @@ class _ProfileState extends State<Profile> {
   List<bool> _boldButtons = [false, true, false];
   Container wallOfText = yourRecipes();
   Stream dataBaseStream;
+  // bool listenBool = true;
   //int karma;
 
   @override
@@ -34,71 +36,75 @@ class _ProfileState extends State<Profile> {
     //final user = Provider.of<User>(context);
     //print(user.uid);
 
-    return StreamBuilder<UserData>(
+    StreamBuilder<UserData>(
         stream: widget.userDataStream,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             UserData userData = snapshot.data;
             print(userData.favoriteList);
-            return Scaffold(
-              body: SafeArea(
-                child: Column(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+            return !userData.loggedIn
+                ? LoginPage()
+                : Scaffold(
+                    body: SafeArea(
+                      child: Column(
                         children: <Widget>[
-                          CircleAvatar(
-                            backgroundImage: NetworkImage(
-                                userData.profilePic ?? kBackupProfilePic),
-                            radius: 40.0,
-                          ),
-                          SizedBox(width: 20.0),
-                          Expanded(
-                            child: Column(
+                          Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                SizedBox(height: 20.0),
-                                Text(
-                                  userData.name ?? "Cannot find name",
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontSize: 20.0,
+                                CircleAvatar(
+                                  backgroundImage: NetworkImage(
+                                      userData.profilePic ?? kBackupProfilePic),
+                                  radius: 40.0,
+                                ),
+                                SizedBox(width: 20.0),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      SizedBox(height: 20.0),
+                                      Text(
+                                        userData.name ?? "Cannot find name",
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontSize: 20.0,
+                                        ),
+                                      ),
+                                      SizedBox(height: 5.0),
+                                      Text(
+                                        userData.description ??
+                                            "Cannot find description",
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 5,
+                                        style: TextStyle(),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                SizedBox(height: 5.0),
-                                Text(
-                                  userData.description ??
-                                      "Cannot find description",
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 5,
-                                  style: TextStyle(),
+                                SizedBox(width: 40.0),
+                                IconButton(
+                                  icon: Image.asset('assets/cogwheel.png'),
+                                  iconSize: 50,
+                                  onPressed: () {
+                                    PopupLayout(top: topMarginPopupLayout)
+                                        .showPopup(context, SettingsScreen(),
+                                            'Cibus Settings');
+                                  },
                                 ),
                               ],
                             ),
                           ),
-                          SizedBox(width: 40.0),
-                          IconButton(
-                            icon: Image.asset('assets/cogwheel.png'),
-                            iconSize: 50,
-                            onPressed: () {
-                              PopupLayout(top: topMarginPopupLayout).showPopup(
-                                  context, SettingsScreen(), 'Cibus Settings');
-                            },
-                          ),
+                          Divider(color: kCibusTextColor),
+                          SizedBox(height: 40.0),
+                          buildProfileButtons(),
+                          SizedBox(height: 20.0),
+                          wallOfText,
                         ],
                       ),
                     ),
-                    Divider(color: kCibusTextColor),
-                    SizedBox(height: 40.0),
-                    buildProfileButtons(),
-                    SizedBox(height: 20.0),
-                    wallOfText,
-                  ],
-                ),
-              ),
-            );
+                  );
           } else {
             return HomePage();
           }

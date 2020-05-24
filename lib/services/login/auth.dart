@@ -67,7 +67,10 @@ class AuthService {
   //sign out
   Future signOut() async {
     try {
-      return await _auth.signOut();
+      print('innan utlogg: ' + user.toString());
+      return await _auth.signOut().whenComplete(() {
+        print('efter utlogg: ' + user.toString());
+      });
     } catch (e) {
       print(e.toString());
       return null;
