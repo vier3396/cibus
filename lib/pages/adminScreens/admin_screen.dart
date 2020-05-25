@@ -8,7 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../loading_screen.dart';
 
-class AdminScreen extends StatefulWidget {
+/*class AdminScreen extends StatefulWidget {
   @override
   _AdminScreenState createState() => _AdminScreenState();
 }
@@ -101,3 +101,4 @@ class RecipeListAdmin extends StatelessWidget {
     );
   }
 }
+*/

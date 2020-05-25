@@ -112,7 +112,7 @@ class _EmailSignInState extends State<EmailSignIn> {
                               _forgotDialog();
                             },
                           ),
-                          SizedBox(width: 80.0),
+                          SizedBox(width: 40.0),
                           RaisedButton(
                             color: kCoral,
                             child: Text('Sign In',

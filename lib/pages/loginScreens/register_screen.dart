@@ -224,7 +224,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             if (!isUsernameFree) {
                               dynamic result =
                                   await _auth.registerWithEmailAndPassword(
-                                      email, password, name, description);
+                                      email,
+                                      password,
+                                      name,
+                                      description,
+                                      _currentUsername);
                               if (result == null) {
                                 setState(() {
                                   error = 'Email is already registered';

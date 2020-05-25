@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
           '/recipePreview': (context) => RecipePreview(),
           '/verifyscreen': (context) => VerifyScreen(),
           '/usernamescreen': (context) => UsernameScreen(),
-          '/adminscreen': (context) => AdminScreen(),
+          //'/adminscreen': (context) => AdminScreen(),
         },
       ),
     );

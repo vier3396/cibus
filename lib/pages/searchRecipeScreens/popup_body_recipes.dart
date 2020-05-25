@@ -219,11 +219,13 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                             children: <Widget>[
                               Column(
                                 children: <Widget>[
-                                  ShowRating(rating: context
+                                  ShowRating(
+                                      rating: context
                                                   .read<RecipeList>()
                                                   .recipeList[index]
                                               ['averageRating'] ??
-                                          0, imageHeight: 20.0),
+                                          0,
+                                      imageHeight: 20.0),
                                   Text(context
                                           .read<RecipeList>()
                                           .recipeList[index]['averageRating']

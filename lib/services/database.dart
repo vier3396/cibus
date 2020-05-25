@@ -1,7 +1,6 @@
 import 'package:cibus/services/article.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cibus/services/login/user.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:cibus/services/recipe.dart';
 import 'package:cibus/services/ingredients.dart';
 
@@ -22,10 +21,6 @@ class DatabaseService {
   final CollectionReference ingredientRecipeCollection =
       Firestore.instance.collection('IngredientRecipes');
 
-  final CollectionReference adminCollection =
-      Firestore.instance.collection('Admin');
-
-  Future updateUserData({String name, String description, int age}) async {
   final CollectionReference reportedRecipesCollection =
       Firestore.instance.collection("ReportedRecipes");
 
@@ -250,21 +245,6 @@ class DatabaseService {
   Stream<UserData> get userData {
     print(userCollection.document(uid).snapshots());
     return userCollection.document(uid).snapshots().map(_userDataFromSnapshot);
-  }
-
-  //adminData from snapshot
-  AdminData _adminDataFromSnapshot(DocumentSnapshot snapshot) {
-    return AdminData(
-      role: snapshot.data['role'],
-    );
-  }
-
-  //get admin doc stream
-  Stream<AdminData> get adminData {
-    return adminCollection
-        .document(uid)
-        .snapshots()
-        .map(_adminDataFromSnapshot);
   }
 
   Future<Map> getIngredient(String ingredient) async {
