@@ -23,11 +23,16 @@ class _IngredientChooserTileState extends State<IngredientChooserTile> {
     'deciliters',
     'pieces',
     'cans',
+    'dash',
     'teaspoons',
     'cups',
     'cloves',
     'stems',
     'pinches',
+    'half',
+    'third',
+    'quarter',
+    'fifth',
   ];
 
   String dropDownValue = 'kgs';

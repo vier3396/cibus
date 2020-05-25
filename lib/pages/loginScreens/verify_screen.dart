@@ -29,10 +29,11 @@ class _VerifyScreenState extends State<VerifyScreen> {
               : Scaffold(
                   body: Column(
                     children: <Widget>[
+                      SizedBox(height: 50),
                       SafeArea(
                         child: Text(
                           'Check your email and verify it.',
-                          style: TextStyle(fontSize: 30.0),
+                          style: TextStyle(fontSize: 28.0),
                         ),
                       ),
                       SizedBox(height: 40.0),
@@ -52,13 +53,13 @@ class _VerifyScreenState extends State<VerifyScreen> {
                             child: Row(
                               children: <Widget>[
                                 Container(
-                                  width: 170,
+                                  width: 160,
                                   child: RaisedButton(
                                     color: kCoral,
                                     child: Align(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
-                                        'Resend verification email?',
+                                        'Resend verification \n email',
                                         style: TextStyle(color: Colors.black),
                                       ),
                                     ),
@@ -74,13 +75,13 @@ class _VerifyScreenState extends State<VerifyScreen> {
                                     },
                                   ),
                                 ),
-                                SizedBox(width: 40.0),
+                                SizedBox(width: 20.0),
                                 Container(
-                                  width: 170,
+                                  width: 160,
                                   child: RaisedButton(
                                     color: kCoral,
                                     child: Text(
-                                      'verified?',
+                                      "I've verified \n my email",
                                       style: TextStyle(color: Colors.black),
                                     ),
                                     onPressed: () async {
@@ -121,7 +122,6 @@ class _VerifyScreenState extends State<VerifyScreen> {
                         ],
                       ),
                       SizedBox(width: 10.0),
-                      Text(user.isEmail.toString()),
                     ],
                   ),
                 );
