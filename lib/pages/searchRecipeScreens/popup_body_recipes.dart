@@ -187,7 +187,6 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                                       index: index,
                                     )),
                               );
-                              ;
                             },
                           ),
                         );
@@ -203,7 +202,7 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                               image: NetworkImage(context
                                       .read<RecipeList>()
                                       .recipeList[index]['imageURL'] ??
-                                  'https://firebasestorage.googleapis.com/v0/b/independent-project-7edde.appspot.com/o/images%2F2020-05-08%2011%3A32%3A16.330607.png?alt=media&token=1e4bff1d-c08b-4afa-a1f3-a975e46e89c5'),
+                                  kDefaultRecipePic),
                             ),
                             title: Text(context
                                     .read<RecipeList>()

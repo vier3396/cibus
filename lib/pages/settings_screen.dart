@@ -1,13 +1,11 @@
 import 'package:cibus/pages/camera_screen.dart';
 import 'package:cibus/pages/loading_screen.dart';
-import 'package:cibus/services/my_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/database.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:cibus/services/constants.dart';
 import 'package:flutter/widgets.dart';
-import 'package:cibus/services/imageServices.dart';
 import 'package:cibus/services/colors.dart';
 import 'package:cibus/widgets/toFixProviderInPopupRecipe.dart';
 
@@ -42,37 +40,30 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 key: _formKey,
                 child: Column(
                   children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        GestureDetector(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: CircleAvatar(
-                              radius: 60.0,
-                              backgroundImage: NetworkImage(
-                                  userData.profilePic ?? kBackupProfilePic),
-                            ),
-                          ),
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return ImageCapture(
-                                    recipePhoto: false,
-                                  );
-                                },
-                              ),
-                            );
-                          },
+                    GestureDetector(
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: CircleAvatar(
+                          radius: 60.0,
+                          backgroundImage: NetworkImage(
+                              userData.profilePic ?? kDefaultProfilePic),
                         ),
-                      ],
+                      ),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return ImageCapture(
+                                recipePhoto: false,
+                              );
+                            },
+                          ),
+                        );
+                      },
                     ),
                     SizedBox(height: 20.0),
                     Text(
                       'Name',
-                      style: TextStyle(
-                        color: kCoral,
-                      ),
                     ),
                     TextFormField(
                       initialValue: userData.name ?? "Cannot find name",
@@ -82,7 +73,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       onChanged: (val) => setState(() => _currentName = val),
                     ),
                     SizedBox(height: 40.0),
-                    //Text('Description'),
+                    Text(
+                      'Description',
+                    ),
                     TextFormField(
                       initialValue:
                           userData.description ?? "Cannot find description",

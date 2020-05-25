@@ -1,3 +1,4 @@
+import 'package:cibus/services/constants.dart';
 import 'package:cibus/services/my_page_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +8,29 @@ import 'package:provider/provider.dart';
 import 'package:cibus/services/database.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
 import 'author_widget.dart';
+import 'navigate_back_button.dart';
+
+/*
+
+Expanded(
+                      child: Text(recipe.title ?? 'title',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 25.0,
+                              fontWeight: FontWeight.w500)),
+                    ),
+                    Expanded(
+                      child: Text(
+                        '${recipe.time ?? '?'} minutes',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w400),
+                      ),
+                    ),
+
+ */
 
 //TODO fixa så att det går att gå fram och tillbaka ordentligt, steps krånglar.
 //TODO fixa så att när man submittar så ska man få en bekräftelse/snackbar
@@ -37,85 +59,159 @@ class _RecipePreviewState extends State<RecipePreview> {
 
     return Consumer<Recipe>(builder: (context, recipe, child) {
       return Scaffold(
-        body: Container(
-          child: Stack(
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.only(left: 20, top: 130),
-                height: 250,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 25.0, left: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(recipe.title ?? 'title',
+        body: Stack(
+          children: <Widget>[
+            /*
+            Container(
+              padding: EdgeInsets.only(left: 12, top: 165),
+              height: 250,
+              child: Padding(
+                padding: EdgeInsets.only(bottom: 5.0, left: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Expanded(
+                      child: Text(recipe.title ?? 'title',
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 25.0,
                               fontWeight: FontWeight.w500)),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 20.0),
-                        child: Text(
-                          '${recipe.time ?? '?'} minutes',
+                    ),
+                    Expanded(
+                      child: Text(
+                        '${recipe.time ?? '?'} minutes',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w400),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.fill,
+                  image: CachedNetworkImageProvider(
+                      recipe.imageURL ?? kDefaultRecipePic),
+                ),
+              ),
+            ),
+             */
+            Stack(
+              children: <Widget>[
+                Container(
+                  height: 250,
+                  child: Image(
+                    fit: BoxFit.cover,
+                    image: CachedNetworkImageProvider(
+                        recipe.imageURL ?? kDefaultRecipePic),
+                  ),
+                  width: MediaQuery.of(context).size.width,
+                ),
+                Positioned(
+                  top: 110.0,
+                  left: 20.0,
+                  child: Container(
+                    height: MediaQuery.of(context).size.height / 6,
+                    width: MediaQuery.of(context).size.width / 1.5,
+                    alignment: Alignment.bottomLeft,
+                    child: Expanded(
+                      child: Text(recipe.title ?? 'title',
                           style: TextStyle(
                               color: Colors.white,
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.w400),
-                        ),
-                      ),
-                    ],
+                              fontSize: 25.0,
+                              fontWeight: FontWeight.w500)),
+                    ),
                   ),
                 ),
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                      fit: BoxFit.fill,
-                      image: CachedNetworkImageProvider(recipe.imageURL ??
-                          'https://firebasestorage.googleapis.com/v0/b/independent-project-7edde.appspot.com/o/blank_profile_picture.png?alt=media&token=49efb712-d543-40ca-8e33-8c0fdb029ea5')),
+                Positioned(
+                  bottom: 30.0,
+                  right: 20.0,
+                  child: Text(
+                    '${recipe.time ?? '?'} min',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.w400),
+                  ),
                 ),
-              ),
-              Positioned(
+                Positioned(
+                  top: 30.0,
+                  left: 0.0,
+                  child: NavigateBackButton(),
+                ),
+                Positioned(
                   top: 40,
-                  left: 10,
+                  right: 10,
                   child: widget.preview
                       ? EditButton()
-                      : AddStarButtons(
-                          recipeID: recipe.recipeId,
-                          user: user,
-                          myRating: Provider.of<Recipe>(context).yourRating)),
-              Positioned(
-                top: 40,
-                right: 10,
-                child: widget.preview
-                    ? SubmitButton()
-                    : AuthorWidget(userId: Provider.of<Recipe>(context).userId),
-              ),
-              Container(
-                padding:
-                    EdgeInsets.only(left: 20, bottom: 20, right: 20, top: 20),
-                margin: EdgeInsets.only(top: 200),
-                constraints: BoxConstraints.expand(
-                    height: MediaQuery.of(context).size.height - 250),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30),
-                      topRight: Radius.circular(30)),
+                      : AuthorWidget(
+                          userId: Provider.of<Recipe>(context).userId),
                 ),
-                child: Column(
-                  children: <Widget>[
-                    Expanded(
-                      flex: 10,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        // mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Expanded(
+              ],
+            ),
+            Container(
+              padding:
+                  EdgeInsets.only(left: 20, bottom: 20, right: 20, top: 20),
+              margin: EdgeInsets.only(top: 230),
+              constraints: BoxConstraints.expand(
+                  height: MediaQuery.of(context).size.height - 250),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30)),
+              ),
+              child: Column(
+                children: <Widget>[
+                  Expanded(
+                    flex: 10,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                'Ingredients',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 20.0),
+                              ),
+                              Expanded(
+                                child: ListView.builder(
+                                  padding: EdgeInsets.only(
+                                    top: 15.0,
+                                  ),
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      child: Text(
+                                        '${recipe.ingredients[index].quantity ?? 'ingredient'} ${recipe.ingredients[index].quantityType} ${recipe.ingredients[index].ingredientName}',
+                                        style: TextStyle(
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      margin: EdgeInsets.only(bottom: 18.0),
+                                    );
+                                  },
+                                  itemCount: recipe.ingredients.length,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        VerticalDivider(),
+                        Expanded(
+                            flex: 2,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  'Ingredients',
+                                  'Recipe steps',
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.w700,
@@ -123,100 +219,82 @@ class _RecipePreviewState extends State<RecipePreview> {
                                 ),
                                 Expanded(
                                   child: ListView.builder(
-                                    padding: EdgeInsets.only(
-                                      top: 15.0,
-                                    ),
+                                    padding: EdgeInsets.only(top: 15.0),
                                     itemBuilder: (context, index) {
-                                      return Container(
-                                        child: Text(
-                                          '${recipe.ingredients[index].quantity ?? 'ingredient'} ${recipe.ingredients[index].quantityType} ${recipe.ingredients[index].ingredientName}',
-                                          style: TextStyle(
-                                              fontSize: 20.0,
-                                              fontWeight: FontWeight.w500),
+                                      return Card(
+                                        elevation: 8.0,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
                                         ),
-                                        margin: EdgeInsets.only(bottom: 18.0),
+                                        child: Column(
+                                          children: <Widget>[
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(10.0),
+                                              child: Text(
+                                                "Step ${index + 1}",
+                                                style: TextStyle(
+                                                  fontSize: 20.0,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 15.0, top: 0),
+                                              child: Text(
+                                                recipe.listOfSteps[index] ??
+                                                    'step',
+                                                textAlign: TextAlign.left,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       );
                                     },
-                                    itemCount: recipe.ingredients.length,
+                                    itemCount: recipe.listOfSteps.length,
                                   ),
                                 ),
                               ],
+                            ))
+                      ],
+                    ),
+                  ),
+                  Divider(
+                    color: kCoral,
+                  ),
+                  widget.preview
+                      ? SubmitButton()
+                      : Column(
+                          children: <Widget>[
+                            Text(
+                              'Did you enjoy the recipe?',
+                              style: TextStyle(
+                                  fontSize: 16.0, fontWeight: FontWeight.w600),
                             ),
-                          ),
-                          VerticalDivider(),
-                          Expanded(
-                              flex: 2,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    'Recipe steps',
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 20.0),
-                                  ),
-                                  Expanded(
-                                    child: ListView.builder(
-                                      padding: EdgeInsets.only(top: 15.0),
-                                      itemBuilder: (context, index) {
-                                        return Card(
-                                          elevation: 8.0,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8.0),
-                                          ),
-                                          child: Column(
-                                            children: <Widget>[
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(10.0),
-                                                child: Text(
-                                                  "Step ${index + 1}",
-                                                  style: TextStyle(
-                                                    fontSize: 20.0,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    bottom: 15.0, top: 0),
-                                                child: Text(
-                                                  recipe.listOfSteps[index] ??
-                                                      'step',
-                                                  textAlign: TextAlign.left,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                      },
-                                      itemCount: recipe.listOfSteps.length,
-                                    ),
-                                  ),
-                                ],
-                              ))
-                        ],
-                      ),
-                    ),
-                    Divider(
-                      color: kCoral,
-                    ),
-                    if (widget.preview)
-                      SizedBox()
-                    else
-                      Expanded(
+                            //TODO: FÅR DEM INTE I CENTER??
+                            AddStarButtons(
+                                recipeID: recipe.recipeId,
+                                user: user,
+                                myRating:
+                                    Provider.of<Recipe>(context).yourRating),
+                          ],
+                        ),
+                  widget.preview
+                      ? Text('')
+                      : Expanded(
                           flex: 1,
                           child: InkWell(
                             child: Ink(
-                                color: kCoral,
-                                child: Text(
-                                  'Report Abuse',
-                                  style: TextStyle(
-                                    color: kCoral,
-                                  ),
-                                )),
+                              color: kCoral,
+                              child: Text(
+                                'Report Abuse',
+                                style: TextStyle(
+                                  color: kCoral,
+                                ),
+                              ),
+                            ),
                             onTap: () {
                               final popProvider =
                                   Provider.of<Recipe>(context, listen: false);
@@ -234,12 +312,12 @@ class _RecipePreviewState extends State<RecipePreview> {
                                 },
                               );
                             },
-                          )),
-                  ],
-                ),
+                          ),
+                        ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       );
     });
@@ -405,12 +483,16 @@ class EditButton extends StatelessWidget {
   }
 }
 
-class SubmitButton extends StatelessWidget {
+class SubmitButton extends StatefulWidget {
+  @override
+  _SubmitButtonState createState() => _SubmitButtonState();
+}
+
+class _SubmitButtonState extends State<SubmitButton> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
-        //TODO lägga till någon form av popup i stilen great job
         User user = Provider.of<User>(context, listen: false);
         DatabaseService database = DatabaseService(uid: user.uid);
         String username = await database.getUsername();
@@ -418,8 +500,6 @@ class SubmitButton extends StatelessWidget {
             .addUserIdAndUsername(uid: user.uid, username: username);
         database.uploadRecipe(Provider.of<Recipe>(context, listen: false));
         // send it here to avoid overwrite loss
-        print("Success");
-
         // Provider.of<Recipe>(context, listen: false).dispose();
 
         Navigator.of(context).pushReplacement(
@@ -429,16 +509,25 @@ class SubmitButton extends StatelessWidget {
             },
           ),
         );
+        //TODO: reset?? och fixa snackbar
         // formKey.currentState.reset();
+        setState(() {
+          Scaffold.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Your recipe is now uploaded!'),
+              duration: Duration(seconds: 3),
+            ),
+          );
+        });
       },
       child: Text(
         'submit',
-        style: TextStyle(
-            fontSize: 20.0, fontWeight: FontWeight.w500, color: Colors.white),
+        style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500),
       ),
     );
   }
 }
+
 //Column(
 //                                  crossAxisAlignment: CrossAxisAlignment.start,
 //                                  children: <Widget>[

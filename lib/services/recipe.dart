@@ -1,5 +1,6 @@
 import 'package:cibus/services/database.dart';
 import 'package:flutter/cupertino.dart';
+import 'constants.dart';
 import 'ingredients.dart';
 
 class Recipe extends ChangeNotifier {
@@ -99,7 +100,7 @@ class Recipe extends ChangeNotifier {
         //'ingredients' : this.ingredients,
         'listOfSteps': this.listOfSteps,
         'imageURL': this.imageURL ??
-            'https://firebasestorage.googleapis.com/v0/b/independent-project-7edde.appspot.com/o/blank_profile_picture.png?alt=media&token=49efb712-d543-40ca-8e33-8c0fdb029ea5',
+            kDefaultRecipePic,
         'time': this.time,
         'userId': this.userId,
         'ingredientsArray': this.ingredientList,

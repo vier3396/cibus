@@ -1,22 +1,15 @@
 import 'package:cibus/pages/camera_screen.dart';
-import 'package:cibus/services/camera/uploader.dart';
-import 'package:cibus/services/database.dart';
-import 'package:cibus/services/popup_layout.dart';
 import 'package:cibus/widgets/recipe_preview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/services/colors.dart';
 import '../../services/recipe.dart';
 import '../../services/my_text_form_field.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
 import '../../services/popup_body_search_ingredients.dart';
 import 'recipe_steps.dart';
 import 'package:provider/provider.dart';
-import 'package:cibus/services/login/user.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:cibus/widgets/ingredientTile.dart';
-import 'dart:convert';
 import '../camera_screen.dart';
 
 class AddRecipeForm extends StatefulWidget {
@@ -27,82 +20,8 @@ class AddRecipeForm extends StatefulWidget {
 class _AddRecipeFormState extends State<AddRecipeForm> {
   final formKey = GlobalKey<FormState>();
 
-  // TODO: use different method for uploading pictures
-  /*
-  File imageFile;
-
-  //Open gallery
-  void openGallery(BuildContext context, Recipe recipe) async {
-    var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
-    this.setState(() {
-      imageFile = picture;
-      recipe.imageFile = imageFile;
-    });
-    Navigator.of(context).pop();
-  }
-
-  //Open camera
-  void openCamera(BuildContext context, Recipe recipe) async {
-    var picture = await ImagePicker.pickImage(source: ImageSource.camera);
-    this.setState(() {
-      imageFile = picture;
-      recipe.imageFile = imageFile;
-    });
-    Navigator.of(context).pop();
-  }
-
-  //Popup - choose between open gallery or camera
-  Future<void> showChoiceDialog(BuildContext context, Recipe recipe) {
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("From"),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: [
-                  Row(
-                    children: <Widget>[
-                      GestureDetector(
-                        child: Text("Gallery"),
-                        onTap: () {
-                          openGallery(context, recipe);
-                        },
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(10.0),
-                      ),
-                      GestureDetector(
-                        child: Text("Camera"),
-                        onTap: () {
-                          openCamera(context, recipe);
-                        },
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          );
-        });
-  }
-
-  //No image selected, or view image selected
-  Widget decideImageView() {
-    if (imageFile == null) {
-      return Center(child: Text("No image selected"));
-    } else {
-      return Image.file(imageFile, width: 400.0, height: 400.0);
-    }
-  }
-
-
- */
-
   @override
   Widget build(BuildContext context) {
-    // final halfMedianWidth = MediaQuery.of(context).size.width / 2.0; (for different screens)
-
     return Consumer<Recipe>(
       builder: (
         context,
@@ -113,7 +32,8 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
           home: Scaffold(
             resizeToAvoidBottomPadding: false, // solves keyboard problems
             appBar: AppBar(
-              backgroundColor: kDarkerkBackgroundColor,
+              backgroundColor: Theme.of(context).appBarTheme.color,
+              elevation: Theme.of(context).appBarTheme.elevation,
               title: Center(
                 child: Text(
                   'Add a recipe',

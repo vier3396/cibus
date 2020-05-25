@@ -1,3 +1,4 @@
+import 'package:cibus/services/constants.dart';
 import 'package:cibus/services/recipe.dart';
 import 'package:cibus/widgets/recipe_preview.dart';
 import 'package:cibus/widgets/show_rating.dart';
@@ -94,8 +95,7 @@ class VerticalListView extends StatelessWidget {
                                   height: 180.0,
                                   width: 180.0,
                                   image: NetworkImage(currentRecipe
-                                      .imageURL ??
-                                      'https://firebasestorage.googleapis.com/v0/b/independent-project-7edde.appspot.com/o/images%2F2020-05-08%2011%3A32%3A16.330607.png?alt=media&token=1e4bff1d-c08b-4afa-a1f3-a975e46e89c5'),
+                                      .imageURL ?? kDefaultRecipePic),
                                   fit: BoxFit.cover,
                                 ),
                               ),
