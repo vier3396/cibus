@@ -84,9 +84,7 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
             children: <Widget>[
               TextField(
                 onChanged: (toSearch) {
-                  ingredientSearch = toSearch;
-                  ingredientSearch =
-                      "${ingredientSearch[0].toUpperCase()}${ingredientSearch.substring(1)}";
+                  ingredientSearch = toSearch.toLowerCase();
                   print(ingredientSearch);
                 },
               ),
@@ -221,7 +219,7 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                                 '??'),
                             subtitle: Text(context
                                     .read<RecipeList>()
-                                    .recipeList[index]['desctription'] ??
+                                    .recipeList[index]['description'] ??
                                 '??'),
                           ),
                           ButtonBar(
@@ -266,7 +264,7 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
     double decimalToAdd;
     if (xDecimal < 0.1) {
       decimalToAdd = 0.0;
-    } else if (xDecimal < 0.5) {
+    } else if (xDecimal <= 0.5) {
       decimalToAdd = 0.5;
     } else {
       decimalToAdd = 1.0;

@@ -76,9 +76,7 @@ class _PopupBodySearchIngredientsState
           children: <Widget>[
             TextField(
               onChanged: (toSearch) {
-                ingredientSearch = toSearch;
-                ingredientSearch =
-                    "${ingredientSearch[0].toUpperCase()}${ingredientSearch.substring(1)}";
+                ingredientSearch = toSearch.toLowerCase();
                 print(ingredientSearch);
               },
             ),

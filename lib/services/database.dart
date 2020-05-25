@@ -230,6 +230,9 @@ class DatabaseService {
             rating = rating + ratingDocument.data['rating'];
           }
           double averageRating = rating / ratingDocuments.length;
+          if (averageRating.isNaN) {
+            averageRating = 0.0;
+          }
           print(averageRating);
           document.data['averageRating'] = averageRating;
           print(document.data['averageRating']);
