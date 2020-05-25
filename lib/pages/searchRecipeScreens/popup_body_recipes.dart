@@ -1,22 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:getflutter/components/avatar/gf_avatar.dart';
-import 'package:getflutter/getflutter.dart';
 import '../../services/recipe.dart';
-import 'popup_body_recipe_individual.dart';
 import 'package:cibus/services/database.dart';
 import 'package:cibus/services/constants.dart';
-import 'package:cibus/widgets/ingredientTile.dart';
 import 'package:cibus/widgets/ingredientChooserTile.dart';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:cibus/services/ingredients.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cibus/services/ingredientList.dart';
 import 'package:cibus/widgets/ingredientTileWithoutQuantity.dart';
 import 'package:cibus/services/recipeList.dart';
 import 'package:cibus/widgets/recipe_preview.dart';
-import 'package:cibus/services/login/auth.dart';
+import 'package:cibus/widgets/show_rating.dart';
 
 const topMarginPopupIndividualRecipe = 0.0;
 
@@ -31,14 +26,11 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
   Map ingredientMap = Map();
   String ingredientId = '';
   List<String> quantityTypeList = ['gram', 'kg', 'liters'];
-  String dropDownValue = 'kg';
   int quantityValue = 5;
   WhatToShow whatToShow = WhatToShow.foundIngredient;
   List<Ingredient> ingredientList = [];
   List<Map> recipeList = [];
   List<Recipe> recipeClassList = [];
-
-  int _currentRating = 0;
 
   Widget foundIngredient({whatToShowenum, ingredientMap}) {
     if (whatToShowenum == WhatToShow.none) {
@@ -155,7 +147,7 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                             .recipeList[index]['title']);
 
                         Provider.of<Recipe>(context, listen: false)
-                            .addAllIngredientsFromDocument(
+                            .addAllPropertiesFromDocument(
                                 recipe: Provider.of<RecipeList>(context,
                                         listen: false)
                                     .recipeList[index],
@@ -200,7 +192,7 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                           ),
                         );
                         //ta rätt recept från recipeList och hämta ingredienserna
-                        // skapa ett recipe objekt och skicka till nästa sida
+                        // skapa ett recipeobjekt och skicka till nästa sida
                         //skicka in recipeList[index] i en funktion och där göra ett nytt recipe
                       },
                       child: Column(
@@ -223,22 +215,34 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                                 '??'),
                           ),
                           ButtonBar(
+                            alignment: MainAxisAlignment.start,
                             children: <Widget>[
-                              Text(context
-                                      .read<RecipeList>()
-                                      .recipeList[index]['time']
-                                      .toString() ??
-                                  '??'),
-                              Text(context
-                                      .read<RecipeList>()
-                                      .recipeList[index]['averageRating']
-                                      .toString() ??
-                                  '??'),
-                              showRatingCibus(
-                                  rating: context
-                                      .read<RecipeList>()
-                                      .recipeList[index]['averageRating'],
-                                  imageHeight: 20.0),
+                              Column(
+                                children: <Widget>[
+                                  ShowRating(rating: context
+                                                  .read<RecipeList>()
+                                                  .recipeList[index]
+                                              ['averageRating'] ??
+                                          0, imageHeight: 20.0),
+                                  Text(context
+                                          .read<RecipeList>()
+                                          .recipeList[index]['averageRating']
+                                          .toStringAsPrecision(2)
+                                          .toString() ??
+                                      '??'),
+                                ],
+                              ),
+                              SizedBox(width: 50),
+                              Column(
+                                children: <Widget>[
+                                  Text(context
+                                          .read<RecipeList>()
+                                          .recipeList[index]['time']
+                                          .toString() ??
+                                      '??'),
+                                  Text("minutes"),
+                                ],
+                              ),
                             ],
                           ),
                         ],
@@ -246,7 +250,7 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                     ),
                   );
                 },
-                itemCount: Provider.of<RecipeList>(context).recipeList.length,
+                itemCount: Provider.of<RecipeList>(context).recipeCount,
               ),
             ],
           ),

@@ -1,0 +1,60 @@
+import 'package:cibus/services/database.dart';
+import 'package:cibus/services/login/user.dart';
+import 'package:cibus/services/recipe.dart';
+import 'package:flutter/material.dart';
+
+import 'horizontal_list_view.dart';
+
+class FutureBuilderFavorites extends StatelessWidget {
+  FutureBuilderFavorites({@required this.userData});
+  final UserData userData;
+
+  Future<List<Recipe>> getFavoriteRecipes(UserData userData) async {
+    return await DatabaseService().findFavoriteRecipes(userData.favoriteList);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: getFavoriteRecipes(userData),
+      builder: (context, futureSnapshot) {
+        if (futureSnapshot.hasError)
+          return Text('Error: ${futureSnapshot.error}');
+        switch (futureSnapshot.connectionState) {
+          case ConnectionState.none:
+            return Center(child: CircularProgressIndicator());
+          case ConnectionState.waiting:
+            return Center(child: CircularProgressIndicator());
+          case ConnectionState.active:
+            return Center(child: CircularProgressIndicator());
+          case ConnectionState.done:
+            {
+              if (futureSnapshot.hasData) {
+                List<Recipe> favorites = futureSnapshot.data;
+                if (favorites.isNotEmpty) {
+                  return HorizontalListView(
+                    title: 'Your favorites',
+                    recipes: favorites,
+                  );
+                } else {
+                  return Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Text(
+                      'Checkout our large database of recipes',
+                      style: TextStyle(
+                        fontSize: 22.0,
+                        fontWeight: FontWeight.w600,
+                        //letterSpacing: 1.1,
+                      ),
+                    ),
+                  ); //TODO styla denna
+                }
+              }
+              return Text('There\'s no available data.');
+            }
+        }
+        return null;
+      },
+    );
+  }
+}

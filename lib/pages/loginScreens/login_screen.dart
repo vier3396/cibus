@@ -1,3 +1,4 @@
+import 'package:cibus/pages/loading_screen.dart';
 import 'package:cibus/pages/loginScreens/register_screen.dart';
 import 'package:cibus/services/constants.dart';
 import 'package:cibus/pages/loginScreens/e-sign_in_screen.dart';
@@ -197,6 +198,8 @@ class _LoginPageState extends State<LoginPage> {
       splashColor: loginSplashColor,
       highlightedBorderColor: loginHighlightedBorderColor,
       onPressed: () {
+        /* Navigator.of(context).pushNamedAndRemoveUntil(
+            '/loginPage', (Route<dynamic> route) => false); */
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) {

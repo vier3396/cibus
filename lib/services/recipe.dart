@@ -1,24 +1,19 @@
 import 'package:cibus/services/database.dart';
 import 'package:flutter/cupertino.dart';
-
 import 'ingredients.dart';
-import 'dart:io';
-import 'package:provider/provider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Recipe extends ChangeNotifier {
+  String recipeId;
   String title;
   String description;
   List<Ingredient> ingredients = [];
   List<dynamic> listOfSteps = [];
-  //TODO: NetworkImage? imageFile;
-  String imageURL; //just to view temporary Recipe objects images
+  String imageURL;
   int time;
   double rating;
   String userId;
   List<String> ingredientList = [];
   String username;
-  String recipeId;
   int yourRating;
   Map ratings;
 
@@ -35,6 +30,20 @@ class Recipe extends ChangeNotifier {
         quantity: ingredientQuantity));
     notifyListeners();
     print(ingredients);
+  }
+
+  void addRecipeProperties(Recipe recipe) {
+    this.recipeId = recipe.recipeId;
+    this.title = recipe.title;
+    this.description = recipe.description;
+    this.ingredients = recipe.ingredients;
+    this.listOfSteps = recipe.listOfSteps;
+    this.imageURL = recipe.imageURL;
+    this.time = recipe.time;
+    this.rating = recipe.rating;
+    this.userId = recipe.userId;
+    this.ingredientList = recipe.ingredientList;
+    notifyListeners();
   }
 
   void setRecipeId(String documentId) {
@@ -89,7 +98,8 @@ class Recipe extends ChangeNotifier {
         'description': this.description,
         //'ingredients' : this.ingredients,
         'listOfSteps': this.listOfSteps,
-        'imageURL': this.imageURL,
+        'imageURL': this.imageURL ??
+            'https://firebasestorage.googleapis.com/v0/b/independent-project-7edde.appspot.com/o/blank_profile_picture.png?alt=media&token=49efb712-d543-40ca-8e33-8c0fdb029ea5',
         'time': this.time,
         'userId': this.userId,
         'ingredientsArray': this.ingredientList,
@@ -102,9 +112,8 @@ class Recipe extends ChangeNotifier {
     return ingredients.length;
   }
 
-  void addAllIngredientsFromDocument(
+  void addAllPropertiesFromDocument(
       {Map<String, dynamic> recipe, String recipeID}) async {
-    print(recipe['title']);
     this.title = recipe['title'];
     this.ingredients =
         await DatabaseService().getIngredientCollectionFromRecipe(recipeID);

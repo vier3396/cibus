@@ -10,6 +10,11 @@ import 'package:cibus/services/constants.dart';
 import 'package:flutter/widgets.dart';
 import 'package:cibus/services/imageServices.dart';
 import 'package:cibus/services/colors.dart';
+import 'package:cibus/widgets/toFixProviderInPopupRecipe.dart';
+import 'package:cibus/services/login/auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import 'loginScreens/login_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -21,9 +26,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   //form values
   String _currentName;
-  int _currentAge;
   String _currentDescription;
   String image;
+  final AuthService _auth = AuthService();
+  bool _loggedIn = true;
+  //final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +43,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
             UserData userData = snapshot.data;
 
             return Scaffold(
+              appBar: AppBar(
+                title: Text('Settings'),
+              ),
               body: Form(
                 key: _formKey,
                 child: Column(
@@ -106,28 +116,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             name: _currentName ?? userData.name,
                             description:
                                 _currentDescription ?? userData.description,
-                            age: _currentAge ?? userData.age,
                           );
                           Navigator.pop(context);
                         }
                       },
                     ),
-                    SizedBox(height: 100.0),
                     RaisedButton(
-                      color: kCoral,
-                      child: Text(
-                        'Admin',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      onPressed: () async {
-                        Navigator.of(context).pushReplacement(
+                      onPressed: () {
+                        Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) {
-                              return AdminScreen();
+                              //TODO fixa navigator till något bättre?
+                              return WidgetToFixProvider(
+                                admin: true,
+                              );
                             },
                           ),
                         );
                       },
+                      child: Text('Admin page'),
                     )
                   ],
                 ),

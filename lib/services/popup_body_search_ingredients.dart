@@ -1,13 +1,10 @@
-import 'package:cibus/services/colors.dart';
 import 'package:cibus/services/recipe.dart';
 import 'package:cibus/widgets/ingredientChooserTile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'my_text_form_field.dart';
 import 'package:cibus/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/login/user.dart';
-import 'dart:convert';
 import 'package:cibus/services/constants.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:cibus/widgets/ingredientTile.dart';
@@ -24,18 +21,7 @@ class _PopupBodySearchIngredientsState
   String ingredientSearch;
   Map ingredientMap = Map();
   String ingredientId = '';
-  List<String> quantityTypeList = [
-    'grams',
-    'kgs',
-    'liters',
-    'deciliters',
-    'pieces',
-    'cans',
-    'teaspoons',
-    'cups',
-    'cloves',
-  ];
-  String dropDownValue = 'kg';
+  //String dropDownValue = 'kg';
   int quantityValue = 5;
   WhatToShow whatToShow = WhatToShow.notYetSea;
 
@@ -129,16 +115,3 @@ class _PopupBodySearchIngredientsState
     );
   }
 }
-
-//Row(
-//              children: <Widget>[
-//                Text(Provider.of<Recipe>(context)
-//                    .ingredients[index]
-//                    .ingredientName),
-//                Text(
-//                    '${Provider.of<Recipe>(context).ingredients[index].quantity}'),
-//                Text(Provider.of<Recipe>(context)
-//                    .ingredients[index]
-//                    .quantityType),
-//              ],
-//            );
