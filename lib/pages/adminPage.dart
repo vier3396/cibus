@@ -13,12 +13,17 @@ class AdminPage extends StatefulWidget {
 }
 
 class _AdminPageState extends State<AdminPage> {
-  void getRecipes() async {
-    User user = Provider.of<User>(context);
-    DatabaseService database = DatabaseService(uid: user.uid);
-    List<Map> recipeListFromDatabase = await database.returnReportedRecipes();
-    Provider.of<RecipeList>(context, listen: false)
-        .addEntireRecipeList(recipeListFromDatabase);
+  bool firstTime = true;
+
+  void getRecipes({bool firstTimeFunc}) async {
+    if (firstTimeFunc) {
+      User user = Provider.of<User>(context);
+      DatabaseService database = DatabaseService(uid: user.uid);
+      List<Map> recipeListFromDatabase = await database.returnReportedRecipes();
+      Provider.of<RecipeList>(context, listen: false)
+          .addEntireRecipeList(recipeListFromDatabase);
+      firstTime = false;
+    }
   }
 
   @override
@@ -29,7 +34,9 @@ class _AdminPageState extends State<AdminPage> {
 
   @override
   Widget build(BuildContext context) {
-    getRecipes();
+    User user = Provider.of<User>(context);
+    DatabaseService database = DatabaseService(uid: user.uid);
+    getRecipes(firstTimeFunc: firstTime);
     return ListView.builder(
       shrinkWrap: true,
       itemBuilder: (context, index) {
@@ -128,6 +135,32 @@ class _AdminPageState extends State<AdminPage> {
                         Text("minutes"),
                       ],
                     ),
+                    RaisedButton(
+                      onPressed: () {
+                        database.removeRecipe(
+                            recipeId: context
+                                .read<RecipeList>()
+                                .recipeList[index]['recipeId']);
+
+                        setState(() {
+                          firstTime = true;
+                        });
+                      },
+                      child: Text('remove recipe'),
+                    ),
+                    RaisedButton(
+                      onPressed: () {
+                        database.removeTag(
+                            recipeId: context
+                                .read<RecipeList>()
+                                .recipeList[index]['recipeId']);
+
+                        setState(() {
+                          firstTime = true;
+                        });
+                      },
+                      child: Text('remove tag'),
+                    )
                   ],
                 ),
               ],

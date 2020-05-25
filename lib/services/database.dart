@@ -24,6 +24,30 @@ class DatabaseService {
   final CollectionReference reportedRecipesCollection =
       Firestore.instance.collection("ReportedRecipes");
 
+  final CollectionReference adminCollection =
+      Firestore.instance.collection("Admin");
+
+  Future<bool> checkIfAdmin({String userId}) async {
+    var result = await adminCollection.document(userId).get();
+    if (result.exists) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  void removeTag({String recipeId}) {
+    reportedRecipesCollection.document(recipeId).delete();
+  }
+
+  void removeRecipe({String recipeId}) {
+    recipeCollection.document().collection('Ingredients').document().delete();
+    recipeCollection.document().collection('Ratings').document().delete();
+    recipeCollection.document().collection('newRatings').document().delete();
+    recipeCollection.document(recipeId).delete();
+    reportedRecipesCollection.document(recipeId).delete();
+  }
+
   Future<List> returnReportedRecipes() async {
     var result = await reportedRecipesCollection.getDocuments();
     var documents = result.documents;
