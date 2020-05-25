@@ -31,7 +31,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
               : Scaffold(
                   body: Column(
                     children: <Widget>[
-                      SizedBox(height: 50.0),
+                      SizedBox(height: 50),
                       SafeArea(
                         child: Text(
                           'Check your email and verify it.',
@@ -151,7 +151,7 @@ class _VerifyScreenState extends State<VerifyScreen> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('Ok'),
+              child: Text('OK'),
               onPressed: () {
                 setState(() {
                   loading = false;

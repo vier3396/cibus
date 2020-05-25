@@ -18,19 +18,26 @@ class _IngredientChooserTileState extends State<IngredientChooserTile> {
   TextEditingController quantityValueController;
   final List<String> quantityTypeList = [
     'grams',
-    'kgs',
+    'kilos',
     'liters',
     'deciliters',
     'pieces',
     'cans',
+    'dash',
     'teaspoons',
+    'tablespoons',
     'cups',
     'cloves',
     'stems',
     'pinches',
+    'whole',
+    'half',
+    'third',
+    'quarter',
+    'fifth',
   ];
 
-  String dropDownValue = 'kgs';
+  String dropDownValue = 'kilos';
   @override
   void initState() {
     // TODO: implement initState
