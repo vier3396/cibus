@@ -134,6 +134,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         );
                       },
                       child: Text('Admin page'),
+                    ),
+                    RaisedButton(
+                      child: Text("log out"),
+                      onPressed: () {
+                        _auth.signOut();
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (context) => LoginPage()),
+                            (Route<dynamic> route) => false);
+                      },
                     )
                   ],
                 ),
@@ -142,6 +152,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           } else {
             return LoadingScreen();
           }
+          /*
           UserData userData = snapshot.data;
           return !userData.loggedIn
               ? LoginPage()
@@ -241,7 +252,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ],
                     ),
                   ),
-                );
+                ); */
         });
   }
 }
