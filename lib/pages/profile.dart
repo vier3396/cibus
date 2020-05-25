@@ -9,26 +9,12 @@ import 'package:cibus/services/recipe.dart';
 import 'package:cibus/widgets/spin_kit_ripple.dart';
 
 class Profile extends StatelessWidget {
-  Stream userDataStream;
+  final Stream userDataStream;
   Profile({this.userDataStream});
 
   Future<List<Recipe>> getUserRecipes(UserData userData) async {
     return await DatabaseService().findUserRecipes(userData.uid);
   }
-
-/*
-  Widget ifHasRecipes(List<Recipe> myRecipes) {
-    if (myRecipes.isEmpty) {
-      return ListViewRecipes(
-        scrollDirection: Axis.vertical,
-        title: 'Your recipes',
-      );
-    } else {
-      return Text('You have no favorites yet'); //TODO styla denna
-    }
-  }
-
- */
 
   @override
   Widget build(BuildContext context) {
@@ -76,20 +62,7 @@ class Profile extends StatelessWidget {
                             ),
                           ),
                           SizedBox(width: 40.0),
-                          IconButton(
-                            icon: Icon(Icons.settings),
-                            iconSize: 50,
-                            color: Colors.grey,
-                            onPressed: () {
-
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SettingsScreen(),
-                                ),
-                              );
-                            },
-                          ),
+                          SettingsButton(),
                         ],
                       ),
                     ),
@@ -140,4 +113,24 @@ class Profile extends StatelessWidget {
         });
   }
 
+}
+
+class SettingsButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.settings),
+      iconSize: 50,
+      color: Colors.grey,
+      onPressed: () {
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SettingsScreen(),
+          ),
+        );
+      },
+    );
+  }
 }

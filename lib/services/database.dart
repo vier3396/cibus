@@ -1,6 +1,6 @@
+import 'package:cibus/services/article.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cibus/services/login/user.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:cibus/services/recipe.dart';
 import 'package:cibus/services/ingredients.dart';
 
@@ -48,6 +48,28 @@ class DatabaseService {
     reportedRecipesCollection.document(recipeId).delete();
   }
 
+  final CollectionReference articleCollection =
+  Firestore.instance.collection("Articles");
+
+  //Database functions
+  Future<Article> findArticle(String articleId) async {
+    final _result = await articleCollection.document(articleId).get();
+    Article _article = Article(
+      articleID: articleId,
+      title: _result.data['title'],
+      subTitle: _result.data['subTitle'],
+      description: _result.data['description'],
+      steps: _result.data['steps'],
+      ending: _result.data['ending'],
+      greeting: _result.data['greeting'],
+      topImage: _result.data['topImage'],
+      bottomImage: _result.data['bottomImage'],
+    );
+    return _article;
+  }
+
+
+
   Future<List> returnReportedRecipes() async {
     var result = await reportedRecipesCollection.getDocuments();
     var documents = result.documents;
@@ -89,11 +111,12 @@ class DatabaseService {
     return mapList;
   }
 
-  Future updateUserData({String name, String description, int age}) async {
+  Future updateUserData(
+      {String name, String description, List<Recipe> favoriteList}) async {
     return await userCollection.document(uid).setData({
       'name': name,
       'description': description,
-      'age': age,
+      'favoriteList': favoriteList,
     }, merge: true);
   }
 
@@ -114,6 +137,19 @@ class DatabaseService {
     return result.data['username'];
   }
 
+  Future<UserData> getUserData(String userID) async {
+    final user = await userCollection.document(userID).get();
+    UserData _userData = UserData(
+        uid: userID,
+        name: user.data['name'],
+        description: user.data['description'],
+        username: user.data['username'],
+        profilePic: user.data['profilePic'],
+        isEmail: user.data['isEmail'],
+        favoriteList: user.data['favoriteList']);
+    return _userData;
+  }
+
   Future<List<Recipe>> findUserRecipes(String uid) async {
     List<Recipe> userRecipes = [];
     var recipeResult =
@@ -121,7 +157,6 @@ class DatabaseService {
 
     for (DocumentSnapshot document in recipeResult.documents) {
       Map<String, dynamic> recipeMap = document.data;
-
       Recipe recipe = Recipe();
       recipe.addAllPropertiesFromDocument(
           recipe: recipeMap, recipeID: document.documentID);
@@ -136,7 +171,7 @@ class DatabaseService {
       {List<dynamic> currentFavorites, String recipeId}) async {
     //print('currentFavorites innan remove: $currentFavorites');
     currentFavorites.remove(recipeId);
-    print('userData.favoriteList efter remove: $currentFavorites');
+    //print('userData.favoriteList efter remove: $currentFavorites');
     return await userCollection.document(uid).setData({
       'favoriteList': currentFavorites,
     }, merge: true);
@@ -146,7 +181,7 @@ class DatabaseService {
       {List<dynamic> currentFavorites, String recipeId}) async {
     //print('currentFavorites innan add: $currentFavorites');
     currentFavorites.add(recipeId);
-    print('userData.favoriteList efter add: $currentFavorites');
+    //print('userData.favoriteList efter add: $currentFavorites');
     return await userCollection.document(uid).setData({
       'favoriteList': currentFavorites,
     }, merge: true);
@@ -157,7 +192,6 @@ class DatabaseService {
     List<Recipe> favoriteRecipeList = [];
 
     for (dynamic id in recipeList) {
-      List<Ingredient> ingredientList = [];
       var result = await recipeCollection.document(id).get();
 
       Map<String, dynamic> recipeMap = result.data;
@@ -185,9 +219,6 @@ class DatabaseService {
     String recipeId,
     String userId,
   }) async {
-    print('recipeid: $recipeId');
-    print('userId: $userId');
-    //HÄR PRINTAR VI JÄTTEMYCKET TODO: TA BORT PRINTS
     var querySnapshot = await recipeCollection
         .document(recipeId)
         .collection("Ratings")
@@ -195,7 +226,6 @@ class DatabaseService {
         .getDocuments();
     final documents = querySnapshot.documents;
     if (documents.isEmpty) {
-      print('document is empty');
       return 0;
     } else {
       return querySnapshot.documents[0].data['rating'];
@@ -221,20 +251,16 @@ class DatabaseService {
       print(document.data);
     }
 
-    print(result.documents.isNotEmpty); //isEmpty
+    print(result.documents.isNotEmpty);
     return result.documents.isNotEmpty;
-    //}
-    return true;
   }
 
   //userData from snapshot
   UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
-    print(snapshot.data['favoriteList']);
     return UserData(
         uid: uid,
         name: snapshot.data['name'],
         description: snapshot.data['description'],
-        age: snapshot.data['age'],
         username: snapshot.data['username'],
         profilePic: snapshot.data['profilePic'],
         isEmail: snapshot.data['isEmail'],

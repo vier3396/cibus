@@ -10,20 +10,20 @@ TextStyle textStyleTitle = TextStyle(
   letterSpacing: 1.2,
 );
 
-class ListViewRecipes extends StatefulWidget {
-  String title;
-  List<Recipe> recipes;
+class HorizontalListView extends StatefulWidget {
+  final String title;
+  final List<Recipe> recipes;
 
-  ListViewRecipes({
+  HorizontalListView({
     this.title,
     this.recipes,
   });
 
   @override
-  _ListViewRecipesState createState() => _ListViewRecipesState();
+  _HorizontalListViewState createState() => _HorizontalListViewState();
 }
 
-class _ListViewRecipesState extends State<ListViewRecipes> {
+class _HorizontalListViewState extends State<HorizontalListView> {
   @override
   Widget build(BuildContext context) {
     return Column(

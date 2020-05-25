@@ -1,5 +1,6 @@
 import 'package:cibus/services/recipe.dart';
 import 'package:cibus/widgets/recipe_preview.dart';
+import 'package:cibus/widgets/show_rating.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -46,6 +47,8 @@ class VerticalListView extends StatelessWidget {
                 Recipe currentRecipe = recipes[index];
                 return GestureDetector(
                   onTap: () {
+                    print('currentRecipe.rating = ${currentRecipe.rating}');
+
                     Provider.of<Recipe>(context, listen: false)
                         .addRecipeProperties(currentRecipe);
 
@@ -112,7 +115,7 @@ class VerticalListView extends StatelessWidget {
                           top: 0.0,
                           right: 0.0,
                           child: Container(
-                            height: 120.0,
+                            height: 200.0,
                             width: 200.0,
                             decoration: BoxDecoration(
                               color: Colors.white,
@@ -121,7 +124,6 @@ class VerticalListView extends StatelessWidget {
                             child: Padding(
                               padding: EdgeInsets.all(10.0),
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
                                 crossAxisAlignment:
                                 CrossAxisAlignment.start,
                                 children: <Widget>[
@@ -137,6 +139,9 @@ class VerticalListView extends StatelessWidget {
                                       color: Colors.grey,
                                     ),
                                   ),
+                                  //TODO: funkar inte
+                                  ShowRating(rating: currentRecipe.rating ??
+                                      0, imageHeight: 20.0),
                                 ],
                               ),
                             ),

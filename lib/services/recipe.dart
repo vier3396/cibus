@@ -1,9 +1,6 @@
 import 'package:cibus/services/database.dart';
 import 'package:flutter/cupertino.dart';
 import 'ingredients.dart';
-import 'dart:io';
-import 'package:provider/provider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Recipe extends ChangeNotifier {
   String recipeId;
@@ -117,7 +114,6 @@ class Recipe extends ChangeNotifier {
 
   void addAllPropertiesFromDocument(
       {Map<String, dynamic> recipe, String recipeID}) async {
-    print(recipe['title']);
     this.title = recipe['title'];
     this.ingredients =
         await DatabaseService().getIngredientCollectionFromRecipe(recipeID);
