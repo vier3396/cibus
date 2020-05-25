@@ -135,6 +135,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         );
                       },
                       child: Text('Admin page'),
+                    ),
+                    RaisedButton(
+                      child: Text("log out"),
+                      onPressed: () {
+                        _auth.signOut();
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (context) => LoginPage()),
+                            (Route<dynamic> route) => false);
+                      },
                     )
                   ],
                 ),
