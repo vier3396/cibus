@@ -45,6 +45,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 UserData userData = snapshot.data;
 
                 return Scaffold(
+                  resizeToAvoidBottomPadding: false,
                   appBar: AppBar(
                     title: Text('Settings'),
                   ),

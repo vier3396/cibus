@@ -50,6 +50,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   //int dropdownValue = null;
   final TextEditingController _pass = TextEditingController();
   final TextEditingController _confirmPass = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -87,6 +90,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       formSizedBox,
                       TextFormField(
                         keyboardType: TextInputType.emailAddress,
+                        controller: _emailController,
                         decoration: InputDecoration(
                           enabledBorder: textInputBorder,
                           border: textInputBorder,
@@ -115,16 +119,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           if (val.isEmpty) {
                             return 'Please enter password';
                           } else if (val.length < 8) {
+                            _confirmPass.clear();
                             return 'Minimum 8 characters required';
                           } else if (!val.contains(RegExp(r'[A-Z]'))) {
+                            _confirmPass.clear();
                             return 'One upper case letter required.';
                           } else if (!val.contains(RegExp(r'[a-z]'))) {
+                            _confirmPass.clear();
                             return 'One lower case letter required.';
                           } else if (!val.contains(RegExp(r'[0-9]'))) {
+                            _confirmPass.clear();
                             return 'One digit required.';
                           } else if (!val
                               .contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
-                            return 'One special character required.';
+                            _confirmPass.clear();
+                            return "One special character required.\nSuch as !@#\\&\$*`~";
                           } /*
 
                           else {
@@ -152,10 +161,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         obscureText: true,
                         controller: _confirmPass,
                         validator: (String val) {
-                          if (val.isEmpty)
+                          if (val.isEmpty) {
                             return 'Re-enter password field is empty';
-                          if (val != _pass.text)
+                          }
+                          if (val != _pass.text) {
+                            _confirmPass.clear();
                             return 'passwords do not match';
+                          }
                           return null;
                         },
                         onChanged: (val) {
@@ -164,6 +176,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       formSizedBox,
                       TextFormField(
+                        controller: _nameController,
                         decoration: InputDecoration(
                           enabledBorder: textInputBorder,
                           border: textInputBorder,
@@ -177,6 +190,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       formSizedBox,
                       TextFormField(
+                        controller: _descriptionController,
                         decoration: InputDecoration(
                           enabledBorder: textInputBorder,
                           border: textInputBorder,
@@ -216,6 +230,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         color: kCoral,
                         child: Text('Register', style: textStyleRegisterButton),
                         onPressed: () async {
+                          _formKey.currentState.save();
                           if (_formKey.currentState.validate()) {
                             setState(() => loading = true);
                             bool isUsernameFree = await DatabaseService()
