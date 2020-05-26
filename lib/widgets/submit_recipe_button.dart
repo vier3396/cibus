@@ -1,8 +1,8 @@
 import 'package:cibus/widgets/uploaded_recipe_alert.dart';
 import 'package:flutter/material.dart';
-import 'package:cibus/services/recipe.dart';
+import 'package:cibus/services/models/recipe.dart';
 import 'package:provider/provider.dart';
-import 'package:cibus/services/database.dart';
+import 'package:cibus/services/database/database.dart';
 import 'package:cibus/services/login/user.dart';
 
 class SubmitButton extends StatelessWidget {

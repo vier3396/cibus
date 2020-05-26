@@ -1,7 +1,7 @@
 import 'package:cibus/services/login/user.dart';
 import 'package:cibus/services/database/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cibus/services/constants.dart';
+import 'package:cibus/services/models/constants.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;

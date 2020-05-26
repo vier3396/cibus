@@ -1,4 +1,4 @@
-import 'package:cibus/services/constants.dart';
+import 'package:cibus/services/models/constants.dart';
 import 'package:cibus/widgets/recipe_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -131,8 +131,8 @@ class _HorizontalListViewState extends State<HorizontalListView> {
                                 child: Image(
                                   height: 180.0,
                                   width: 180.0,
-                                  image: NetworkImage(currentRecipe
-                                      .imageURL ?? kDefaultRecipePic),
+                                  image: NetworkImage(currentRecipe.imageURL ??
+                                      kDefaultRecipePic),
                                   fit: BoxFit.cover,
                                 ),
                               ),

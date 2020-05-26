@@ -5,6 +5,7 @@ import 'package:cibus/widgets/show_rating.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/login/user.dart';
+import 'package:cibus/services/models/constants.dart';
 
 TextStyle textStyleTitle = TextStyle(
   fontSize: 22.0,
@@ -100,8 +101,8 @@ class VerticalListView extends StatelessWidget {
                                 child: Image(
                                   height: 180.0,
                                   width: 180.0,
-                                  image: NetworkImage(currentRecipe
-                                      .imageURL ?? kDefaultRecipePic),
+                                  image: NetworkImage(currentRecipe.imageURL ??
+                                      kDefaultRecipePic),
                                   fit: BoxFit.cover,
                                 ),
                               ),

@@ -60,7 +60,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 child: CircleAvatar(
                                   radius: 60.0,
                                   backgroundImage: NetworkImage(
-                                      userData.profilePic ?? kBackupProfilePic),
+                                      userData.profilePic ??
+                                          kDefaultProfilePic),
                                 ),
                               ),
                               onTap: () {

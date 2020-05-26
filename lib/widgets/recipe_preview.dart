@@ -1,6 +1,6 @@
 import 'package:cibus/services/models/my_page_view.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:cibus/services/constants.dart';
+import 'package:cibus/services/models/constants.dart';
 import 'package:cibus/widgets/submit_recipe_button.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/services/models/colors.dart';
@@ -251,14 +251,16 @@ class _RecipePreviewState extends State<RecipePreview> {
                                           fontWeight: FontWeight.w600),
                                     ),
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
                                       children: <Widget>[
                                         SizedBox(),
                                         AddStarButtons(
                                             recipeID: recipe.recipeId,
                                             user: user,
-                                            myRating: Provider.of<Recipe>(context)
-                                                .yourRating),
+                                            myRating:
+                                                Provider.of<Recipe>(context)
+                                                    .yourRating),
                                         SizedBox(),
                                       ],
                                     )
