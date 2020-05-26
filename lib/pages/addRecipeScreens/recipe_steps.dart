@@ -46,7 +46,7 @@ class _RecipeStepsState extends State<RecipeSteps> {
       i++;
 
       return Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(8.0),
         child: MyTextFormField(
           controller: controller,
           maxLength: 400,
@@ -133,7 +133,7 @@ class _RecipeStepsState extends State<RecipeSteps> {
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Text(
-              'add a step',
+              'Add a step',
               style: TextStyle(
                 color: Colors.white,
               ),

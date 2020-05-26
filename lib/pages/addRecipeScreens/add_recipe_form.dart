@@ -28,8 +28,7 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
         recipe,
         child,
       ) {
-        return MaterialApp(
-          home: Scaffold(
+        return Scaffold(
             resizeToAvoidBottomPadding: false, // solves keyboard problems
             appBar: AppBar(
               backgroundColor: Theme.of(context).appBarTheme.color,
@@ -160,17 +159,16 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: EdgeInsets.all(8.0),
                         child: MyTextFormField(
                           isAmount: true,
                           maxLength: 10,
                           labelText:
-                              "How many minutes does the recipe take to make?",
+                              "How many minutes does the recipe take?",
                           validator: (String time) {
                             if (time.isEmpty) {
                               return 'Enter a time';
                             } else {
-                              //formKey.currentState.save();
                               return null;
                             }
                           },
@@ -246,8 +244,7 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                 ),
               ),
             ),
-          ),
-        );
+          );
       },
     );
   }
