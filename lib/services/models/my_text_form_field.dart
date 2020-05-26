@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'colors.dart';
 
 class MyTextFormField extends StatelessWidget {
   final String labelText;
@@ -40,6 +41,10 @@ class MyTextFormField extends StatelessWidget {
       controller: controller,
       keyboardType: isAmount ? TextInputType.number : TextInputType.text,
       decoration: InputDecoration(
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: kCoral),
+          borderRadius: BorderRadius.circular(25.0),
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(25.0),
         ),

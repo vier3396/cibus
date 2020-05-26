@@ -28,7 +28,7 @@ class UserPage extends StatelessWidget {
                 children: <Widget>[
                   CircleAvatar(
                     backgroundImage:
-                        NetworkImage(userData.profilePic ?? kBackupProfilePic),
+                    NetworkImage(userData.profilePic ?? kDefaultProfilePic),
                     radius: 50.0,
                   ),
                   SizedBox(width: 20.0),

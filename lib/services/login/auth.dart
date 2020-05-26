@@ -1,6 +1,7 @@
 import 'package:cibus/services/login/user.dart';
 import 'package:cibus/services/database/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cibus/services/constants.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -46,9 +47,8 @@ class AuthService {
       //create a new document for the user with the uid
       await DatabaseService(uid: user.uid).updateUserData(
           name: name, description: description, favoriteList: []);
-      await DatabaseService(uid: user.uid).updateUserPicture(
-          pictureURL:
-              'https://firebasestorage.googleapis.com/v0/b/independent-project-7edde.appspot.com/o/blank_profile_picture.png?alt=media&token=49efb712-d543-40ca-8e33-8c0fdb029ea5');
+      await DatabaseService(uid: user.uid)
+          .updateUserPicture(pictureURL: kDefaultProfilePic);
       await DatabaseService(uid: user.uid).updateUsername(username: username);
       return _userFromFirebaseUser(user);
     } catch (e) {

@@ -1,3 +1,4 @@
+import 'package:cibus/widgets/navigate_back_button.dart';
 import 'package:cibus/services/models/article.dart';
 import 'package:flutter/material.dart';
 
@@ -9,8 +10,8 @@ const BoxShadow boxShadowHero = BoxShadow(
 
 class ArticlePage extends StatelessWidget {
   final Article article;
-  final String hero;
-  ArticlePage({this.article, this.hero});
+  final String heroTag;
+  ArticlePage({this.article, this.heroTag});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,7 @@ class ArticlePage extends StatelessWidget {
                   ],
                 ),
                 child: Hero(
-                  tag: hero,
+                  tag: heroTag,
                   child: ClipRRect(
                     child: Image(
                       image: NetworkImage(article.topImage),
@@ -37,11 +38,9 @@ class ArticlePage extends StatelessWidget {
                   ),
                 ),
               ),
-              IconButton(
-                icon: Icon(Icons.arrow_back_ios),
-                iconSize: 35.0,
-                color: Colors.white,
-                onPressed: () => Navigator.pop(context),
+              Positioned(
+                top: 20.0,
+                child: NavigateBackButton(),
               ),
             ],
           ),

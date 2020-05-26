@@ -35,9 +35,8 @@ class SignIn {
     if (isNewUser) {
       await DatabaseService(uid: user.uid).updateUserData(
           name: user.displayName, description: 'description', favoriteList: []);
-      await DatabaseService(uid: user.uid).updateUserPicture(
-          pictureURL:
-              'https://firebasestorage.googleapis.com/v0/b/independent-project-7edde.appspot.com/o/blank_profile_picture.png?alt=media&token=49efb712-d543-40ca-8e33-8c0fdb029ea5');
+      await DatabaseService(uid: user.uid)
+          .updateUserPicture(pictureURL: kDefaultProfilePic);
     }
 
     assert(!user.isAnonymous);
@@ -70,9 +69,8 @@ class SignIn {
             name: user.displayName,
             description: 'description',
             favoriteList: []);
-        await DatabaseService(uid: user.uid).updateUserPicture(
-            pictureURL:
-                'https://firebasestorage.googleapis.com/v0/b/independent-project-7edde.appspot.com/o/blank_profile_picture.png?alt=media&token=49efb712-d543-40ca-8e33-8c0fdb029ea5');
+        await DatabaseService(uid: user.uid)
+            .updateUserPicture(pictureURL: kDefaultProfilePic);
       }
 
       assert(!user.isAnonymous);

@@ -3,6 +3,7 @@ import 'package:cibus/services/login/user.dart';
 import 'package:cibus/services/models/recipe.dart';
 import 'package:cibus/widgets/horizontal_list_view.dart';
 import 'package:cibus/widgets/spin_kit_ripple.dart';
+import 'package:cibus/widgets/vertical_list_view.dart';
 import 'package:flutter/material.dart';
 
 class FavoritesPage extends StatefulWidget {
@@ -48,7 +49,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                           if (futureSnapshot.hasData) {
                             List<Recipe> favorites = futureSnapshot.data;
                             if (favorites.isNotEmpty) {
-                              return HorizontalListView(
+                              return VerticalListView(
                                 title: 'Your favorites',
                                 recipes: favorites,
                               );

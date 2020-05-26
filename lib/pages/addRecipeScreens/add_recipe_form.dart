@@ -27,93 +27,19 @@ class AddRecipeForm extends StatefulWidget {
 class _AddRecipeFormState extends State<AddRecipeForm> {
   final formKey = GlobalKey<FormState>();
 
-  // TODO: use different method for uploading pictures
-  /*
-  File imageFile;
-
-  //Open gallery
-  void openGallery(BuildContext context, Recipe recipe) async {
-    var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
-    this.setState(() {
-      imageFile = picture;
-      recipe.imageFile = imageFile;
-    });
-    Navigator.of(context).pop();
-  }
-
-  //Open camera
-  void openCamera(BuildContext context, Recipe recipe) async {
-    var picture = await ImagePicker.pickImage(source: ImageSource.camera);
-    this.setState(() {
-      imageFile = picture;
-      recipe.imageFile = imageFile;
-    });
-    Navigator.of(context).pop();
-  }
-
-  //Popup - choose between open gallery or camera
-  Future<void> showChoiceDialog(BuildContext context, Recipe recipe) {
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("From"),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: [
-                  Row(
-                    children: <Widget>[
-                      GestureDetector(
-                        child: Text("Gallery"),
-                        onTap: () {
-                          openGallery(context, recipe);
-                        },
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(10.0),
-                      ),
-                      GestureDetector(
-                        child: Text("Camera"),
-                        onTap: () {
-                          openCamera(context, recipe);
-                        },
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          );
-        });
-  }
-
-  //No image selected, or view image selected
-  Widget decideImageView() {
-    if (imageFile == null) {
-      return Center(child: Text("No image selected"));
-    } else {
-      return Image.file(imageFile, width: 400.0, height: 400.0);
-    }
-  }
-
-
- */
-
   @override
   Widget build(BuildContext context) {
-    // final halfMedianWidth = MediaQuery.of(context).size.width / 2.0; (for different screens)
-
     return Consumer<Recipe>(
       builder: (
         context,
         recipe,
         child,
       ) {
-        return MaterialApp(
-          home: Scaffold(
+        return Scaffold(
             resizeToAvoidBottomPadding: false, // solves keyboard problems
             appBar: AppBar(
-              backgroundColor: kDarkerkBackgroundColor,
+              backgroundColor: Theme.of(context).appBarTheme.color,
+              elevation: Theme.of(context).appBarTheme.elevation,
               title: Center(
                 child: Text(
                   'Add a recipe',
@@ -240,17 +166,16 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: EdgeInsets.all(8.0),
                         child: MyTextFormField(
                           isAmount: true,
                           maxLength: 10,
                           labelText:
-                              "How many minutes does the recipe take to make?",
+                              "How many minutes does the recipe take?",
                           validator: (String time) {
                             if (time.isEmpty) {
                               return 'Enter a time';
                             } else {
-                              //formKey.currentState.save();
                               return null;
                             }
                           },
@@ -326,8 +251,7 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                 ),
               ),
             ),
-          ),
-        );
+          );
       },
     );
   }
