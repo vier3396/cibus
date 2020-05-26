@@ -20,11 +20,12 @@ class AuthorWidget extends StatelessWidget {
             context,
             MaterialPageRoute(
                 builder: (context) => UserPage(
-                  recipes: recipes,
-                  userData: userData,
-                )));
+                      recipes: recipes,
+                      userData: userData,
+                    )));
       },
-      child: Text(Provider.of<Recipe>(context).username ?? 'userName',
+      child: Text(
+        Provider.of<Recipe>(context).username ?? 'username',
         style: TextStyle(
             fontSize: 20.0, fontWeight: FontWeight.w500, color: Colors.white),
       ),

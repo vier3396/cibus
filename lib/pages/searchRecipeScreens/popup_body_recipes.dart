@@ -25,12 +25,13 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
   String ingredientSearch;
   Map ingredientMap = Map();
   String ingredientId = '';
-  List<String> quantityTypeList = ['gram', 'kg', 'liters'];
-  int quantityValue = 5;
+  //List<String> quantityTypeList = ['gram', 'kg', 'liters'];
+  //int quantityValue = 5;
   WhatToShow whatToShow = WhatToShow.foundIngredient;
   List<Ingredient> ingredientList = [];
   List<Map> recipeList = [];
   List<Recipe> recipeClassList = [];
+  final TextEditingController searchController = TextEditingController();
 
   Widget foundIngredient({whatToShowenum, ingredientMap}) {
     if (whatToShowenum == WhatToShow.none) {
@@ -75,9 +76,41 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
             padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
             children: <Widget>[
               TextField(
+                controller: searchController,
                 onChanged: (toSearch) {
                   ingredientSearch = toSearch.toLowerCase();
                   print(ingredientSearch);
+                },
+                onSubmitted: (toSearch) async {
+                  Map ingredientMapFromDatabase =
+                      await database.getIngredient(ingredientSearch);
+
+                  if (ingredientMapFromDatabase != null) {
+                    Provider.of<IngredientList>(context, listen: false)
+                        .addIngredient(Ingredient(
+                            ingredientId:
+                                ingredientMapFromDatabase['ingredientId'],
+                            ingredientName:
+                                ingredientMapFromDatabase['ingredientName']));
+                    List<Map> recipeListFromDatabase =
+                        await database.findRecipes(
+                            Provider.of<IngredientList>(context, listen: false)
+                                .ingredientList);
+                    //print(recipeListFromDatabase[0].data['title']);
+
+                    setState(() {
+                      Provider.of<RecipeList>(context, listen: false)
+                          .addEntireRecipeList(recipeListFromDatabase);
+                      //recipeList = recipeListFromDatabase;
+                      whatToShow = WhatToShow.foundIngredient;
+                      FocusScope.of(context).requestFocus(FocusNode());
+                      searchController.clear();
+                    });
+                  } else if (ingredientMap == null) {
+                    setState(() {
+                      whatToShow = WhatToShow.none;
+                    });
+                  }
                 },
               ),
               FlatButton(
@@ -104,6 +137,7 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                         //recipeList = recipeListFromDatabase;
                         whatToShow = WhatToShow.foundIngredient;
                         FocusScope.of(context).requestFocus(FocusNode());
+                        searchController.clear();
                       });
                     } else if (ingredientMap == null) {
                       setState(() {
@@ -219,11 +253,13 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                             children: <Widget>[
                               Column(
                                 children: <Widget>[
-                                  ShowRating(rating: context
+                                  ShowRating(
+                                      rating: context
                                                   .read<RecipeList>()
                                                   .recipeList[index]
                                               ['averageRating'] ??
-                                          0, imageHeight: 20.0),
+                                          0,
+                                      imageHeight: 20.0),
                                   Text(context
                                           .read<RecipeList>()
                                           .recipeList[index]['averageRating']

@@ -140,7 +140,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           child: Text('Admin page'),
                         ),
                         RaisedButton(
-                          child: Text("log out"),
+                          child: Text("Log out"),
                           onPressed: () {
                             setState(() {
                               loading = true;

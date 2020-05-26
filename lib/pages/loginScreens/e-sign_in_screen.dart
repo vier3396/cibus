@@ -185,24 +185,47 @@ class _EmailSignInState extends State<EmailSignIn> {
           actions: <Widget>[
             Column(
               children: <Widget>[
-                FlatButton(
-                  child: Text('Reset Password'),
-                  onPressed: () async {
-                    setState(() {
-                      loading = false;
-                    });
-                    try {
-                      await _authInstance.sendPasswordResetEmail(
-                          email: forgotEmail);
-                      Navigator.of(context).pop();
-                    } catch (e) {
-                      print(e.message);
-                      //print('runtimeType: $e.runtimeType');
-                      setState(() {
-                        errorMessage = e.message;
-                      });
-                    }
-                  },
+                Row(
+                  children: <Widget>[
+                    FlatButton(
+                      child: Text(
+                        "Close",
+                        style: TextStyle(
+                          color: kCoral,
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        setState(() {
+                          loading = false;
+                        });
+                      },
+                    ),
+                    FlatButton(
+                      child: Text(
+                        'Reset Password',
+                        style: TextStyle(
+                          color: kCoral,
+                        ),
+                      ),
+                      onPressed: () async {
+                        setState(() {
+                          loading = false;
+                        });
+                        try {
+                          await _authInstance.sendPasswordResetEmail(
+                              email: forgotEmail);
+                          Navigator.of(context).pop();
+                        } catch (e) {
+                          print(e.message);
+                          //print('runtimeType: $e.runtimeType');
+                          setState(() {
+                            errorMessage = e.message;
+                          });
+                        }
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),

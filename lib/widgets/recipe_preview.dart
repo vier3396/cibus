@@ -26,6 +26,7 @@ class RecipePreview extends StatefulWidget {
 
 class _RecipePreviewState extends State<RecipePreview> {
   void getRecipe({user, database}) async {}
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +38,7 @@ class _RecipePreviewState extends State<RecipePreview> {
 
     return Consumer<Recipe>(builder: (context, recipe, child) {
       return Scaffold(
+        key: _scaffoldKey,
         body: Container(
           child: Stack(
             children: <Widget>[
@@ -269,10 +271,20 @@ class _RecipePreviewState extends State<RecipePreview> {
             onPressed: () {
               database.reportRecipe(recipeId: recipeId);
               Navigator.of(context).pop();
+              _displaySnackBar(context);
             },
             child: Text('Report'))
       ],
     );
+  }
+
+  _displaySnackBar(BuildContext context) {
+    final snackBar = SnackBar(
+      backgroundColor: kCoral,
+      content: Text("Recipe reported. The Cibus Admins will have a look!"),
+      duration: Duration(seconds: 2),
+    );
+    _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 }
 

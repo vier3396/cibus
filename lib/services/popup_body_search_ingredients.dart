@@ -24,6 +24,7 @@ class _PopupBodySearchIngredientsState
   //String dropDownValue = 'kg';
   int quantityValue = 5;
   WhatToShow whatToShow = WhatToShow.notYetSea;
+  final TextEditingController searchController = TextEditingController();
 
   Widget foundIngredient({whatToShowenum, ingredientMap}) {
     if (whatToShowenum == WhatToShow.none) {
@@ -61,9 +62,28 @@ class _PopupBodySearchIngredientsState
           padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
           children: <Widget>[
             TextField(
+              controller: searchController,
               onChanged: (toSearch) {
                 ingredientSearch = toSearch.toLowerCase();
                 print(ingredientSearch);
+              },
+              onSubmitted: (toSearch) async {
+                ingredientMap = await database.getIngredient(ingredientSearch);
+                print(ingredientMap);
+                if (ingredientMap != null) {
+                  setState(() {
+                    print(ingredientMap['ingredientName']);
+                    ingredientName = ingredientMap['ingredientName'];
+                    ingredientId = ingredientMap['ingredientId'];
+                    whatToShow = WhatToShow.foundIngredient;
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    searchController.clear();
+                  });
+                } else if (ingredientMap == null) {
+                  setState(() {
+                    whatToShow = WhatToShow.none;
+                  });
+                }
               },
             ),
             FlatButton(
@@ -78,6 +98,7 @@ class _PopupBodySearchIngredientsState
                       ingredientId = ingredientMap['ingredientId'];
                       whatToShow = WhatToShow.foundIngredient;
                       FocusScope.of(context).requestFocus(FocusNode());
+                      searchController.clear();
                     });
                   } else if (ingredientMap == null) {
                     setState(() {

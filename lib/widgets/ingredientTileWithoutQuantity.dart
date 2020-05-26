@@ -40,7 +40,7 @@ class IngredientTileWithoutQuantity extends StatelessWidget {
               .ingredientList[index]
               .ingredientName),
           IconButton(
-              icon: Icon(Icons.clear),
+              icon: Icon(Icons.delete, color: Colors.black38),
               onPressed: () async {
                 //When remove ingredient update to another query and update the recipelist, if empty clear the list
                 Provider.of<IngredientList>(parentContext, listen: false)

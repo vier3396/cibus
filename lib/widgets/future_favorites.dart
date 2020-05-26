@@ -40,7 +40,7 @@ class FutureBuilderFavorites extends StatelessWidget {
                   return Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20.0),
                     child: Text(
-                      'Checkout our large database of recipes',
+                      'Check out our large database of recipes',
                       style: TextStyle(
                         fontSize: 22.0,
                         fontWeight: FontWeight.w600,

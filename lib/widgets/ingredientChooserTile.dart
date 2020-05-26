@@ -155,7 +155,7 @@ class _IngredientChooserTileState extends State<IngredientChooserTile> {
                         }
                         setState(() {
                           // quantityValue = null;
-                          dropDownValue = 'kgs';
+                          dropDownValue = 'kilos';
                           quantityValueController.clear();
                         });
                       },
