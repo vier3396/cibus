@@ -26,3 +26,9 @@ class UserData {
       this.favoriteList,
       this.loggedIn});
 }
+
+class AdminData {
+  final String role;
+
+  AdminData({this.role});
+}

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:cibus/services/database.dart';
@@ -107,7 +109,11 @@ class _VerifyScreenState extends State<VerifyScreen> {
                                           ),
                                         );
                                       } else {
-                                        _verifyDialog();
+                                        Timer(Duration(seconds: 3), () {
+                                          print(
+                                              "Yeah, this line is printed after 3 second");
+                                          _verifyDialog();
+                                        });
                                       }
                                       print(_firebaseUser.isEmailVerified);
                                       _firebaseUser
