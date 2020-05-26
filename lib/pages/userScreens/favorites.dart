@@ -1,6 +1,6 @@
-import 'package:cibus/services/database.dart';
+import 'package:cibus/services/database/database.dart';
 import 'package:cibus/services/login/user.dart';
-import 'package:cibus/services/recipe.dart';
+import 'package:cibus/services/models/recipe.dart';
 import 'package:cibus/widgets/horizontal_list_view.dart';
 import 'package:cibus/widgets/spin_kit_ripple.dart';
 import 'package:flutter/material.dart';

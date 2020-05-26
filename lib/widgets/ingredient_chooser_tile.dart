@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:cibus/services/colors.dart';
-import 'package:cibus/services/recipe.dart';
+import 'package:cibus/services/models/colors.dart';
+import 'package:cibus/services/models/recipe.dart';
 import 'package:provider/provider.dart';
 
 class IngredientChooserTile extends StatefulWidget {

@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:cibus/services/my_text_form_field.dart';
-import 'package:cibus/services/popup_layout.dart';
-import 'package:cibus/services/popup_body_search_ingredients.dart';
+import 'package:cibus/services/models/my_text_form_field.dart';
+import 'package:cibus/services/models/popup_layout.dart';
+import 'package:cibus/services/models/popup_body_search_ingredients.dart';
 import 'package:cibus/pages/searchRecipeScreens/popup_body_recipes.dart';
-import 'package:cibus/services/colors.dart';
-import 'package:cibus/widgets/toFixProviderInPopupRecipe.dart';
+import 'package:cibus/services/models/colors.dart';
+import 'package:cibus/widgets/to_fix_provider_in_popup_recipe.dart';
 
 const circleAvatarRadius = 30.0;
 const circleAvatarSize = 40.0;

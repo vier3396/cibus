@@ -1,7 +1,7 @@
 import 'package:cibus/services/login/user.dart';
 import 'package:flutter/material.dart';
-import '../services/database.dart';
-import '../services/recipe.dart';
+import '../services/database/database.dart';
+import '../services/models/recipe.dart';
 import 'package:provider/provider.dart';
 
 //TODO make it work
@@ -17,14 +17,16 @@ class _FavoriteButtonState extends State<FavoriteButton> {
   String snackBarFavoritesContent;
 
   void removeFromFavorites(String id, UserData userData, Recipe recipe) async {
-    print('innan removeFromUserFavorites: userData.favoriteList = ${userData.favoriteList}');
+    print(
+        'innan removeFromUserFavorites: userData.favoriteList = ${userData.favoriteList}');
     print('recipe.recipeId = ${recipe.recipeId}');
     await DatabaseService(uid: id).removeFromUserFavorites(
         currentFavorites: userData.favoriteList, recipeId: recipe.recipeId);
   }
 
   addToFavorites(String id, UserData userData, Recipe recipe) async {
-    print('innan addToUserFavorites: userData.favoriteList = ${userData.favoriteList}');
+    print(
+        'innan addToUserFavorites: userData.favoriteList = ${userData.favoriteList}');
     print('recipe.recipeId = ${recipe.recipeId}');
     await DatabaseService(uid: id).addToUserFavorites(
         currentFavorites: userData.favoriteList, recipeId: recipe.recipeId);
@@ -36,8 +38,7 @@ class _FavoriteButtonState extends State<FavoriteButton> {
     if (userData.favoriteList.contains(recipe.recipeId)) {
       print('true');
       return true;
-    }
-    else {
+    } else {
       return false;
     }
   }
@@ -54,11 +55,13 @@ class _FavoriteButtonState extends State<FavoriteButton> {
           builder: (context, snapshot) {
             UserData userData = snapshot.data;
             return IconButton(
-              icon: isFavorite(Provider.of<Recipe>(context, listen: false), userData)
+              icon: isFavorite(
+                      Provider.of<Recipe>(context, listen: false), userData)
                   ? favoriteFilledIcon
                   : favoriteBorderIcon,
               onPressed: () {
-                final recipeProvider = Provider.of<Recipe>(context, listen: false);
+                final recipeProvider =
+                    Provider.of<Recipe>(context, listen: false);
 
                 setState(() {
                   if (isFavorite(recipeProvider, userData)) {

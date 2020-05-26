@@ -1,5 +1,5 @@
-import 'package:cibus/services/database.dart';
-import 'package:cibus/services/recipe.dart';
+import 'package:cibus/services/database/database.dart';
+import 'package:cibus/services/models/recipe.dart';
 import 'package:cibus/widgets/recipe_preview.dart';
 import 'package:cibus/widgets/show_rating.dart';
 import 'package:flutter/material.dart';

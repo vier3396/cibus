@@ -1,4 +1,4 @@
-import 'package:cibus/services/database.dart';
+import 'package:cibus/services/database/database.dart';
 import 'package:flutter/cupertino.dart';
 import 'ingredients.dart';
 

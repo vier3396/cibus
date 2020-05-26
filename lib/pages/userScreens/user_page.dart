@@ -1,10 +1,11 @@
-import 'package:cibus/services/constants.dart';
+import 'package:cibus/services/models/constants.dart';
 import 'package:cibus/widgets/vertical_list_view.dart';
 import 'package:flutter/material.dart';
-import 'package:cibus/services/recipe.dart';
+import 'package:cibus/services/models/recipe.dart';
 import 'package:cibus/services/login/user.dart';
 
-const kNoRecipeText = 'Sharing is caring<3 feel free to upload some of your own recipes';
+const kNoRecipeText =
+    'Sharing is caring<3 feel free to upload some of your own recipes';
 
 class UserPage extends StatelessWidget {
   final List<Recipe> recipes;
@@ -27,7 +28,7 @@ class UserPage extends StatelessWidget {
                 children: <Widget>[
                   CircleAvatar(
                     backgroundImage:
-                    NetworkImage(userData.profilePic ?? kBackupProfilePic),
+                        NetworkImage(userData.profilePic ?? kBackupProfilePic),
                     radius: 50.0,
                   ),
                   SizedBox(width: 20.0),
@@ -59,9 +60,9 @@ class UserPage extends StatelessWidget {
             Divider(),
             recipes.isNotEmpty
                 ? VerticalListView(
-              title: "More recipes",
-              recipes: recipes,
-            )
+                    title: "More recipes",
+                    recipes: recipes,
+                  )
                 : Text(kNoRecipeText), //TODO styla denna
           ],
         ),

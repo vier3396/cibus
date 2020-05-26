@@ -1,8 +1,8 @@
-import 'package:cibus/services/article.dart';
+import 'package:cibus/services/models/article.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cibus/services/login/user.dart';
-import 'package:cibus/services/recipe.dart';
-import 'package:cibus/services/ingredients.dart';
+import 'package:cibus/services/models/recipe.dart';
+import 'package:cibus/services/models/ingredients.dart';
 
 class DatabaseService {
   final String uid;

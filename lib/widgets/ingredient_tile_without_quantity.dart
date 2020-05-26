@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cibus/services/ingredientList.dart';
+import 'package:cibus/services/models/ingredient_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cibus/services/database.dart';
+import 'package:cibus/services/database/database.dart';
 import 'package:cibus/services/login/user.dart';
-import 'package:cibus/services/recipeList.dart';
+import 'package:cibus/services/models/recipe_list.dart';
 
 //TODO ändra så att ingredientTile går att använda för båda istället för att ha två
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cibus/services/colors.dart';
+import 'package:cibus/services/models/colors.dart';
 import 'package:cibus/widgets/spin_kit_ripple.dart';
 // final halfMedianWidth = MediaQuery.of(context).size.width / 2.0; //(for different screens)
 

@@ -1,10 +1,10 @@
-import 'package:cibus/services/my_page_view.dart';
+import 'package:cibus/services/models/my_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/services/login/auth.dart';
-import 'package:cibus/pages/loading_screen.dart';
-import 'package:cibus/services/constants.dart';
+import 'package:cibus/pages/loadingScreens/loading_screen.dart';
+import 'package:cibus/services/models/constants.dart';
 import 'package:cibus/pages/loginScreens/register_screen.dart';
-import 'package:cibus/services/colors.dart';
+import 'package:cibus/services/models/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 const TextStyle textStyleErrorMessage =

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import '../../services/recipe.dart';
-import 'package:cibus/services/database.dart';
-import 'package:cibus/services/constants.dart';
-import 'package:cibus/widgets/ingredientChooserTile.dart';
+import '../../services/models/recipe.dart';
+import 'package:cibus/services/database/database.dart';
+import 'package:cibus/services/models/constants.dart';
+import 'package:cibus/widgets/ingredient_chooser_tile.dart';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:cibus/services/ingredients.dart';
-import 'package:cibus/services/ingredientList.dart';
-import 'package:cibus/widgets/ingredientTileWithoutQuantity.dart';
-import 'package:cibus/services/recipeList.dart';
+import 'package:cibus/services/models/ingredients.dart';
+import 'package:cibus/services/models/ingredient_list.dart';
+import 'package:cibus/widgets/ingredient_tile_without_quantity.dart';
+import 'package:cibus/services/models/recipe_list.dart';
 import 'package:cibus/widgets/recipe_preview.dart';
 import 'package:cibus/widgets/show_rating.dart';
 

@@ -1,13 +1,13 @@
-import 'package:cibus/services/recipe.dart';
-import 'package:cibus/widgets/ingredientChooserTile.dart';
+import 'package:cibus/services/models/recipe.dart';
+import 'package:cibus/widgets/ingredient_chooser_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:cibus/services/database.dart';
+import 'package:cibus/services/database/database.dart';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/login/user.dart';
-import 'package:cibus/services/constants.dart';
+import 'package:cibus/services/models/constants.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:cibus/widgets/ingredientTile.dart';
+import 'package:cibus/widgets/ingredient_tile.dart';
 
 class PopupBodySearchIngredients extends StatefulWidget {
   @override

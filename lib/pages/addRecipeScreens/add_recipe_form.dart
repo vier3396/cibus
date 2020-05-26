@@ -1,23 +1,23 @@
-import 'package:cibus/pages/camera_screen.dart';
+import 'package:cibus/pages/cameraScreens/camera_screen.dart';
 import 'package:cibus/services/camera/uploader.dart';
-import 'package:cibus/services/database.dart';
-import 'package:cibus/services/popup_layout.dart';
+import 'package:cibus/services/database/database.dart';
+import 'package:cibus/services/models/popup_layout.dart';
 import 'package:cibus/widgets/recipe_preview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:cibus/services/colors.dart';
-import '../../services/recipe.dart';
-import '../../services/my_text_form_field.dart';
+import 'package:cibus/services/models/colors.dart';
+import '../../services/models/recipe.dart';
+import '../../services/models/my_text_form_field.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import '../../services/popup_body_search_ingredients.dart';
+import '../../services/models/popup_body_search_ingredients.dart';
 import 'recipe_steps.dart';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:cibus/widgets/ingredientTile.dart';
+import 'package:cibus/widgets/ingredient_tile.dart';
 import 'dart:convert';
-import '../camera_screen.dart';
+import '../cameraScreens/camera_screen.dart';
 
 class AddRecipeForm extends StatefulWidget {
   @override

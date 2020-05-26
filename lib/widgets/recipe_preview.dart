@@ -1,10 +1,10 @@
-import 'package:cibus/services/my_page_view.dart';
+import 'package:cibus/services/models/my_page_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:cibus/services/colors.dart';
-import 'package:cibus/services/recipe.dart';
+import 'package:cibus/services/models/colors.dart';
+import 'package:cibus/services/models/recipe.dart';
 import 'package:provider/provider.dart';
-import 'package:cibus/services/database.dart';
+import 'package:cibus/services/database/database.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 

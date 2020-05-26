@@ -1,4 +1,4 @@
-import 'package:cibus/services/article.dart';
+import 'package:cibus/services/models/article.dart';
 import 'package:flutter/material.dart';
 
 const BoxShadow boxShadowHero = BoxShadow(

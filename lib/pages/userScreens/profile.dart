@@ -1,15 +1,15 @@
-import 'package:cibus/services/constants.dart';
+import 'package:cibus/services/models/constants.dart';
 import 'dart:convert';
 
-import 'package:cibus/pages/home.dart';
+import 'package:cibus/pages/userScreens/home.dart';
 import 'package:cibus/pages/loginScreens/login_screen.dart';
-import 'package:cibus/pages/settings_screen.dart';
-import 'package:cibus/services/database.dart';
+import 'package:cibus/pages/userScreens/settings_screen.dart';
+import 'package:cibus/services/database/database.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:cibus/widgets/vertical_list_view.dart';
 import 'package:flutter/material.dart';
 import 'settings_screen.dart';
-import 'package:cibus/services/recipe.dart';
+import 'package:cibus/services/models/recipe.dart';
 import 'package:cibus/widgets/spin_kit_ripple.dart';
 
 class Profile extends StatelessWidget {

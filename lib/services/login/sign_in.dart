@@ -1,10 +1,10 @@
-import 'package:cibus/services/database.dart';
+import 'package:cibus/services/database/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/pages/loginScreens/login_screen.dart';
-import 'package:cibus/services/constants.dart';
+import 'package:cibus/services/models/constants.dart';
 
 class SignIn {
   loginType whatLogin;
@@ -67,7 +67,9 @@ class SignIn {
       final FirebaseUser user = authResult.user;
       if (isNewUser) {
         await DatabaseService(uid: user.uid).updateUserData(
-            name: user.displayName, description: 'description', favoriteList: []);
+            name: user.displayName,
+            description: 'description',
+            favoriteList: []);
         await DatabaseService(uid: user.uid).updateUserPicture(
             pictureURL:
                 'https://firebasestorage.googleapis.com/v0/b/independent-project-7edde.appspot.com/o/blank_profile_picture.png?alt=media&token=49efb712-d543-40ca-8e33-8c0fdb029ea5');

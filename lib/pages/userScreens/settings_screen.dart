@@ -1,20 +1,19 @@
-import 'package:cibus/pages/adminScreens/admin_screen.dart';
-import 'package:cibus/pages/camera_screen.dart';
-import 'package:cibus/pages/loading_screen.dart';
-import 'package:cibus/services/my_text_form_field.dart';
+import 'package:cibus/pages/cameraScreens/camera_screen.dart';
+import 'package:cibus/pages/loadingScreens/loading_screen.dart';
+import 'package:cibus/services/models/my_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cibus/services/database.dart';
+import 'package:cibus/services/database/database.dart';
 import 'package:cibus/services/login/user.dart';
-import 'package:cibus/services/constants.dart';
+import 'package:cibus/services/models/constants.dart';
 import 'package:flutter/widgets.dart';
-import 'package:cibus/services/imageServices.dart';
-import 'package:cibus/services/colors.dart';
-import 'package:cibus/widgets/toFixProviderInPopupRecipe.dart';
+import 'package:cibus/services/camera/image_services.dart';
+import 'package:cibus/services/models/colors.dart';
+import 'package:cibus/widgets/to_fix_provider_in_popup_recipe.dart';
 import 'package:cibus/services/login/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'loginScreens/login_screen.dart';
+import '../loginScreens/login_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override

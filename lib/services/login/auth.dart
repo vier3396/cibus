@@ -1,5 +1,5 @@
 import 'package:cibus/services/login/user.dart';
-import 'package:cibus/services/database.dart';
+import 'package:cibus/services/database/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {

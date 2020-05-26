@@ -1,17 +1,17 @@
 import 'package:cibus/pages/loginScreens/username_screen.dart';
 import 'package:cibus/pages/loginScreens/verify_screen.dart';
-import 'package:cibus/services/colors.dart';
+import 'package:cibus/services/models/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/services/login/auth.dart';
-import 'package:cibus/services/constants.dart';
+import 'package:cibus/services/models/constants.dart';
 import 'package:cibus/pages/loginScreens/e-sign_in_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_user_stream/firebase_user_stream.dart';
-import 'package:cibus/services/my_page_view.dart';
+import 'package:cibus/services/models/my_page_view.dart';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/login/user.dart';
-import 'package:cibus/services/database.dart';
-import 'package:cibus/pages/loading_screen.dart';
+import 'package:cibus/services/database/database.dart';
+import 'package:cibus/pages/loadingScreens/loading_screen.dart';
 
 const registerButtonColor = kTurquoise;
 const formSizedBox = SizedBox(height: 20.0);

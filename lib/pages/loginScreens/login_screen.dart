@@ -1,12 +1,12 @@
-import 'package:cibus/pages/loading_screen.dart';
+import 'package:cibus/pages/loadingScreens/loading_screen.dart';
 import 'package:cibus/pages/loginScreens/register_screen.dart';
-import 'package:cibus/services/constants.dart';
+import 'package:cibus/services/models/constants.dart';
 import 'package:cibus/pages/loginScreens/e-sign_in_screen.dart';
-import 'package:cibus/services/my_page_view.dart';
+import 'package:cibus/services/models/my_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/services/login/sign_in.dart';
 import 'package:cibus/pages/loginScreens/username_screen.dart';
-import 'package:cibus/services/colors.dart';
+import 'package:cibus/services/models/colors.dart';
 
 const widthLogo = 250.0;
 const heightLogo = 250.0;

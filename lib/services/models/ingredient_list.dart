@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cibus/services/ingredients.dart';
+import 'package:cibus/services/models/ingredients.dart';
 
 class IngredientList extends ChangeNotifier {
   List<Ingredient> ingredientList = [];

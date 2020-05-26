@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cibus/services/recipeList.dart';
-import 'package:cibus/services/recipe.dart';
+import 'package:cibus/services/models/recipe_list.dart';
+import 'package:cibus/services/models/recipe.dart';
 import 'package:cibus/services/login/user.dart';
-import 'package:cibus/services/database.dart';
+import 'package:cibus/services/database/database.dart';
 import 'package:cibus/widgets/recipe_preview.dart';
-import 'package:cibus/services/ingredientList.dart';
-import 'package:cibus/services/database.dart';
+import 'package:cibus/services/models/ingredient_list.dart';
+import 'package:cibus/services/database/database.dart';
 
 class AdminPage extends StatefulWidget {
   @override
