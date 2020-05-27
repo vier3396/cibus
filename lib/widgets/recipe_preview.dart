@@ -1,10 +1,12 @@
-import 'package:cibus/services/constants.dart';
+import 'package:cibus/services/models/my_page_view.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:cibus/services/models/constants.dart';
 import 'package:cibus/widgets/submit_recipe_button.dart';
 import 'package:flutter/material.dart';
-import 'package:cibus/services/colors.dart';
-import 'package:cibus/services/recipe.dart';
+import 'package:cibus/services/models/colors.dart';
+import 'package:cibus/services/models/recipe.dart';
 import 'package:provider/provider.dart';
-import 'package:cibus/services/database.dart';
+import 'package:cibus/services/database/database.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'add_start_buttons.dart';
@@ -32,6 +34,7 @@ class RecipePreview extends StatefulWidget {
 }
 
 class _RecipePreviewState extends State<RecipePreview> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     User user = Provider.of<User>(context);
@@ -39,6 +42,7 @@ class _RecipePreviewState extends State<RecipePreview> {
 
     return Consumer<Recipe>(builder: (context, recipe, child) {
       return Scaffold(
+        key: _scaffoldKey,
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Stack(
@@ -340,9 +344,19 @@ class _RecipePreviewState extends State<RecipePreview> {
             onPressed: () {
               database.reportRecipe(recipeId: recipeId);
               Navigator.of(context).pop();
+              _displaySnackBar(context);
             },
             child: Text('Report'))
       ],
     );
+  }
+
+  _displaySnackBar(BuildContext context) {
+    final snackBar = SnackBar(
+      backgroundColor: kCoral,
+      content: Text("Recipe reported. The Cibus Admins will have a look!"),
+      duration: Duration(seconds: 2),
+    );
+    _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 }

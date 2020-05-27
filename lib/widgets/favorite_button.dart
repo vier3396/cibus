@@ -1,16 +1,13 @@
 import 'package:cibus/services/colors.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:flutter/material.dart';
-import '../services/database.dart';
-import '../services/recipe.dart';
+import '../services/database/database.dart';
+import '../services/models/recipe.dart';
 import 'package:provider/provider.dart';
 
 const kFavoriteIconSize = 35.0;
 
 class FavoriteButton extends StatefulWidget {
-  final UserData userData;
-  FavoriteButton({this.userData});
-
   @override
   _FavoriteButtonState createState() => _FavoriteButtonState();
 }

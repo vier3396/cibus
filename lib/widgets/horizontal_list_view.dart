@@ -1,8 +1,8 @@
-import 'package:cibus/services/constants.dart';
+import 'package:cibus/services/models/constants.dart';
 import 'package:cibus/widgets/recipe_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cibus/services/recipe.dart';
+import 'package:cibus/services/models/recipe.dart';
 //import 'favorite_button.dart';
 
 TextStyle textStyleTitle = TextStyle(
@@ -163,5 +163,4 @@ class _HorizontalListViewState extends State<HorizontalListView> {
       ],
     );
   }
-
 }

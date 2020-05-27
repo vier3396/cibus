@@ -1,12 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:cibus/services/login/user.dart';
-import 'package:cibus/services/database.dart';
+import 'package:cibus/services/database/database.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cibus/services/login/auth.dart';
-import 'package:cibus/pages/loading_screen.dart';
-import 'package:cibus/services/my_page_view.dart';
-import 'package:cibus/services/colors.dart';
+import 'package:cibus/pages/loadingScreens/loading_screen.dart';
+import 'package:cibus/services/models/my_page_view.dart';
+import 'package:cibus/services/models/colors.dart';
 
 class VerifyScreen extends StatefulWidget {
   @override
@@ -29,10 +31,11 @@ class _VerifyScreenState extends State<VerifyScreen> {
               : Scaffold(
                   body: Column(
                     children: <Widget>[
+                      SizedBox(height: 50),
                       SafeArea(
                         child: Text(
                           'Check your email and verify it.',
-                          style: TextStyle(fontSize: 30.0),
+                          style: TextStyle(fontSize: 28.0),
                         ),
                       ),
                       SizedBox(height: 40.0),
@@ -52,13 +55,13 @@ class _VerifyScreenState extends State<VerifyScreen> {
                             child: Row(
                               children: <Widget>[
                                 Container(
-                                  width: 170,
+                                  width: 160,
                                   child: RaisedButton(
                                     color: kCoral,
                                     child: Align(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
-                                        'Resend verification email?',
+                                        'Resend verification \n email',
                                         style: TextStyle(color: Colors.black),
                                       ),
                                     ),
@@ -74,13 +77,13 @@ class _VerifyScreenState extends State<VerifyScreen> {
                                     },
                                   ),
                                 ),
-                                SizedBox(width: 40.0),
+                                SizedBox(width: 20.0),
                                 Container(
-                                  width: 170,
+                                  width: 160,
                                   child: RaisedButton(
                                     color: kCoral,
                                     child: Text(
-                                      'verified?',
+                                      "I've verified \n my email",
                                       style: TextStyle(color: Colors.black),
                                     ),
                                     onPressed: () async {
@@ -106,7 +109,11 @@ class _VerifyScreenState extends State<VerifyScreen> {
                                           ),
                                         );
                                       } else {
-                                        _verifyDialog();
+                                        Timer(Duration(seconds: 3), () {
+                                          print(
+                                              "Yeah, this line is printed after 3 second");
+                                          _verifyDialog();
+                                        });
                                       }
                                       print(_firebaseUser.isEmailVerified);
                                       _firebaseUser
@@ -121,7 +128,6 @@ class _VerifyScreenState extends State<VerifyScreen> {
                         ],
                       ),
                       SizedBox(width: 10.0),
-                      Text(user.isEmail.toString()),
                     ],
                   ),
                 );

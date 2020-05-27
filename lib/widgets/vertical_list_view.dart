@@ -1,10 +1,11 @@
-import 'package:cibus/services/recipe.dart';
+import 'package:cibus/services/database/database.dart';
+import 'package:cibus/services/models/recipe.dart';
 import 'package:cibus/widgets/recipe_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:cibus/services/login/user.dart';
+import 'package:cibus/services/models/constants.dart';
 import 'package:cibus/services/colors.dart';
-import 'package:cibus/services/database.dart';
-import 'package:cibus/services/constants.dart';
 import 'package:cibus/widgets/show_rating.dart';
 
 TextStyle textStyleTitle = TextStyle(
@@ -33,7 +34,6 @@ class _VerticalListViewState extends State<VerticalListView> {
 
   @override
   Widget build(BuildContext context) {
-    //print(widget.recipes[0].title);
     return Column(
       children: <Widget>[
         Padding(

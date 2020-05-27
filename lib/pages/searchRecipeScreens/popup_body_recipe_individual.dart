@@ -1,5 +1,6 @@
+import 'package:cibus/services/models/colors.dart';
 import 'package:flutter/material.dart';
-import '../../services/recipe.dart';
+import '../../services/models/recipe.dart';
 
 const TextStyle ingredientsTitleStyle = TextStyle(
   fontSize: 18.0,

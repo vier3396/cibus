@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cibus/services/recipe.dart';
+import 'package:cibus/services/models/recipe.dart';
 
 class RatingWidget extends StatelessWidget {
   @override

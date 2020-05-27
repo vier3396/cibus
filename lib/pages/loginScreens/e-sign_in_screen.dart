@@ -1,10 +1,10 @@
-import 'package:cibus/services/my_page_view.dart';
+import 'package:cibus/services/models/my_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/services/login/auth.dart';
-import 'package:cibus/pages/loading_screen.dart';
-import 'package:cibus/services/constants.dart';
+import 'package:cibus/pages/loadingScreens/loading_screen.dart';
+import 'package:cibus/services/models/constants.dart';
 import 'package:cibus/pages/loginScreens/register_screen.dart';
-import 'package:cibus/services/colors.dart';
+import 'package:cibus/services/models/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 const TextStyle textStyleErrorMessage =
@@ -112,7 +112,7 @@ class _EmailSignInState extends State<EmailSignIn> {
                               _forgotDialog();
                             },
                           ),
-                          SizedBox(width: 80.0),
+                          SizedBox(width: 40.0),
                           RaisedButton(
                             color: kCoral,
                             child: Text('Sign In',
@@ -185,24 +185,47 @@ class _EmailSignInState extends State<EmailSignIn> {
           actions: <Widget>[
             Column(
               children: <Widget>[
-                FlatButton(
-                  child: Text('Reset Password'),
-                  onPressed: () async {
-                    setState(() {
-                      loading = false;
-                    });
-                    try {
-                      await _authInstance.sendPasswordResetEmail(
-                          email: forgotEmail);
-                      Navigator.of(context).pop();
-                    } catch (e) {
-                      print(e.message);
-                      //print('runtimeType: $e.runtimeType');
-                      setState(() {
-                        errorMessage = e.message;
-                      });
-                    }
-                  },
+                Row(
+                  children: <Widget>[
+                    FlatButton(
+                      child: Text(
+                        "Close",
+                        style: TextStyle(
+                          color: kCoral,
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        setState(() {
+                          loading = false;
+                        });
+                      },
+                    ),
+                    FlatButton(
+                      child: Text(
+                        'Reset Password',
+                        style: TextStyle(
+                          color: kCoral,
+                        ),
+                      ),
+                      onPressed: () async {
+                        setState(() {
+                          loading = false;
+                        });
+                        try {
+                          await _authInstance.sendPasswordResetEmail(
+                              email: forgotEmail);
+                          Navigator.of(context).pop();
+                        } catch (e) {
+                          print(e.message);
+                          //print('runtimeType: $e.runtimeType');
+                          setState(() {
+                            errorMessage = e.message;
+                          });
+                        }
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),
