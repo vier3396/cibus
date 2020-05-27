@@ -1,10 +1,10 @@
-import 'package:cibus/services/database.dart';
 import 'package:cibus/services/recipe.dart';
 import 'package:cibus/widgets/recipe_preview.dart';
-import 'package:cibus/widgets/show_rating.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/colors.dart';
+import 'package:cibus/services/database.dart';
+import 'package:cibus/services/constants.dart';
 
 TextStyle textStyleTitle = TextStyle(
   fontSize: 22.0,
@@ -107,8 +107,8 @@ class _VerticalListViewState extends State<VerticalListView> {
                                   height: 180.0,
                                   width: 180.0,
                                   image: NetworkImage(widget
-                                          .recipes[index].imageURL ??
-                                      'https://firebasestorage.googleapis.com/v0/b/independent-project-7edde.appspot.com/o/images%2F2020-05-08%2011%3A32%3A16.330607.png?alt=media&token=1e4bff1d-c08b-4afa-a1f3-a975e46e89c5'),
+                                      .recipes[index]
+                                      .imageURL ?? kDefaultRecipePic),
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -135,8 +135,8 @@ class _VerticalListViewState extends State<VerticalListView> {
                               //TODO fixa denna knapp
                               /*
                               Positioned(
-                                right: 10.0,
-                                top: 10.0,
+                                right: 2.0,
+                                bottom: 2.0,
                                 child: FavoriteButton(),
                               ),
 
@@ -164,11 +164,14 @@ class _VerticalListViewState extends State<VerticalListView> {
                                         'Could not find title',
                                     style: textStyleTitle,
                                   ),
-                                  Text(
-                                    widget.recipes[index].description ??
-                                        'Could not find description',
-                                    style: TextStyle(
-                                      color: Colors.grey,
+                                  Expanded(
+                                    child: Text(
+                                      widget.recipes[index].description ??
+                                          'Could not find description',
+                                      overflow: TextOverflow.fade,
+                                      style: TextStyle(
+                                        color: Colors.grey,
+                                      ),
                                     ),
                                   ),
                                   //TODO: funkar inte

@@ -3,10 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:cibus/services/database.dart';
 import 'package:provider/provider.dart';
-import 'package:cibus/services/constants.dart';
-import 'package:cibus/pages/firstScreen.dart';
-import 'package:cibus/services/login/auth.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cibus/services/colors.dart';
 
 OutlineInputBorder textInputBorder = OutlineInputBorder(

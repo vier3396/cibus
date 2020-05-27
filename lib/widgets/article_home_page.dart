@@ -15,7 +15,7 @@ class ArticleHomePage extends StatelessWidget {
           builder: (context) {
             return ArticlePage(
               article: article,
-              hero: article.articleID,
+              heroTag: article.articleID,
             );
           },
         ));

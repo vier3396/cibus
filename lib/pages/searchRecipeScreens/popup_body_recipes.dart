@@ -172,87 +172,85 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                       final recipeListProvider =
                           Provider.of<RecipeList>(context, listen: false);
 
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) {
-                            //TODO fixa navigator till något bättre?
-                            return ChangeNotifierProvider.value(
-                              value: recipeListProvider,
-                              child: ChangeNotifierProvider.value(
-                                  value: popProvider,
-                                  child: RecipePreview(
-                                    preview: false,
-                                    index: index,
-                                  )),
-                            );
-                            ;
-                          },
-                        ),
-                      );
-                      //ta rätt recept från recipeList och hämta ingredienserna
-                      // skapa ett recipeobjekt och skicka till nästa sida
-                      //skicka in recipeList[index] i en funktion och där göra ett nytt recipe
-                    },
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        ListTile(
-                          leading: Image(
-                            image: NetworkImage(context
-                                    .read<RecipeList>()
-                                    .recipeList[index]['imageURL'] ??
-                                'https://firebasestorage.googleapis.com/v0/b/independent-project-7edde.appspot.com/o/images%2F2020-05-08%2011%3A32%3A16.330607.png?alt=media&token=1e4bff1d-c08b-4afa-a1f3-a975e46e89c5'),
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) {
+                              //TODO fixa navigator till något bättre?
+                              return ChangeNotifierProvider.value(
+                                value: recipeListProvider,
+                                child: ChangeNotifierProvider.value(
+                                    value: popProvider,
+                                    child: RecipePreview(
+                                      preview: false,
+                                      index: index,
+                                    )),
+                              );
+                            },
                           ),
-                          title: Text(context
-                                  .read<RecipeList>()
-                                  .recipeList[index]['title'] ??
-                              '??'),
-                          subtitle: Text(context
-                                  .read<RecipeList>()
-                                  .recipeList[index]['description'] ??
-                              '??'),
-                        ),
-                        ButtonBar(
-                          alignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            Column(
-                              children: <Widget>[
-                                ShowRating(
-                                    rating: context
-                                                .read<RecipeList>()
-                                                .recipeList[index]
-                                            ['averageRating'] ??
-                                        0,
-                                    imageHeight: 20.0),
-                                Text(context
-                                        .read<RecipeList>()
-                                        .recipeList[index]['averageRating']
-                                        .toStringAsPrecision(2)
-                                        .toString() ??
-                                    '??'),
-                              ],
+                        );
+                        //ta rätt recept från recipeList och hämta ingredienserna
+                        // skapa ett recipeobjekt och skicka till nästa sida
+                        //skicka in recipeList[index] i en funktion och där göra ett nytt recipe
+                      },
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          ListTile(
+                            leading: Image(
+                              image: NetworkImage(context
+                                      .read<RecipeList>()
+                                      .recipeList[index]['imageURL'] ??
+                                  kDefaultRecipePic),
                             ),
-                            SizedBox(width: 50),
-                            Column(
-                              children: <Widget>[
-                                Text(context
-                                        .read<RecipeList>()
-                                        .recipeList[index]['time']
-                                        .toString() ??
-                                    '??'),
-                                Text("minutes"),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
+                            title: Text(context
+                                    .read<RecipeList>()
+                                    .recipeList[index]['title'] ??
+                                '??'),
+                            subtitle: Text(context
+                                    .read<RecipeList>()
+                                    .recipeList[index]['description'] ??
+                                '??'),
+                          ),
+                          ButtonBar(
+                            alignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              Column(
+                                children: <Widget>[
+                                  ShowRating(rating: context
+                                                  .read<RecipeList>()
+                                                  .recipeList[index]
+                                              ['averageRating'] ??
+                                          0, imageHeight: 20.0),
+                                  Text(context
+                                          .read<RecipeList>()
+                                          .recipeList[index]['averageRating']
+                                          .toStringAsPrecision(2)
+                                          .toString() ??
+                                      '??'),
+                                ],
+                              ),
+                              SizedBox(width: 50),
+                              Column(
+                                children: <Widget>[
+                                  Text(context
+                                          .read<RecipeList>()
+                                          .recipeList[index]['time']
+                                          .toString() ??
+                                      '??'),
+                                  Text("minutes"),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
-              itemCount: Provider.of<RecipeList>(context).recipeCount,
-            ),
-          ],
+                  );
+                },
+                itemCount: Provider.of<RecipeList>(context).recipeCount,
+              ),
+            ],
+          ),
         ),
       ),
     );

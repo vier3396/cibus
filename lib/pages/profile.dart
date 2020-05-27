@@ -24,84 +24,82 @@ class Profile extends StatelessWidget {
           if (snapshot.hasData) {
             UserData userData = snapshot.data;
             return Scaffold(
-              body: SafeArea(
-                child: ListView(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          CircleAvatar(
-                            backgroundImage: NetworkImage(
-                                userData.profilePic ?? kBackupProfilePic),
-                            radius: 40.0,
-                          ),
-                          SizedBox(width: 20.0),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                SizedBox(height: 20.0),
-                                Text(
-                                  userData.name ?? "Cannot find name",
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontSize: 20.0,
-                                  ),
+              body: ListView(
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.all(20.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        CircleAvatar(
+                          backgroundImage: NetworkImage(
+                              userData.profilePic ?? kDefaultProfilePic),
+                          radius: 50.0,
+                        ),
+                        SizedBox(width: 20.0),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              SizedBox(height: 20.0),
+                              Text(
+                                userData.name ?? "Cannot find name",
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 20.0,
                                 ),
-                                SizedBox(height: 5.0),
-                                Text(
-                                  userData.description ??
-                                      "Cannot find description",
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 5,
-                                  style: TextStyle(),
-                                ),
-                              ],
-                            ),
+                              ),
+                              SizedBox(height: 5.0),
+                              Text(
+                                userData.description ??
+                                    "Cannot find description",
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 5,
+                                style: TextStyle(),
+                              ),
+                            ],
                           ),
-                          SizedBox(width: 40.0),
-                          SettingsButton(),
-                        ],
-                      ),
+                        ),
+                        SizedBox(width: 40.0),
+                        SettingsButton(),
+                      ],
                     ),
-                    Divider(),
-                    FutureBuilder(
-                      future: getUserRecipes(snapshot.data),
-                      builder: (context, futureSnapshot) {
-                        if (futureSnapshot.hasError)
-                          return Text('Error: ${futureSnapshot.error}');
-                        switch (futureSnapshot.connectionState) {
-                          case ConnectionState.none:
-                            return Center(child: CircularProgressIndicator());
-                          case ConnectionState.waiting:
-                            return Center(child: CircularProgressIndicator());
-                          case ConnectionState.active:
-                            return Center(child: CircularProgressIndicator());
-                          case ConnectionState.done:
-                            {
-                              if (futureSnapshot.hasData) {
-                                List<Recipe> myRecipes = futureSnapshot.data;
-                                if (myRecipes.isNotEmpty) {
-                                  return VerticalListView(
-                                    title: 'Your recipes',
-                                    recipes: myRecipes,
-                                    myOwnUserPage: true,
-                                  );
-                                } else {
-                                  return Text(
-                                      'Sharing is caring<3 feel free to upload some of your own recipes'); //TODO styla denna
-                                }
-                              }
-                              return Text('There\'s no available data.');
+                  ),
+                  Divider(),
+                FutureBuilder(
+                  future: getUserRecipes(snapshot.data),
+                  builder: (context, futureSnapshot) {
+                    if (futureSnapshot.hasError)
+                      return Text('Error: ${futureSnapshot.error}');
+                    switch (futureSnapshot.connectionState) {
+                      case ConnectionState.none:
+                        return Center(child: CircularProgressIndicator());
+                      case ConnectionState.waiting:
+                        return Center(child: CircularProgressIndicator());
+                      case ConnectionState.active:
+                        return Center(child: CircularProgressIndicator());
+                      case ConnectionState.done:
+                        {
+                          if (futureSnapshot.hasData) {
+                            List<Recipe> myRecipes = futureSnapshot.data;
+                            if (myRecipes.isNotEmpty) {
+                              return VerticalListView(
+                                title: 'Your recipes',
+                                recipes: myRecipes,
+                                myOwnUserPage: true,
+                              );
+                            } else {
+                              return Text(
+                                  'Sharing is caring<3 feel free to upload some of your own recipes'); //TODO styla denna
                             }
+                          }
+                          return Text('There\'s no available data.');
                         }
-                        return null;
-                      },
-                    ),
-                  ],
+                    }
+                    return null;
+                  },
                 ),
+                ],
               ),
             );
           } else {
