@@ -66,39 +66,39 @@ class Profile extends StatelessWidget {
                     ),
                   ),
                   Divider(),
-                FutureBuilder(
-                  future: getUserRecipes(snapshot.data),
-                  builder: (context, futureSnapshot) {
-                    if (futureSnapshot.hasError)
-                      return Text('Error: ${futureSnapshot.error}');
-                    switch (futureSnapshot.connectionState) {
-                      case ConnectionState.none:
-                        return Center(child: CircularProgressIndicator());
-                      case ConnectionState.waiting:
-                        return Center(child: CircularProgressIndicator());
-                      case ConnectionState.active:
-                        return Center(child: CircularProgressIndicator());
-                      case ConnectionState.done:
-                        {
-                          if (futureSnapshot.hasData) {
-                            List<Recipe> myRecipes = futureSnapshot.data;
-                            if (myRecipes.isNotEmpty) {
-                              return VerticalListView(
-                                title: 'Your recipes',
-                                recipes: myRecipes,
-                                myOwnUserPage: true,
-                              );
-                            } else {
-                              return Text(
-                                  'Sharing is caring<3 feel free to upload some of your own recipes'); //TODO styla denna
+                  FutureBuilder(
+                    future: getUserRecipes(snapshot.data),
+                    builder: (context, futureSnapshot) {
+                      if (futureSnapshot.hasError)
+                        return Text('Error: ${futureSnapshot.error}');
+                      switch (futureSnapshot.connectionState) {
+                        case ConnectionState.none:
+                          return Center(child: CircularProgressIndicator());
+                        case ConnectionState.waiting:
+                          return Center(child: CircularProgressIndicator());
+                        case ConnectionState.active:
+                          return Center(child: CircularProgressIndicator());
+                        case ConnectionState.done:
+                          {
+                            if (futureSnapshot.hasData) {
+                              List<Recipe> myRecipes = futureSnapshot.data;
+                              if (myRecipes.isNotEmpty) {
+                                return VerticalListView(
+                                  title: 'Your recipes',
+                                  recipes: myRecipes,
+                                  myOwnUserPage: true,
+                                );
+                              } else {
+                                return Text(
+                                    'Sharing is caring<3 feel free to upload some of your own recipes'); //TODO styla denna
+                              }
                             }
+                            return Text('There\'s no available data.');
                           }
-                          return Text('There\'s no available data.');
-                        }
-                    }
-                    return null;
-                  },
-                ),
+                      }
+                      return null;
+                    },
+                  ),
                 ],
               ),
             );

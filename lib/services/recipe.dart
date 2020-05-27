@@ -102,8 +102,7 @@ class Recipe extends ChangeNotifier {
         'description': this.description,
         //'ingredients' : this.ingredients,
         'listOfSteps': this.listOfSteps,
-        'imageURL': this.imageURL ??
-            kDefaultRecipePic,
+        'imageURL': this.imageURL ?? kDefaultRecipePic,
         'time': this.time,
         'userId': this.userId,
         'ingredientsArray': this.ingredientList,
