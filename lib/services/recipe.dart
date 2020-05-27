@@ -34,6 +34,7 @@ class Recipe extends ChangeNotifier {
   }
 
   void addRecipeProperties(Recipe recipe) {
+    this.username = recipe.username;
     this.recipeId = recipe.recipeId;
     this.title = recipe.title;
     this.description = recipe.description;
@@ -115,9 +116,8 @@ class Recipe extends ChangeNotifier {
 
   void addAllPropertiesFromDocument(
       {Map<String, dynamic> recipe, String recipeID}) async {
+    this.username = recipe['username'];
     this.title = recipe['title'];
-    this.ingredients =
-        await DatabaseService().getIngredientCollectionFromRecipe(recipeID);
     this.imageURL = recipe['imageURL'];
     this.userId = recipe['userId'];
     this.time = recipe['time'];
@@ -125,6 +125,8 @@ class Recipe extends ChangeNotifier {
     this.description = recipe['description'];
     this.recipeId = recipeID;
     this.ratings = recipe['ratings'];
+    this.ingredients =
+        await DatabaseService().getIngredientCollectionFromRecipe(recipeID);
     notifyListeners();
   }
 

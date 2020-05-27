@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:provider/provider.dart';
 
+const kStarIconSize = 35.0;
+
 class AddStarButtons extends StatelessWidget {
   final String recipeID;
   final User user;
@@ -18,6 +20,7 @@ class AddStarButtons extends StatelessWidget {
         GestureDetector(
           child: Icon(
             Icons.star,
+            size: kStarIconSize,
             color: myRating >= 1 ? Colors.amberAccent : Colors.grey,
           ),
           onTap: () {
@@ -35,6 +38,7 @@ class AddStarButtons extends StatelessWidget {
         GestureDetector(
           child: Icon(
             Icons.star,
+            size: kStarIconSize,
             color: myRating >= 2 ? Colors.amberAccent : Colors.grey,
           ),
           onTap: () {
@@ -51,6 +55,7 @@ class AddStarButtons extends StatelessWidget {
         GestureDetector(
           child: Icon(
             Icons.star,
+            size: kStarIconSize,
             color: myRating >= 3 ? Colors.amberAccent : Colors.grey,
           ),
           onTap: () {
@@ -66,6 +71,7 @@ class AddStarButtons extends StatelessWidget {
         GestureDetector(
           child: Icon(
             Icons.star,
+            size: kStarIconSize,
             color: myRating >= 4 ? Colors.amberAccent : Colors.grey,
           ),
           onTap: () {
@@ -82,6 +88,7 @@ class AddStarButtons extends StatelessWidget {
         GestureDetector(
           child: Icon(
             Icons.star,
+            size: kStarIconSize,
             color: myRating >= 5 ? Colors.amberAccent : Colors.grey,
           ),
           onTap: () {

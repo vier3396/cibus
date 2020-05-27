@@ -1,7 +1,6 @@
 import 'package:cibus/services/constants.dart';
 import 'package:cibus/services/recipe.dart';
 import 'package:cibus/widgets/recipe_preview.dart';
-import 'package:cibus/widgets/show_rating.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -48,13 +47,13 @@ class VerticalListView extends StatelessWidget {
                 Recipe currentRecipe = recipes[index];
                 return GestureDetector(
                   onTap: () {
-                    print('currentRecipe.rating = ${currentRecipe.rating}');
-
+                    print('currentRecipe.username = ${currentRecipe.username}');
                     Provider.of<Recipe>(context, listen: false)
                         .addRecipeProperties(currentRecipe);
 
                     final recipeProvider =
                     Provider.of<Recipe>(context, listen: false);
+                    print('recipeProvider.username = ${recipeProvider.username}');
 
                     Navigator.push(
                       context,
@@ -99,11 +98,11 @@ class VerticalListView extends StatelessWidget {
                                   fit: BoxFit.cover,
                                 ),
                               ),
-                              //TODO fixa denna knapp
+                              //TODO fixa favorite knapp
                               /*
                               Positioned(
-                                right: 10.0,
-                                top: 10.0,
+                                right: 2.0,
+                                bottom: 2.0,
                                 child: FavoriteButton(),
                               ),
 
@@ -132,16 +131,17 @@ class VerticalListView extends StatelessWidget {
                                         'Could not find title',
                                     style: textStyleTitle,
                                   ),
-                                  Text(
-                                    currentRecipe.description ??
-                                        'Could not find description',
-                                    style: TextStyle(
-                                      color: Colors.grey,
+                                  Expanded(
+                                    child: Text(
+                                      currentRecipe.description ??
+                                          'Could not find description',
+                                      overflow: TextOverflow.fade,
+                                      style: TextStyle(
+                                        color: Colors.grey,
+                                      ),
                                     ),
                                   ),
-                                  //TODO: funkar inte
-                                  ShowRating(rating: currentRecipe.rating ??
-                                      0, imageHeight: 20.0),
+                                  //TODO: Show rating
                                 ],
                               ),
                             ),

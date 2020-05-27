@@ -26,7 +26,7 @@ class AuthorWidget extends StatelessWidget {
       },
       child: Text(Provider.of<Recipe>(context).username ?? 'userName',
         style: TextStyle(
-            fontSize: 20.0, fontWeight: FontWeight.w500, color: Colors.white),
+            fontSize: 22.0, fontWeight: FontWeight.bold, color: Colors.white),
       ),
     );
   }

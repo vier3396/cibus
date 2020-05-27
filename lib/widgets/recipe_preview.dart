@@ -10,9 +10,17 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'add_start_buttons.dart';
 import 'author_widget.dart';
 import 'edit_recipe_button.dart';
+import 'favorite_button.dart';
 import 'navigate_back_button.dart';
 
 //TODO further refactor widgets?
+const kShadowList = [
+  Shadow(
+    offset: Offset(0.1, 0.0),
+    blurRadius: 6.0,
+    color: Colors.grey,
+  )
+];
 
 class RecipePreview extends StatefulWidget {
   final int index;
@@ -24,13 +32,10 @@ class RecipePreview extends StatefulWidget {
 }
 
 class _RecipePreviewState extends State<RecipePreview> {
-  void getRecipe({user, database}) async {}
-
   @override
   Widget build(BuildContext context) {
     User user = Provider.of<User>(context);
     DatabaseService database = DatabaseService(uid: user.uid);
-    getRecipe(user: user, database: database);
 
     return Consumer<Recipe>(builder: (context, recipe, child) {
       return Scaffold(
@@ -60,8 +65,9 @@ class _RecipePreviewState extends State<RecipePreview> {
                         child: Text(recipe.title ?? 'title',
                             style: TextStyle(
                                 color: Colors.white,
+                                //shadows: kShadowList,
                                 fontSize: 25.0,
-                                fontWeight: FontWeight.w500)),
+                                fontWeight: FontWeight.bold)),
                       ),
                     ),
                   ),
@@ -72,14 +78,22 @@ class _RecipePreviewState extends State<RecipePreview> {
                       '${recipe.time ?? '?'} min',
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.w600),
+                          //shadows: kShadowList,
+                          fontSize: 22.0,
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                   widget.preview
                       ? Text('')
                       : Positioned(
-                          top: 30.0,
+                          top: 65,
+                          right: 10,
+                          child: FavoriteButton(),
+                        ),
+                  widget.preview
+                      ? Text('')
+                      : Positioned(
+                          top: 40.0,
                           left: 0.0,
                           child: NavigateBackButton(),
                         ),
@@ -112,7 +126,7 @@ class _RecipePreviewState extends State<RecipePreview> {
                       flex: 2,
                       child: Container(
                         child: Text(
-                          recipe.description,
+                          recipe.description ?? 'Cannot find description',
                           style: TextStyle(
                               fontSize: 18.0, fontWeight: FontWeight.w600),
                         ),
@@ -247,14 +261,16 @@ class _RecipePreviewState extends State<RecipePreview> {
                                           fontWeight: FontWeight.w600),
                                     ),
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
                                       children: <Widget>[
                                         SizedBox(),
                                         AddStarButtons(
                                             recipeID: recipe.recipeId,
                                             user: user,
-                                            myRating: Provider.of<Recipe>(context)
-                                                .yourRating),
+                                            myRating:
+                                                Provider.of<Recipe>(context)
+                                                    .yourRating),
                                         SizedBox(),
                                       ],
                                     )
