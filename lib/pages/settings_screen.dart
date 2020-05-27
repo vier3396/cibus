@@ -1,13 +1,13 @@
-import 'package:cibus/pages/camera_screen.dart';
-import 'package:cibus/pages/loading_screen.dart';
+import 'package:cibus/services/models/colors.dart';
+import 'package:cibus/services/models/constants.dart';
+import 'package:cibus/widgets/spin_kit_ripple.dart';
+import 'package:cibus/widgets/to_fix_provider_in_popup_recipe.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cibus/services/database.dart';
+import 'package:cibus/services/database/database.dart';
 import 'package:cibus/services/login/user.dart';
-import 'package:cibus/services/constants.dart';
 import 'package:flutter/widgets.dart';
-import 'package:cibus/services/colors.dart';
-import 'package:cibus/widgets/toFixProviderInPopupRecipe.dart';
+import 'package:cibus/pages/cameraScreens/camera_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -47,7 +47,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             UserData userData = snapshot.data;
-
             return Scaffold(
               appBar: AppBar(
                 title: Text('Settings'),
@@ -144,7 +143,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             );
           } else {
-            return LoadingScreen();
+            return Center(child: MySpinKitRipple());
           }
         });
   }

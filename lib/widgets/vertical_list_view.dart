@@ -1,11 +1,10 @@
 import 'package:cibus/services/database/database.dart';
+import 'package:cibus/services/models/colors.dart';
 import 'package:cibus/services/models/recipe.dart';
 import 'package:cibus/widgets/recipe_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cibus/services/login/user.dart';
 import 'package:cibus/services/models/constants.dart';
-import 'package:cibus/services/colors.dart';
 import 'package:cibus/widgets/show_rating.dart';
 
 TextStyle textStyleTitle = TextStyle(
