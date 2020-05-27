@@ -3,8 +3,12 @@ import 'package:cibus/widgets/vertical_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/services/recipe.dart';
 import 'package:cibus/services/login/user.dart';
+import 'package:provider/provider.dart';
+import 'package:cibus/services/database.dart';
+import 'package:cibus/services/colors.dart';
 
-const kNoRecipeText = 'Sharing is caring<3 feel free to upload some of your own recipes';
+const kNoRecipeText =
+    'Sharing is caring<3 feel free to upload some of your own recipes';
 
 class UserPage extends StatelessWidget {
   final List<Recipe> recipes;
@@ -27,7 +31,7 @@ class UserPage extends StatelessWidget {
                 children: <Widget>[
                   CircleAvatar(
                     backgroundImage:
-                    NetworkImage(userData.profilePic ?? kBackupProfilePic),
+                        NetworkImage(userData.profilePic ?? kBackupProfilePic),
                     radius: 50.0,
                   ),
                   SizedBox(width: 20.0),
@@ -53,19 +57,75 @@ class UserPage extends StatelessWidget {
                       ],
                     ),
                   ),
+                  Expanded(
+                    flex: 1,
+                    child: InkWell(
+                      child: Ink(
+                          child: Text(
+                        'Report Abuse',
+                        style: TextStyle(
+                          color: kCoral,
+                        ),
+                      )),
+                      onTap: () {
+                        DatabaseService database = DatabaseService();
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return makeAlertDialog(
+                                userId: userData.uid,
+                                context: context,
+                                database: database);
+                          },
+                        );
+                      },
+                    ),
+                  ),
                 ],
               ),
             ),
             Divider(),
             recipes.isNotEmpty
                 ? VerticalListView(
-              title: "More recipes",
-              recipes: recipes,
-            )
-                : Text(kNoRecipeText), //TODO styla denna
+                    title: "More recipes",
+                    recipes: recipes,
+                    myOwnUserPage: false,
+                  )
+                : Text(kNoRecipeText),
+            //TODO styla denna
           ],
         ),
       ),
+    );
+  }
+
+  AlertDialog makeAlertDialog(
+      {String userId, DatabaseService database, BuildContext context}) {
+    return AlertDialog(
+      title: Text('Report'),
+      content: SingleChildScrollView(
+        child: ListBody(
+          children: <Widget>[
+            Text('Do you want to report this user to the CIBUS Police?')
+          ],
+        ),
+      ),
+      actions: <Widget>[
+        FlatButton(
+          textColor: kCoral,
+          child: Text("Cancel"),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        FlatButton(
+            textColor: kCoral,
+            onPressed: () {
+              database.reportUser(userId: userId);
+              Navigator.of(context).pop();
+            },
+            child: Text('Report'))
+      ],
     );
   }
 }

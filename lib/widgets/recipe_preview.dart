@@ -34,6 +34,7 @@ class _RecipePreviewState extends State<RecipePreview> {
     //print(' recipe ID in recipe: ${Provider.of<Recipe>(context, listen: false).recipeId}');
     getRecipe(user: user, database: database);
     final popProvider = Provider.of<Recipe>(context);
+    print('username: ${Provider.of<Recipe>(context).userId}');
 
     return Consumer<Recipe>(builder: (context, recipe, child) {
       return Scaffold(

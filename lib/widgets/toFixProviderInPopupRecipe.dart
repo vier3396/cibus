@@ -21,7 +21,10 @@ import 'package:cibus/pages/adminPage.dart';
 class WidgetToFixProvider extends StatelessWidget {
   final bool admin;
 
-  WidgetToFixProvider({this.admin});
+  WidgetToFixProvider({
+    this.admin,
+  });
+
   //TODO byt till multiprovider och byt namn
   @override
   Widget build(BuildContext context) {

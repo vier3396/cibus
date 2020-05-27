@@ -16,6 +16,7 @@ class Recipe extends ChangeNotifier {
   String username;
   int yourRating;
   Map ratings;
+  double averageRating;
 
   void addIngredient(
       {String ingredientId,
@@ -43,6 +44,7 @@ class Recipe extends ChangeNotifier {
     this.rating = recipe.rating;
     this.userId = recipe.userId;
     this.ingredientList = recipe.ingredientList;
+    this.username = recipe.username;
     notifyListeners();
   }
 
@@ -114,9 +116,8 @@ class Recipe extends ChangeNotifier {
 
   void addAllPropertiesFromDocument(
       {Map<String, dynamic> recipe, String recipeID}) async {
+    this.username = recipe['username'];
     this.title = recipe['title'];
-    this.ingredients =
-        await DatabaseService().getIngredientCollectionFromRecipe(recipeID);
     this.imageURL = recipe['imageURL'];
     this.userId = recipe['userId'];
     this.time = recipe['time'];
@@ -124,6 +125,9 @@ class Recipe extends ChangeNotifier {
     this.description = recipe['description'];
     this.recipeId = recipeID;
     this.ratings = recipe['ratings'];
+    this.averageRating = recipe['averageRating'];
+    this.ingredients =
+        await DatabaseService().getIngredientCollectionFromRecipe(recipeID);
     notifyListeners();
   }
 

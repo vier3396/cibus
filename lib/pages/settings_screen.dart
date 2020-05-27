@@ -129,7 +129,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                     isAdmin
                         ? RaisedButton(
-                            onPressed: () {
+                            onPressed: () async {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) {

@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:cibus/services/recipe.dart';
 import 'package:cibus/services/ingredients.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class DatabaseService {
   final String uid;
@@ -27,6 +28,39 @@ class DatabaseService {
   final CollectionReference adminCollection =
       Firestore.instance.collection("Admin");
 
+  final CollectionReference reportedUsersCollection =
+      Firestore.instance.collection('ReportedUsers');
+
+  Future<List<UserData>> getUserDataList() async {
+    List<UserData> userDataList = [];
+    final userDataDocuments = await reportedUsersCollection.getDocuments();
+
+    for (DocumentSnapshot document in userDataDocuments.documents) {
+      var user = await userCollection.document(document.documentID).get();
+      UserData userData = UserData(
+          uid: user.documentID,
+          name: user.data['name'],
+          description: user.data['description'],
+          username: user.data['username'],
+          profilePic: user.data['profilePic'],
+          isEmail: user.data['isEmail'],
+          favoriteList: user.data['favoriteList']);
+
+      userDataList.add(userData);
+    }
+
+    return userDataList;
+  }
+
+  void adminRemoveUserTag({String userId}) async {
+    reportedUsersCollection.document(userId).delete();
+  }
+
+  void adminRemoveUser({String userId}) async {
+    userCollection.document(userId).delete();
+    reportedUsersCollection.document(userId).delete();
+  }
+
   Future<bool> checkIfAdmin({String userId}) async {
     var result = await adminCollection.document(userId).get();
     if (result.exists) {
@@ -36,20 +70,55 @@ class DatabaseService {
     }
   }
 
-  void removeTag({String recipeId}) {
+  void reportUser({String userId}) {
+    reportedUsersCollection.document(userId).setData({'userId': userId});
+  }
+
+  void removeReportedRecipeTag({String recipeId}) {
     reportedRecipesCollection.document(recipeId).delete();
   }
 
   void removeRecipe({String recipeId}) {
-    recipeCollection.document().collection('Ingredients').document().delete();
-    recipeCollection.document().collection('Ratings').document().delete();
-    recipeCollection.document().collection('newRatings').document().delete();
+    recipeCollection
+        .document(recipeId)
+        .collection('Ingredients')
+        .document()
+        .delete();
+    recipeCollection
+        .document(recipeId)
+        .collection('Ratings')
+        .document()
+        .delete();
+    recipeCollection
+        .document(recipeId)
+        .collection('newRatings')
+        .document()
+        .delete();
+    recipeCollection.document(recipeId).delete();
+  }
+
+  void adminRemoveRecipe({String recipeId}) {
+    recipeCollection
+        .document(recipeId)
+        .collection('Ingredients')
+        .document()
+        .delete();
+    recipeCollection
+        .document(recipeId)
+        .collection('Ratings')
+        .document()
+        .delete();
+    recipeCollection
+        .document(recipeId)
+        .collection('newRatings')
+        .document()
+        .delete();
     recipeCollection.document(recipeId).delete();
     reportedRecipesCollection.document(recipeId).delete();
   }
 
   final CollectionReference articleCollection =
-  Firestore.instance.collection("Articles");
+      Firestore.instance.collection("Articles");
 
   //Database functions
   Future<Article> findArticle(String articleId) async {
@@ -67,8 +136,6 @@ class DatabaseService {
     );
     return _article;
   }
-
-
 
   Future<List> returnReportedRecipes() async {
     var result = await reportedRecipesCollection.getDocuments();
@@ -103,9 +170,11 @@ class DatabaseService {
       //print(document.data['averageRating']);
       //recipeList[0].data['averageRating'] = averageRating;
       var map = document.data;
-      map['averageRating'] = averageRating ?? 0;
-      map['recipeId'] = document.documentID;
-      mapList.add(map);
+      if (document.data != null) {
+        map['averageRating'] = averageRating ?? 0;
+        map['recipeId'] = document.documentID;
+        mapList.add(map);
+      }
     }
 
     return mapList;
@@ -157,6 +226,21 @@ class DatabaseService {
 
     for (DocumentSnapshot document in recipeResult.documents) {
       Map<String, dynamic> recipeMap = document.data;
+      var ratingResult = await recipeCollection
+          .document(document.documentID)
+          .collection('Ratings')
+          .getDocuments();
+      var ratingDocuments = ratingResult.documents;
+      print(ratingDocuments.isEmpty);
+      double rating = 0;
+      for (DocumentSnapshot ratingDocument in ratingDocuments) {
+        rating = rating + ratingDocument.data['rating'];
+      }
+      double averageRating = rating / ratingDocuments.length;
+      if (averageRating.isNaN) {
+        averageRating = 0.0;
+      }
+      recipeMap['averageRating'] = averageRating;
       Recipe recipe = Recipe();
       recipe.addAllPropertiesFromDocument(
           recipe: recipeMap, recipeID: document.documentID);
