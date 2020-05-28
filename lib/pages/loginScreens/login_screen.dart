@@ -10,7 +10,6 @@ import 'package:cibus/services/models/colors.dart';
 
 const widthLogo = 250.0;
 const heightLogo = 250.0;
-const backgroundColor = kCoral;
 const loginSplashColor = kWarmOrange;
 const loginHighlightedBorderColor = kPalePink;
 const EdgeInsets loginPaddingFbGo = EdgeInsets.only(left: 10, right: 5);
@@ -49,36 +48,41 @@ class _LoginPageState extends State<LoginPage> {
     return loading
         ? LoadingScreen()
         : Scaffold(
-            body: Container(
-              color: backgroundColor,
-              child: Center(
+            backgroundColor: Theme.of(context).accentColor,
+            body: Center(
+              child: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
+                    //Text('Welcome!', style: loginTextStyle,),
                     Image.asset(
                       'assets/coral_lemon.png',
                       height: heightLogo,
                       width: widthLogo,
                     ),
+                    kCibusLogoText,
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: _signInButtonGoogle(),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(8.0),
                       child: _signInButtonFacebook(),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(8.0),
+                      child: _signInButtonGoogle(),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
                       child: _signInEmailButton(),
                     ),
+                    /*
                     SizedBox(height: 20.0),
                     Text('New to CIBUS?', style: newUserTextStyle),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(8.0),
                       child: _registerButton(),
                     ),
+
+                     */
                   ],
                 ),
               ),
@@ -97,20 +101,16 @@ class _LoginPageState extends State<LoginPage> {
         signIn.whatLogin = loginType.google;
         signIn.signInWithGoogle().whenComplete(() {
           if (signIn.isNewUser && signIn.isLoggedInGoogle) {
-            print("två true");
-
             Navigator.of(context).push(MaterialPageRoute(builder: (context) {
               loading = false;
               return UsernameScreen();
             }));
           } else if (signIn.isLoggedInGoogle) {
-            print("ett true");
             loading = false;
             Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(builder: (context) => MyPageView()),
                 (Route<dynamic> route) => false);
           } else {
-            print("funkar ej");
             setState(() {
               loading = false;
             });

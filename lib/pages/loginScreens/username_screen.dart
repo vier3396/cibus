@@ -1,13 +1,10 @@
 import 'package:cibus/pages/loadingScreens/loading_screen.dart';
-import 'package:cibus/pages/loginScreens/login_screen.dart';
 import 'package:cibus/services/models/my_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:cibus/services/database/database.dart';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/models/constants.dart';
-import 'package:cibus/services/login/auth.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cibus/services/models/colors.dart';
 
 OutlineInputBorder textInputBorder = OutlineInputBorder(
@@ -22,7 +19,6 @@ class UsernameScreen extends StatefulWidget {
 class _UsernameScreenState extends State<UsernameScreen> {
   final _formKey = GlobalKey<FormState>();
   String _currentUsername;
-  //bool checkUsername;
   bool loading = false;
 
   @override
@@ -37,19 +33,20 @@ class _UsernameScreenState extends State<UsernameScreen> {
           return loading
               ? LoadingScreen()
               : Scaffold(
+                  resizeToAvoidBottomInset: false,
                   body: Form(
                     key: _formKey,
                     child: SafeArea(
                       child: Padding(
-                        padding: const EdgeInsets.all(15.0),
+                        padding: EdgeInsets.all(15.0),
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            SizedBox(height: 30.0),
                             Text(
-                              'Update your Cibus username',
+                              'Choose your CIBUS username',
                               style: TextStyle(fontSize: 25.0),
                             ),
-                            SizedBox(height: 200.0),
+                            SizedBox(height: 30.0),
                             TextFormField(
                                 initialValue: '',
                                 decoration: InputDecoration(
@@ -60,8 +57,6 @@ class _UsernameScreenState extends State<UsernameScreen> {
                                 validator: (val) {
                                   if (val.length < 3)
                                     return 'Name must be more than 2 characters';
-                                  /*else if (checkUsername == false)
-                              return 'Username is allready taken';*/
                                   return null;
                                 },
                                 onChanged: (val) {
@@ -70,10 +65,12 @@ class _UsernameScreenState extends State<UsernameScreen> {
                                     print(_currentUsername);
                                   });
                                 }),
+                            SizedBox(height: 40.0),
+                            /*
                             RaisedButton(
                               color: kCoral,
                               child: Text(
-                                'update',
+                                'Done',
                                 style: TextStyle(color: Colors.white),
                               ),
                               onPressed: () async {
@@ -82,13 +79,11 @@ class _UsernameScreenState extends State<UsernameScreen> {
                                   bool checkUsername = await DatabaseService()
                                       .isUsernameTaken(
                                           username: _currentUsername);
-                                  print(' checkUsername: $checkUsername');
                                   if (!checkUsername) {
                                     await DatabaseService(uid: user.uid)
                                         .updateUsername(
                                       username: _currentUsername,
                                     );
-                                    print('Creating usernamse');
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
                                         builder: (context) {
@@ -101,7 +96,54 @@ class _UsernameScreenState extends State<UsernameScreen> {
                                   }
                                 }
                               },
-                            )
+                            ),
+
+                             */
+                            ButtonTheme(
+                              height: 52.0,
+                              minWidth: 200.0,
+                              child: FlatButton(
+                                child: Text(
+                                  'Done',
+                                  style: kTextStyleRegisterButton,
+                                  /* TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.w600,
+                                      letterSpacing: 1.1),
+                                      */
+                                ),
+                                color: kCoral,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(25.0)),
+                                ),
+                                onPressed: () async {
+                                  loading = true;
+                                  if (_formKey.currentState.validate()) {
+                                    bool checkUsername = await DatabaseService()
+                                        .isUsernameTaken(
+                                            username: _currentUsername);
+                                    if (!checkUsername) {
+                                      await DatabaseService(uid: user.uid)
+                                          .updateUsername(
+                                        username: _currentUsername,
+                                      );
+                                      Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(
+                                          builder: (context) {
+                                            return MyPageView();
+                                          },
+                                        ),
+                                      );
+                                    } else {
+                                      _usernameDialog();
+                                    }
+                                  }
+                                },
+                              ),
+                            ),
+                            SizedBox(height: 30.0),
                           ],
                         ),
                       ),
@@ -144,19 +186,22 @@ class _UsernameScreenState extends State<UsernameScreen> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Username is already taken'),
+          title: Text('Username already taken'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
                 Text(
-                    'Unfortunately it seems like your username is allready taken. Please try another one'),
+                    'Unfortunately the username is already taken. Please try another one'),
               ],
             ),
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('OK'),
+              child: Text('Ok'),
               onPressed: () {
+                setState(() {
+                  loading = false;
+                });
                 Navigator.of(context).pop();
               },
             ),

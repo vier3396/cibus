@@ -31,7 +31,6 @@ class SignIn {
 
     isNewUser = authResult.additionalUserInfo.isNewUser;
     final FirebaseUser user = authResult.user;
-    print(isNewUser);
     if (isNewUser) {
       await DatabaseService(uid: user.uid).updateUserData(
           name: user.displayName, description: 'description', favoriteList: []);

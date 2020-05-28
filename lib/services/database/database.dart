@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:cibus/services/models/recipe.dart';
 import 'package:cibus/services/models/ingredients.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class DatabaseService {
   final String uid;
@@ -181,7 +180,7 @@ class DatabaseService {
   }
 
   Future updateUserData(
-      {String name, String description, List<Recipe> favoriteList}) async {
+      {String name, String description, List<dynamic> favoriteList}) async {
     return await userCollection.document(uid).setData({
       'name': name,
       'description': description,
