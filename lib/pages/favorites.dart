@@ -66,7 +66,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                                         ),
                                       ),
                                       Text(
-                                        'Checkout our large database of recipes!',
+                                        'Check out our large database of recipes!',
                                         style: TextStyle(
                                           color: Colors.grey,
                                           fontSize: 20.0,

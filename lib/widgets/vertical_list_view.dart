@@ -1,9 +1,12 @@
 import 'package:cibus/services/constants.dart';
+import 'package:cibus/services/login/auth.dart';
 import 'package:cibus/services/recipe.dart';
 import 'package:cibus/widgets/recipe_preview.dart';
 import 'package:cibus/widgets/show_rating.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:cibus/services/database.dart';
+import 'package:cibus/services/login/user.dart';
 
 TextStyle textStyleTitle = TextStyle(
   fontSize: 22.0,
@@ -19,6 +22,8 @@ class VerticalListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    User user = Provider.of<User>(context);
+
     return Column(
       children: <Widget>[
         Padding(
@@ -47,14 +52,18 @@ class VerticalListView extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 Recipe currentRecipe = recipes[index];
                 return GestureDetector(
-                  onTap: () {
-                    print('currentRecipe.rating = ${currentRecipe.rating}');
+                  onTap: () async {
+                    int rating = await DatabaseService().getYourRating(
+                        recipeId: currentRecipe.recipeId, userId: user.uid);
+
+                    Provider.of<Recipe>(context, listen: false)
+                        .addYourRating(rating: rating);
 
                     Provider.of<Recipe>(context, listen: false)
                         .addRecipeProperties(currentRecipe);
 
                     final recipeProvider =
-                    Provider.of<Recipe>(context, listen: false);
+                        Provider.of<Recipe>(context, listen: false);
 
                     Navigator.push(
                       context,
@@ -94,8 +103,8 @@ class VerticalListView extends StatelessWidget {
                                 child: Image(
                                   height: 180.0,
                                   width: 180.0,
-                                  image: NetworkImage(currentRecipe
-                                      .imageURL ?? kDefaultRecipePic),
+                                  image: NetworkImage(currentRecipe.imageURL ??
+                                      kDefaultRecipePic),
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -124,8 +133,7 @@ class VerticalListView extends StatelessWidget {
                             child: Padding(
                               padding: EdgeInsets.all(10.0),
                               child: Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
                                     currentRecipe.title ??
@@ -140,8 +148,9 @@ class VerticalListView extends StatelessWidget {
                                     ),
                                   ),
                                   //TODO: funkar inte
-                                  ShowRating(rating: currentRecipe.rating ??
-                                      0, imageHeight: 20.0),
+                                  ShowRating(
+                                      rating: currentRecipe.rating ?? 0,
+                                      imageHeight: 20.0),
                                 ],
                               ),
                             ),
