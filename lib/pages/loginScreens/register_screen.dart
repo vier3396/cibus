@@ -8,7 +8,6 @@ import 'package:cibus/services/database/database.dart';
 import 'package:cibus/pages/loadingScreens/loading_screen.dart';
 
 const kPasswordCriteria = 'Password must include: A special character. An uppercase letter. A numeric character. A minimum of 8 characters. A lowercase letter';
-const registerButtonColor = kTurquoise;
 const kFormSizedBox = SizedBox(height: 20.0);
 
 OutlineInputBorder textInputBorder = OutlineInputBorder(

@@ -1,4 +1,5 @@
 import 'package:cibus/services/models/colors.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:flutter/widgets.dart';
@@ -30,7 +31,7 @@ class _ImageCaptureState extends State<ImageCapture> {
           // ratioY: 1.0,
           // maxWidth: 512,
           // maxHeight: 512,
-          toolbarColor: Colors.purple,
+          toolbarColor: kCoral,
           toolbarWidgetColor: Colors.white,
           toolbarTitle: 'Crop It'),
     );
@@ -41,7 +42,6 @@ class _ImageCaptureState extends State<ImageCapture> {
   }
 
   /// Select an image via gallery or services.camera
-
   Future<void> chooseImage(ImageSource source) async {
     File selected = await ImagePicker.pickImage(source: source);
 
@@ -84,67 +84,64 @@ class _ImageCaptureState extends State<ImageCapture> {
 
     final user = Provider.of<User>(context);
     return Scaffold(
+      appBar: AppBar(),
       // Select an image from the services.camera or gallery
-      body: SafeArea(
-        child: ListView(
-          //mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SizedBox(height: 50),
-            Center(
-              child: Text(
-                _happyQuote,
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: kCoral,
-                ),
+      body: ListView(
+        padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 40.0),
+        children: <Widget>[
+          Center(
+            child: Text(
+              _happyQuote,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 150),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                IconButton(
-                  iconSize: 100.0,
-                  icon: Icon(
-                    Icons.photo_camera,
-                    color: kCoral,
-                  ),
-                  onPressed: () => _pickImage(ImageSource.camera),
+          ),
+          SizedBox(height: 50),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              IconButton(
+                iconSize: 100.0,
+                icon: Icon(
+                  Icons.photo_camera,
+                  color: kCoral,
                 ),
-                SizedBox(width: 100),
-                IconButton(
-                  iconSize: 100.0,
-                  icon: Icon(
-                    Icons.photo_library,
-                    color: kCoral,
-                  ),
-                  onPressed: () => _pickImage(ImageSource.gallery),
+                onPressed: () => _pickImage(ImageSource.camera),
+              ),
+              IconButton(
+                iconSize: 100.0,
+                icon: Icon(
+                  Icons.photo_library,
+                  color: kCoral,
+                ),
+                onPressed: () => _pickImage(ImageSource.gallery),
+              ),
+            ],
+          ),
+          // Preview the image and crop it
+          if (_imageFile != null) ...[
+            Image.file(_imageFile),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                FlatButton(
+                  child: Icon(Icons.crop, size: 25.0,),
+                  onPressed: _cropImage,
+                ),
+                FlatButton(
+                  child: Icon(Icons.delete_outline, size: 25.0,),
+                  onPressed: _clear,
                 ),
               ],
             ),
-            // Preview the image and crop it
-            if (_imageFile != null) ...[
-              Image.file(_imageFile),
-              Row(
-                children: <Widget>[
-                  FlatButton(
-                    child: Icon(Icons.crop),
-                    onPressed: _cropImage,
-                  ),
-                  FlatButton(
-                    child: Icon(Icons.refresh),
-                    onPressed: _clear,
-                  ),
-                ],
-              ),
-              Uploader(
-                file: _imageFile,
-                recipePhoto: widget.recipePhoto,
-              )
-            ]
-          ],
-        ),
+            Uploader(
+              file: _imageFile,
+              recipePhoto: widget.recipePhoto,
+            )
+          ]
+        ],
       ),
     );
   }

@@ -1,3 +1,5 @@
+import 'package:cibus/services/database/database.dart';
+import 'package:cibus/services/models/colors.dart';
 import 'package:cibus/services/models/constants.dart';
 import 'package:cibus/widgets/recipe_preview.dart';
 import 'package:flutter/material.dart';
@@ -14,10 +16,12 @@ TextStyle textStyleTitle = TextStyle(
 class HorizontalListView extends StatefulWidget {
   final String title;
   final List<Recipe> recipes;
+  final bool myFavorites;
 
   HorizontalListView({
     this.title,
     this.recipes,
+    this.myFavorites,
   });
 
   @override
@@ -25,6 +29,8 @@ class HorizontalListView extends StatefulWidget {
 }
 
 class _HorizontalListViewState extends State<HorizontalListView> {
+  final DatabaseService database = DatabaseService();
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -93,7 +99,7 @@ class _HorizontalListViewState extends State<HorizontalListView> {
                             child: Padding(
                               padding: EdgeInsets.all(10.0),
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,//MainAxisAlignment.end,
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment:
                                 CrossAxisAlignment.start,
                                 children: <Widget>[
@@ -141,14 +147,30 @@ class _HorizontalListViewState extends State<HorizontalListView> {
                                   fit: BoxFit.cover,
                                 ),
                               ),
-                              //TODO fixa denna knapp
-                              /*
                               Positioned(
-                                right: 10.0,
-                                top: 10.0,
-                                child: FavoriteButton(),
+                                bottom: 0.0,
+                                left: 0.0,
+                                child: widget.myFavorites
+                                    ? IconButton(
+                                    icon: Icon(Icons.favorite, color: kCoral, size: 30.0,),
+                                    onPressed: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return removeFavoriteAlert(
+                                              recipeId: widget
+                                                  .recipes[index].recipeId,
+                                              context: context,
+                                              database: database,
+                                              index: index,
+                                            );
+                                          });
+                                      //  database.removeRecipe(
+                                      //  currentRecipe.recipeId,
+                                      //  );
+                                    })
+                                    : SizedBox(),
                               ),
-                               */
                             ],
                           ),
                         )
@@ -163,4 +185,40 @@ class _HorizontalListViewState extends State<HorizontalListView> {
       ],
     );
   }
+
+  AlertDialog removeFavoriteAlert({
+    String recipeId,
+    DatabaseService database,
+    BuildContext context,
+    int index,
+  }) {
+    return AlertDialog(
+      content: SingleChildScrollView(
+        child: ListBody(
+          children: <Widget>[Text('Do you want to remove this recipe from favorites?')],
+        ),
+      ),
+      actions: <Widget>[
+        FlatButton(
+          textColor: kCoral,
+          child: Text("Cancel"),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        FlatButton(
+            textColor: kCoral,
+            onPressed: () {
+              database.removeFromUserFavorites(recipeId: recipeId, currentFavorites: widget.recipes);
+              Navigator.of(context).pop();
+              setState(() {
+                widget.recipes.removeAt(index);
+              });
+            },
+            child: Text('Remove'))
+      ],
+    );
+  }
+
+
 }

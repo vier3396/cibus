@@ -13,8 +13,6 @@ import 'package:cibus/services/models/recipe_list.dart';
 import 'package:cibus/widgets/recipe_preview.dart';
 import 'package:cibus/widgets/show_rating.dart';
 
-const topMarginPopupIndividualRecipe = 0.0;
-
 class PopupBodyRecipes extends StatefulWidget {
   @override
   _PopupBodyRecipesState createState() => _PopupBodyRecipesState();
@@ -25,8 +23,6 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
   String ingredientSearch;
   Map ingredientMap = Map();
   String ingredientId = '';
-  //List<String> quantityTypeList = ['gram', 'kg', 'liters'];
-  //int quantityValue = 5;
   WhatToShow whatToShow = WhatToShow.foundIngredient;
   List<Ingredient> ingredientList = [];
   List<Map> recipeList = [];
@@ -46,8 +42,6 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
 
   @override
   void dispose() {
-    print('nu disposas');
-    // TODO: implement dispose
     super.dispose();
   }
 

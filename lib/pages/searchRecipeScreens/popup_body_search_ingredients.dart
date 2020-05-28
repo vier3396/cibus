@@ -1,3 +1,4 @@
+import 'package:cibus/services/models/colors.dart';
 import 'package:cibus/services/models/recipe.dart';
 import 'package:cibus/widgets/ingredient_chooser_tile.dart';
 import 'package:flutter/cupertino.dart';
@@ -128,6 +129,19 @@ class _PopupBodySearchIngredientsState
                   );
                 },
                 itemCount: (Provider.of<Recipe>(context).ingredientCount),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 80.0),
+              child: RaisedButton(
+                color: kCoral,
+                child: Text(
+                  'Done',
+                  style: kTextStyleRegisterButton,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
               ),
             ),
           ],

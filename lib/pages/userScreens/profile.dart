@@ -1,8 +1,4 @@
 import 'package:cibus/services/models/constants.dart';
-import 'dart:convert';
-
-import 'package:cibus/pages/userScreens/home.dart';
-import 'package:cibus/pages/loginScreens/login_screen.dart';
 import 'package:cibus/pages/userScreens/settings_screen.dart';
 import 'package:cibus/services/database/database.dart';
 import 'package:cibus/services/login/user.dart';
@@ -91,10 +87,11 @@ class Profile extends StatelessWidget {
                                   title: 'Your recipes',
                                   recipes: myRecipes,
                                   myOwnUserPage: true,
+                                  myFavorites: false,
                                 );
                               } else {
                                 return Text(
-                                    'Sharing is caring<3 feel free to upload some of your own recipes'); //TODO styla denna
+                                    'Sharing is caring<3 feel free to upload some of your own recipes');
                               }
                             }
                             return Text('There\'s no available data.');

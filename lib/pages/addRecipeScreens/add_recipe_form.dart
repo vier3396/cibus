@@ -1,23 +1,22 @@
 import 'package:cibus/pages/cameraScreens/camera_screen.dart';
-import 'package:cibus/services/camera/uploader.dart';
-import 'package:cibus/services/database/database.dart';
-import 'package:cibus/services/models/popup_layout.dart';
 import 'package:cibus/widgets/recipe_preview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/services/models/colors.dart';
 import '../../services/models/recipe.dart';
 import '../../services/models/my_text_form_field.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
-import '../../services/models/popup_body_search_ingredients.dart';
+import '../searchRecipeScreens/popup_body_search_ingredients.dart';
 import 'recipe_steps.dart';
 import 'package:provider/provider.dart';
-import 'package:cibus/services/login/user.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:cibus/widgets/ingredient_tile.dart';
-import 'dart:convert';
 import '../cameraScreens/camera_screen.dart';
+
+const kRecipeTitleLength = 40;
+const kRecipeDescLength = 200;
+const kRecipeDescLines = 5;
+const kMaxIngredients = 20;
+const kCookingTimeLength = 10;
 
 class AddRecipeForm extends StatefulWidget {
   @override
@@ -60,15 +59,14 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                   children: <Widget>[
                     //Title
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(8.0),
                       child: MyTextFormField(
-                        maxLength: 50,
+                        maxLength: kRecipeTitleLength,
                         labelText: "Recipe Title",
                         validator: (String title) {
                           if (title.isEmpty) {
                             return 'Enter a Title';
                           } else {
-                            // formKey.currentState.save();
                             return null;
                           }
                         },
@@ -81,8 +79,8 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: MyTextFormField(
-                        maxLines: 5,
-                        maxLength: 400,
+                        maxLines: kRecipeDescLines,
+                        maxLength: kRecipeDescLength,
                         labelText: "Describe your dish",
                         validator: (String description) {
                           if (description.isEmpty) {
@@ -113,7 +111,7 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                                 }
                                 return null;
                               },
-                              maxLength: 20,
+                              maxLength: kMaxIngredients,
                               labelText: 'Add ingredient',
                               onTap: () {
                                 final popProvider =
@@ -125,16 +123,14 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                                       ChangeNotifierProvider.value(
                                     value: popProvider,
                                     child: SingleChildScrollView(
-                                      child: PopupBodySearchIngredients(),
+                                      child:
+                                        PopupBodySearchIngredients()
                                     ),
                                   ),
                                 );
                                 FocusScope.of(context)
                                     .requestFocus(FocusNode());
                               },
-
-                              //TODO:  onSaved: save ingredients to recipe object
-                              //TODO: validator: validate ingredients
                             ),
                           ),
                         ],
@@ -150,7 +146,7 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                           return AnimationConfiguration.staggeredGrid(
                             columnCount: 3,
                             position: index,
-                            duration: const Duration(milliseconds: 500),
+                            duration: Duration(milliseconds: 500),
                             child: ScaleAnimation(
                               child: FadeInAnimation(
                                 child: IngredientTile(index: index),
@@ -166,8 +162,8 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                       padding: EdgeInsets.all(8.0),
                       child: MyTextFormField(
                         isAmount: true,
-                        maxLength: 10,
-                        labelText: "How many minutes does the recipe take?",
+                        maxLength: kCookingTimeLength,
+                        labelText: "Total cooking time in minutes",
                         validator: (String time) {
                           if (time.isEmpty) {
                             return 'Enter a time';
@@ -184,39 +180,57 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                       formkey: formKey,
                       recipe: recipe,
                     ),
-                    //No image selected/Selected image
-                    // decideImageView(), TODO: different method
-                    //Add image button
+                    //TODO: IF NOT UPLOADED PICTURE, SHOW THIS:
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        child: RaisedButton(
-                          child: Icon(Icons.add_a_photo),
-                          onPressed: () {
-                            final popProvider =
-                                Provider.of<Recipe>(context, listen: false);
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return ChangeNotifierProvider.value(
-                                    value: popProvider,
-                                    child: ImageCapture(
-                                      recipePhoto: true,
-                                    ),
-                                  );
-                                },
-                              ),
-                            );
-                            // showChoiceDialog(context, recipe); TODO: different method
-                          },
-                        ),
+                      padding: EdgeInsets.only(top: 20.0),
+                      child: Column(
+                        children: <Widget>[
+                          CircleAvatar(
+                            radius: 32.0,
+                            backgroundColor: Colors.grey[300],
+                            child: InkWell(
+                              child: Icon(Icons.add_a_photo, color: Colors.black, size: 30.0,),
+                              onTap: () {
+                                final popProvider =
+                                    Provider.of<Recipe>(context, listen: false);
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return ChangeNotifierProvider.value(
+                                        value: popProvider,
+                                        child: ImageCapture(
+                                          recipePhoto: true,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                );
+                                // showChoiceDialog(context, recipe); TODO: different method
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text('Upload a picture of your dish', style: TextStyle(fontSize: 16.0),),
+                          ),
+                        ],
                       ),
                     ),
                     //Submit form button
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
                       child: RaisedButton(
-                          child: Text("Review and submit recipe"),
+                        color: kCoral,
+                        splashColor: kWarmOrange,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            'Review and submit recipe',
+                            style:
+                            TextStyle(color: Colors.white, fontSize: 18.0),
+                          ),
+                        ),
                           onPressed: () {
                             if (formKey.currentState.validate()) {
                               print(recipe.listOfSteps);
@@ -225,7 +239,7 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                               //}
 
                               final popProvider =
-                                  Provider.of<Recipe>(context, listen: false);
+                              Provider.of<Recipe>(context, listen: false);
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) {
@@ -240,7 +254,8 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                                 ),
                               );
                             }
-                          }),
+                          }
+                      ),
                     ),
                   ],
                 ),

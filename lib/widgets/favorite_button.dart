@@ -71,7 +71,11 @@ class _FavoriteButtonState extends State<FavoriteButton> {
                       : snackBarFavoritesContent = "Removed from favorites";
                   Scaffold.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(snackBarFavoritesContent),
+                      content: Text(
+                        snackBarFavoritesContent,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      backgroundColor: kCoral,
                       duration: Duration(seconds: 3),
                     ),
                   );

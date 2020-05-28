@@ -18,8 +18,9 @@ class VerticalListView extends StatefulWidget {
   final String title;
   List<Recipe> recipes;
   bool myOwnUserPage;
+  bool myFavorites;
 
-  VerticalListView({this.title, this.recipes, this.myOwnUserPage});
+  VerticalListView({this.title, this.recipes, this.myOwnUserPage, this.myFavorites});
 
   @override
   _VerticalListViewState createState() => _VerticalListViewState();
@@ -122,35 +123,54 @@ class _VerticalListViewState extends State<VerticalListView> {
                                   fit: BoxFit.cover,
                                 ),
                               ),
-                              widget.myOwnUserPage
-                                  ? IconButton(
-                                      icon: Icon(Icons.delete),
-                                      onPressed: () {
-                                        showDialog(
-                                            context: context,
-                                            builder: (context) {
-                                              return makeAlertDialog(
-                                                recipeId: widget
-                                                    .recipes[index].recipeId,
-                                                context: context,
-                                                database: database,
-                                                index: index,
-                                              );
-                                            });
-                                        //  database.removeRecipe(
-                                        //  currentRecipe.recipeId,
-                                        //  );
-                                      })
-                                  : SizedBox(),
-                              //TODO fixa denna knapp
-                              /*
                               Positioned(
-                                right: 2.0,
-                                bottom: 2.0,
-                                child: FavoriteButton(),
+                                bottom: 0.0,
+                                left: 0.0,
+                                child: widget.myOwnUserPage
+                                    ? IconButton(
+                                        icon: Icon(Icons.delete, size: 30.0,),
+                                        onPressed: () {
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return makeAlertDialog(
+                                                  recipeId: widget
+                                                      .recipes[index].recipeId,
+                                                  context: context,
+                                                  database: database,
+                                                  index: index,
+                                                );
+                                              });
+                                          //  database.removeRecipe(
+                                          //  currentRecipe.recipeId,
+                                          //  );
+                                        })
+                                    : SizedBox(),
                               ),
-
-                               */
+                              Positioned(
+                                bottom: 0.0,
+                                left: 0.0,
+                                child: widget.myFavorites
+                                    ? IconButton(
+                                    icon: Icon(Icons.favorite, color: kCoral, size: 30.0,),
+                                    onPressed: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return removeFavoriteAlert(
+                                              recipeId: widget
+                                                  .recipes[index].recipeId,
+                                              context: context,
+                                              database: database,
+                                              index: index,
+                                            );
+                                          });
+                                      //  database.removeRecipe(
+                                      //  currentRecipe.recipeId,
+                                      //  );
+                                    })
+                                    : SizedBox(),
+                              ),
                             ],
                           ),
                         ),
@@ -184,7 +204,6 @@ class _VerticalListViewState extends State<VerticalListView> {
                                       ),
                                     ),
                                   ),
-                                  //TODO: funkar inte
                                   ShowRating(
                                       rating:
                                           widget.recipes[index].averageRating ??
@@ -242,4 +261,39 @@ class _VerticalListViewState extends State<VerticalListView> {
       ],
     );
   }
+
+  AlertDialog removeFavoriteAlert({
+    String recipeId,
+    DatabaseService database,
+    BuildContext context,
+    int index,
+  }) {
+    return AlertDialog(
+      content: SingleChildScrollView(
+        child: ListBody(
+          children: <Widget>[Text('Do you want to remove this recipe from favorites?')],
+        ),
+      ),
+      actions: <Widget>[
+        FlatButton(
+          textColor: kCoral,
+          child: Text("Cancel"),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        FlatButton(
+            textColor: kCoral,
+            onPressed: () {
+              database.removeFromUserFavorites(recipeId: recipeId, currentFavorites: widget.recipes);
+              Navigator.of(context).pop();
+              setState(() {
+                widget.recipes.removeAt(index);
+              });
+            },
+            child: Text('Remove'))
+      ],
+    );
+  }
+
 }

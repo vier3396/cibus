@@ -252,9 +252,7 @@ class DatabaseService {
 
   Future removeFromUserFavorites(
       {List<dynamic> currentFavorites, String recipeId}) async {
-    //print('currentFavorites innan remove: $currentFavorites');
     currentFavorites.remove(recipeId);
-    //print('userData.favoriteList efter remove: $currentFavorites');
     return await userCollection.document(uid).setData({
       'favoriteList': currentFavorites,
     }, merge: true);
@@ -262,9 +260,7 @@ class DatabaseService {
 
   Future addToUserFavorites(
       {List<dynamic> currentFavorites, String recipeId}) async {
-    //print('currentFavorites innan add: $currentFavorites');
     currentFavorites.add(recipeId);
-    //print('userData.favoriteList efter add: $currentFavorites');
     return await userCollection.document(uid).setData({
       'favoriteList': currentFavorites,
     }, merge: true);

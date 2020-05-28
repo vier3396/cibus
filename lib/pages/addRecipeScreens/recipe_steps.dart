@@ -1,5 +1,6 @@
 // https://stackoverflow.com/questions/56386039/how-to-remove-a-textfield-from-listview-when-onpressed-button?fbclid=IwAR33FFAUmxQ4Ji-dUyGIyWPiAHPFCoJKq8xrwkVoVbVf27hN-C7aJGHw3Fw
-
+import 'package:cibus/services/models/colors.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../services/models/my_text_form_field.dart';
 import '../../services/models/recipe.dart';
@@ -120,25 +121,38 @@ class _RecipeStepsState extends State<RecipeSteps> {
 
     // append an 'add step' button to the end of the list
     children.add(
+      /*
       GestureDetector(
         onTap: () {
-          // when adding a player, we only need to inc the fieldCount, because the _buildList()
+          // when adding a step, we only need to inc the fieldCount, because the _buildList()
           // will handle the creation of the new TextEditingController
           setState(() {
             fieldCount++;
           });
         },
-        child: Container(
-          color: Colors.blue,
+        child:
+        */
+      Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20.0),
+        child: RaisedButton(
+          color: Colors.grey[300],
+          splashColor: kWarmOrange,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(8.0),
             child: Text(
-              'Add a step',
-              style: TextStyle(
-                color: Colors.white,
-              ),
+              'Add another step',
+              style:
+              TextStyle(fontSize: 16.0),
             ),
           ),
+          onPressed: () {
+            // when adding a step, we only need to inc the fieldCount, because the _buildList()
+            // will handle the creation of the new TextEditingController
+            setState(() {
+              fieldCount++;
+            });
+          },
         ),
       ),
     );

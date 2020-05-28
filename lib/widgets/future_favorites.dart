@@ -35,6 +35,7 @@ class FutureBuilderFavorites extends StatelessWidget {
                   return HorizontalListView(
                     title: 'Your favorites',
                     recipes: favorites,
+                    myFavorites: true,
                   );
                 } else {
                   return Padding(
