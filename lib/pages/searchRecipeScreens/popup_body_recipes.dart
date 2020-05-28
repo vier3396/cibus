@@ -79,6 +79,36 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                 ingredientSearch = toSearch.toLowerCase();
                 print(ingredientSearch);
               },
+              onSubmitted: (toSearch) async {
+                Map ingredientMapFromDatabase =
+                    await database.getIngredient(ingredientSearch);
+
+                if (ingredientMapFromDatabase != null) {
+                  Provider.of<IngredientList>(context, listen: false)
+                      .addIngredient(Ingredient(
+                          ingredientId:
+                              ingredientMapFromDatabase['ingredientId'],
+                          ingredientName:
+                              ingredientMapFromDatabase['ingredientName']));
+                  List<Map> recipeListFromDatabase = await database.findRecipes(
+                      Provider.of<IngredientList>(context, listen: false)
+                          .ingredientList);
+                  //print(recipeListFromDatabase[0].data['title']);
+
+                  setState(() {
+                    Provider.of<RecipeList>(context, listen: false)
+                        .addEntireRecipeList(recipeListFromDatabase);
+                    //recipeList = recipeListFromDatabase;
+                    whatToShow = WhatToShow.foundIngredient;
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    searchController.clear();
+                  });
+                } else if (ingredientMap == null) {
+                  setState(() {
+                    whatToShow = WhatToShow.none;
+                  });
+                }
+              },
             ),
             FlatButton(
                 onPressed: () async {

@@ -1,5 +1,8 @@
-import 'package:cibus/services/constants.dart';
-import 'package:cibus/services/recipe.dart';
+import 'package:cibus/services/database/database.dart';
+import 'package:cibus/services/login/user.dart';
+import 'package:cibus/services/models/colors.dart';
+import 'package:cibus/services/models/constants.dart';
+import 'package:cibus/services/models/recipe.dart';
 import 'package:cibus/widgets/recipe_preview.dart';
 import 'package:cibus/widgets/show_rating.dart';
 import 'package:flutter/material.dart';
@@ -63,7 +66,8 @@ class _VerticalListViewState extends State<VerticalListView> {
                 return GestureDetector(
                   onTap: () async {
                     int rating = await DatabaseService().getYourRating(
-                        recipeId: widget.recipes[index].recipeId, userId: user.uid);
+                        recipeId: widget.recipes[index].recipeId,
+                        userId: user.uid);
 
                     Provider.of<Recipe>(context, listen: false)
                         .addYourRating(rating: rating);
@@ -85,7 +89,6 @@ class _VerticalListViewState extends State<VerticalListView> {
                         );
                       }),
                     );
-
                   },
                   child: Container(
                     margin: EdgeInsets.all(10.0),
