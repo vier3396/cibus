@@ -9,10 +9,10 @@ class NavigateBackButton extends StatelessWidget {
       fillColor: Colors.grey[500].withOpacity(0.3),
       child: Icon(
         Icons.arrow_back_ios,
-        size: 35.0,
+        size: 25.0,
         color: Theme.of(context).backgroundColor,
       ),
-      padding: EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(10.0),
       shape: CircleBorder(),
     );
   }

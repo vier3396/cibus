@@ -1,8 +1,8 @@
 // https://stackoverflow.com/questions/56386039/how-to-remove-a-textfield-from-listview-when-onpressed-button?fbclid=IwAR33FFAUmxQ4Ji-dUyGIyWPiAHPFCoJKq8xrwkVoVbVf27hN-C7aJGHw3Fw
 
 import 'package:flutter/material.dart';
-import '../../services/my_text_form_field.dart';
-import '../../services/recipe.dart';
+import '../../services/models/my_text_form_field.dart';
+import '../../services/models/recipe.dart';
 import 'package:provider/provider.dart';
 
 // needs to be StatefulWidget, so we can keep track of the count of the fields internally

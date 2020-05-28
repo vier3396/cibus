@@ -1,5 +1,5 @@
-import 'package:cibus/pages/article_page.dart';
-import 'package:cibus/services/article.dart';
+import 'package:cibus/pages/userScreens/article_page.dart';
+import 'package:cibus/services/models/article.dart';
 import 'package:flutter/material.dart';
 
 class ArticleHomePage extends StatelessWidget {

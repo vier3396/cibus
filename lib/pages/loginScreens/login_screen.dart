@@ -1,11 +1,12 @@
+import 'package:cibus/pages/loadingScreens/loading_screen.dart';
 import 'package:cibus/pages/loginScreens/register_screen.dart';
-import 'package:cibus/services/constants.dart';
+import 'package:cibus/services/models/constants.dart';
 import 'package:cibus/pages/loginScreens/e-sign_in_screen.dart';
-import 'package:cibus/services/my_page_view.dart';
+import 'package:cibus/services/models/my_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/services/login/sign_in.dart';
 import 'package:cibus/pages/loginScreens/username_screen.dart';
-import 'package:cibus/services/colors.dart';
+import 'package:cibus/services/models/colors.dart';
 
 const widthLogo = 250.0;
 const heightLogo = 250.0;
@@ -41,44 +42,48 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  bool loading = false;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        color: backgroundColor,
-        child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Image.asset(
-                'assets/coral_lemon.png',
-                height: heightLogo,
-                width: widthLogo,
+    return loading
+        ? LoadingScreen()
+        : Scaffold(
+            body: Container(
+              color: backgroundColor,
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Image.asset(
+                      'assets/coral_lemon.png',
+                      height: heightLogo,
+                      width: widthLogo,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: _signInButtonGoogle(),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: _signInButtonFacebook(),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: _signInEmailButton(),
+                    ),
+                    SizedBox(height: 20.0),
+                    Text('New to CIBUS?', style: newUserTextStyle),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: _registerButton(),
+                    ),
+                  ],
+                ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: _signInButtonGoogle(),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: _signInButtonFacebook(),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: _signInEmailButton(),
-              ),
-              SizedBox(height: 20.0),
-              Text('New to CIBUS?', style: newUserTextStyle),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: _registerButton(),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          );
   }
 
   Widget _signInButtonGoogle() {
@@ -86,16 +91,29 @@ class _LoginPageState extends State<LoginPage> {
       splashColor: loginSplashColor,
       highlightedBorderColor: loginHighlightedBorderColor,
       onPressed: () {
+        setState(() {
+          loading = true;
+        });
         signIn.whatLogin = loginType.google;
         signIn.signInWithGoogle().whenComplete(() {
           if (signIn.isNewUser && signIn.isLoggedInGoogle) {
+            print("två true");
+
             Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+              loading = false;
               return UsernameScreen();
             }));
           } else if (signIn.isLoggedInGoogle) {
+            print("ett true");
+            loading = false;
             Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(builder: (context) => MyPageView()),
                 (Route<dynamic> route) => false);
+          } else {
+            print("funkar ej");
+            setState(() {
+              loading = false;
+            });
           }
         });
       },
@@ -126,16 +144,26 @@ class _LoginPageState extends State<LoginPage> {
       splashColor: loginSplashColor,
       highlightedBorderColor: loginHighlightedBorderColor,
       onPressed: () {
+        setState(() {
+          loading = true;
+        });
+
         signIn.whatLogin = loginType.facebook;
         signIn.signInWithFacebook().whenComplete(() {
           if (signIn.isNewUser && signIn.isLoggedInFacebook) {
             Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+              loading = false;
               return UsernameScreen();
             }));
           } else if (signIn.isLoggedInFacebook) {
+            loading = false;
             Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(builder: (context) => MyPageView()),
                 (Route<dynamic> route) => false);
+          } else {
+            setState(() {
+              loading = false;
+            });
           }
         });
       },
@@ -197,6 +225,8 @@ class _LoginPageState extends State<LoginPage> {
       splashColor: loginSplashColor,
       highlightedBorderColor: loginHighlightedBorderColor,
       onPressed: () {
+        /* Navigator.of(context).pushNamedAndRemoveUntil(
+            '/loginPage', (Route<dynamic> route) => false); */
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) {

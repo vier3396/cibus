@@ -1,4 +1,4 @@
-import 'package:cibus/services/my_page_view.dart';
+import 'package:cibus/services/models/my_page_view.dart';
 import 'package:flutter/material.dart';
 
 class UploadedRecipeAlert extends StatelessWidget {
@@ -11,7 +11,7 @@ class UploadedRecipeAlert extends StatelessWidget {
         onPressed: () {
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(builder: (context) => MyPageView()),
-                  (Route<dynamic> route) => false);
+              (Route<dynamic> route) => false);
         },
       ),
     );

@@ -1,17 +1,17 @@
 import 'package:cibus/pages/loginScreens/username_screen.dart';
 import 'package:cibus/pages/loginScreens/verify_screen.dart';
-import 'package:cibus/services/colors.dart';
+import 'package:cibus/services/models/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/services/login/auth.dart';
-import 'package:cibus/services/constants.dart';
+import 'package:cibus/services/models/constants.dart';
 import 'package:cibus/pages/loginScreens/e-sign_in_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_user_stream/firebase_user_stream.dart';
-import 'package:cibus/services/my_page_view.dart';
+import 'package:cibus/services/models/my_page_view.dart';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/login/user.dart';
-import 'package:cibus/services/database.dart';
-import 'package:cibus/pages/loading_screen.dart';
+import 'package:cibus/services/database/database.dart';
+import 'package:cibus/pages/loadingScreens/loading_screen.dart';
 
 const registerButtonColor = kTurquoise;
 const formSizedBox = SizedBox(height: 20.0);
@@ -50,6 +50,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   //int dropdownValue = null;
   final TextEditingController _pass = TextEditingController();
   final TextEditingController _confirmPass = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -87,6 +90,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       formSizedBox,
                       TextFormField(
                         keyboardType: TextInputType.emailAddress,
+                        controller: _emailController,
                         decoration: InputDecoration(
                           enabledBorder: textInputBorder,
                           border: textInputBorder,
@@ -115,16 +119,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           if (val.isEmpty) {
                             return 'Please enter password';
                           } else if (val.length < 8) {
+                            _confirmPass.clear();
                             return 'Minimum 8 characters required';
                           } else if (!val.contains(RegExp(r'[A-Z]'))) {
+                            _confirmPass.clear();
                             return 'One upper case letter required.';
                           } else if (!val.contains(RegExp(r'[a-z]'))) {
+                            _confirmPass.clear();
                             return 'One lower case letter required.';
                           } else if (!val.contains(RegExp(r'[0-9]'))) {
+                            _confirmPass.clear();
                             return 'One digit required.';
                           } else if (!val
                               .contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
-                            return 'One special character required.';
+                            _confirmPass.clear();
+                            return "One special character required.\nSuch as !@#\\&\$*`~";
                           } /*
 
                           else {
@@ -152,10 +161,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         obscureText: true,
                         controller: _confirmPass,
                         validator: (String val) {
-                          if (val.isEmpty)
+                          if (val.isEmpty) {
                             return 'Re-enter password field is empty';
-                          if (val != _pass.text)
+                          }
+                          if (val != _pass.text) {
+                            _confirmPass.clear();
                             return 'passwords do not match';
+                          }
                           return null;
                         },
                         onChanged: (val) {
@@ -164,6 +176,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       formSizedBox,
                       TextFormField(
+                        controller: _nameController,
                         decoration: InputDecoration(
                           enabledBorder: textInputBorder,
                           border: textInputBorder,
@@ -177,6 +190,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       formSizedBox,
                       TextFormField(
+                        controller: _descriptionController,
                         decoration: InputDecoration(
                           enabledBorder: textInputBorder,
                           border: textInputBorder,
@@ -216,6 +230,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         color: kCoral,
                         child: Text('Register', style: textStyleRegisterButton),
                         onPressed: () async {
+                          _formKey.currentState.save();
                           if (_formKey.currentState.validate()) {
                             setState(() => loading = true);
                             bool isUsernameFree = await DatabaseService()
@@ -224,7 +239,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             if (!isUsernameFree) {
                               dynamic result =
                                   await _auth.registerWithEmailAndPassword(
-                                      email, password, name, description);
+                                      email,
+                                      password,
+                                      name,
+                                      description,
+                                      _currentUsername);
                               if (result == null) {
                                 setState(() {
                                   error = 'Email is already registered';
@@ -255,66 +274,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ])),
               ),
             ));
-  }
-
-  Future<void> _verificationDialog(User user) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Verification email'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(
-                    'The Verification email has been sent, please check your email and complete the registration. Press the verify button below when done.'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            RaisedButton(
-              child: Text('Verified?'),
-              onPressed: () async {
-                FirebaseUser _firebaseUser =
-                    await FirebaseAuth.instance.currentUser();
-                AuthService().isEmailVerified(_firebaseUser);
-                setState(() {
-                  user.isEmail = _firebaseUser.isEmailVerified;
-                });
-                //user.isEmail = _firebaseUser.isEmailVerified;
-                print(_firebaseUser.isEmailVerified);
-                _firebaseUser
-                    .reload(); //LÖS DET HÄR MED ATT MAN MÅSTE KLICKA TVÅ GÅNGER!!
-                //print(AuthService().isEmailVerified(_firebaseUser));
-              },
-            ),
-            FlatButton(
-              child: Text('Resend Verification email?'),
-              onPressed: () {},
-            ),
-            FlatButton(
-              child: Text('Click to continue when email is verified'),
-              onPressed: () {
-                //Navigator.of(context).pop();
-                print('Klar med popup');
-                setState(() {
-                  if (isVerified) {
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return MyPageView();
-                        },
-                      ),
-                    );
-                  }
-                });
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 
   Future<void> _usernameDialog() async {

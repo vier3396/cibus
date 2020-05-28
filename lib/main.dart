@@ -1,22 +1,23 @@
 import 'package:cibus/pages/loginScreens/username_screen.dart';
 import 'package:cibus/pages/loginScreens/verify_screen.dart';
-import 'package:cibus/pages/settings_screen.dart';
+import 'package:cibus/pages/userScreens/settings_screen.dart';
 import 'package:cibus/services/login/auth.dart';
-import 'package:cibus/services/my_page_view.dart';
+import 'package:cibus/services/models/my_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/pages/loginScreens/login_screen.dart';
-import 'package:cibus/pages/profile.dart';
-import 'package:cibus/pages/loading_screen.dart';
+import 'package:cibus/pages/userScreens/profile.dart';
+import 'package:cibus/pages/loadingScreens/loading_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/login/user.dart';
-import 'package:cibus/pages/camera_screen.dart';
-import 'package:cibus/services/recipe.dart';
-import 'package:cibus/services/colors.dart';
+import 'package:cibus/pages/cameraScreens/camera_screen.dart';
+import 'package:cibus/services/models/recipe.dart';
+import 'package:cibus/services/models/colors.dart';
 import 'package:cibus/widgets/recipe_preview.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  bool authenticated = true;
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
           '/recipePreview': (context) => RecipePreview(),
           '/verifyscreen': (context) => VerifyScreen(),
           '/usernamescreen': (context) => UsernameScreen(),
+          //'/adminscreen': (context) => AdminScreen(),
         },
       ),
     );

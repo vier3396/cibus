@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cibus/services/recipe.dart';
+import 'package:cibus/services/models/recipe.dart';
 import 'package:provider/provider.dart';
 
 class EditButton extends StatelessWidget {

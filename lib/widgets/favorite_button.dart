@@ -1,10 +1,11 @@
 import 'package:cibus/services/login/user.dart';
+import 'package:cibus/services/models/colors.dart';
 import 'package:flutter/material.dart';
-import '../services/database.dart';
-import '../services/recipe.dart';
+import '../services/database/database.dart';
+import '../services/models/recipe.dart';
 import 'package:provider/provider.dart';
 
-//TODO make it work
+const kFavoriteIconSize = 35.0;
 
 class FavoriteButton extends StatefulWidget {
   @override
@@ -12,32 +13,32 @@ class FavoriteButton extends StatefulWidget {
 }
 
 class _FavoriteButtonState extends State<FavoriteButton> {
-  Icon favoriteBorderIcon = Icon(Icons.favorite_border);
-  Icon favoriteFilledIcon = Icon(Icons.favorite);
+  Icon favoriteBorderIcon = Icon(
+    Icons.favorite_border,
+    color: kCoral,
+    size: kFavoriteIconSize,
+  );
+  Icon favoriteFilledIcon = Icon(
+    Icons.favorite,
+    color: kCoral,
+    size: kFavoriteIconSize,
+  );
   String snackBarFavoritesContent;
 
   void removeFromFavorites(String id, UserData userData, Recipe recipe) async {
-    print('innan removeFromUserFavorites: userData.favoriteList = ${userData.favoriteList}');
-    print('recipe.recipeId = ${recipe.recipeId}');
     await DatabaseService(uid: id).removeFromUserFavorites(
         currentFavorites: userData.favoriteList, recipeId: recipe.recipeId);
   }
 
   addToFavorites(String id, UserData userData, Recipe recipe) async {
-    print('innan addToUserFavorites: userData.favoriteList = ${userData.favoriteList}');
-    print('recipe.recipeId = ${recipe.recipeId}');
     await DatabaseService(uid: id).addToUserFavorites(
         currentFavorites: userData.favoriteList, recipeId: recipe.recipeId);
   }
 
   bool isFavorite(Recipe recipe, UserData userData) {
-    print('Provider.of<Recipe>(context, listen: false) = $recipe');
-    print('userData.favoriteList = ${userData.favoriteList}');
     if (userData.favoriteList.contains(recipe.recipeId)) {
-      print('true');
       return true;
-    }
-    else {
+    } else {
       return false;
     }
   }
@@ -47,28 +48,27 @@ class _FavoriteButtonState extends State<FavoriteButton> {
     final _user = Provider.of<User>(context);
     Stream<UserData> _userDataStream = DatabaseService(uid: _user.uid).userData;
 
-    return ChangeNotifierProvider<Recipe>(
-      create: (context) => Recipe(),
-      child: StreamBuilder<UserData>(
+    return Consumer<Recipe>(builder: (context, recipe, child) {
+      return StreamBuilder<UserData>(
           stream: _userDataStream,
           builder: (context, snapshot) {
             UserData userData = snapshot.data;
             return IconButton(
-              icon: isFavorite(Provider.of<Recipe>(context, listen: false), userData)
+              icon: isFavorite(recipe, userData)
                   ? favoriteFilledIcon
                   : favoriteBorderIcon,
-              onPressed: () {
-                final recipeProvider = Provider.of<Recipe>(context, listen: false);
+              onPressed: () async {
+                final recipeProvider =
+                    Provider.of<Recipe>(context, listen: false);
+
+                isFavorite(recipeProvider, userData)
+                    ? removeFromFavorites(_user.uid, userData, recipeProvider)
+                    : addToFavorites(_user.uid, userData, recipeProvider);
 
                 setState(() {
-                  if (isFavorite(recipeProvider, userData)) {
-                    removeFromFavorites(_user.uid, userData, recipeProvider);
-                    snackBarFavoritesContent = "Removed from favorites";
-                  } else {
-                    addToFavorites(_user.uid, userData, recipeProvider);
-                    snackBarFavoritesContent = "Added to favorites";
-                  }
-
+                  isFavorite(recipeProvider, userData)
+                      ? snackBarFavoritesContent = "Added to favorites"
+                      : snackBarFavoritesContent = "Removed from favorites";
                   Scaffold.of(context).showSnackBar(
                     SnackBar(
                       content: Text(snackBarFavoritesContent),
@@ -78,7 +78,7 @@ class _FavoriteButtonState extends State<FavoriteButton> {
                 });
               },
             );
-          }),
-    );
+          });
+    });
   }
 }

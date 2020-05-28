@@ -1,5 +1,5 @@
-import 'package:cibus/services/article.dart';
-import 'package:cibus/services/database.dart';
+import 'package:cibus/services/models/article.dart';
+import 'package:cibus/services/database/database.dart';
 import 'package:flutter/material.dart';
 
 import 'article_home_page.dart';

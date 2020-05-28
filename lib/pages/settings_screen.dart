@@ -1,13 +1,13 @@
-import 'package:cibus/pages/camera_screen.dart';
-import 'package:cibus/pages/loading_screen.dart';
+import 'package:cibus/services/models/colors.dart';
+import 'package:cibus/services/models/constants.dart';
+import 'package:cibus/widgets/spin_kit_ripple.dart';
+import 'package:cibus/widgets/to_fix_provider_in_popup_recipe.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cibus/services/database.dart';
+import 'package:cibus/services/database/database.dart';
 import 'package:cibus/services/login/user.dart';
-import 'package:cibus/services/constants.dart';
 import 'package:flutter/widgets.dart';
-import 'package:cibus/services/colors.dart';
-import 'package:cibus/widgets/toFixProviderInPopupRecipe.dart';
+import 'package:cibus/pages/cameraScreens/camera_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -21,17 +21,32 @@ class _SettingsScreenState extends State<SettingsScreen> {
   String _currentName;
   String _currentDescription;
   String image;
+  bool isAdmin = false;
+
+  void checkIfAdmin({
+    String userId,
+    DatabaseService database,
+  }) async {
+    isAdmin = await database.checkIfAdmin(userId: userId);
+  }
 
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
+    DatabaseService database = DatabaseService(uid: user.uid);
+
+    setState(() {
+      checkIfAdmin(
+        userId: user.uid,
+        database: database,
+      );
+    });
 
     return StreamBuilder<UserData>(
-        stream: DatabaseService(uid: user.uid).userData,
+        stream: database.userData,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             UserData userData = snapshot.data;
-
             return Scaffold(
               appBar: AppBar(
                 title: Text('Settings'),
@@ -106,27 +121,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         }
                       },
                     ),
-                    RaisedButton(
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) {
-                              //TODO fixa navigator till något bättre?
-                              return WidgetToFixProvider(
-                                admin: true,
+                    isAdmin
+                        ? RaisedButton(
+                            onPressed: () async {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    //TODO fixa navigator till något bättre?
+                                    return WidgetToFixProvider(
+                                      admin: true,
+                                    );
+                                  },
+                                ),
                               );
                             },
-                          ),
-                        );
-                      },
-                      child: Text('Admin page'),
-                    )
+                            child: Text('Admin page'),
+                          )
+                        : SizedBox(),
                   ],
                 ),
               ),
             );
           } else {
-            return LoadingScreen();
+            return Center(child: MySpinKitRipple());
           }
         });
   }

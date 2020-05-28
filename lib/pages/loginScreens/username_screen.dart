@@ -1,9 +1,14 @@
-import 'package:cibus/services/my_page_view.dart';
+import 'package:cibus/pages/loadingScreens/loading_screen.dart';
+import 'package:cibus/pages/loginScreens/login_screen.dart';
+import 'package:cibus/services/models/my_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/services/login/user.dart';
-import 'package:cibus/services/database.dart';
+import 'package:cibus/services/database/database.dart';
 import 'package:provider/provider.dart';
-import 'package:cibus/services/colors.dart';
+import 'package:cibus/services/models/constants.dart';
+import 'package:cibus/services/login/auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cibus/services/models/colors.dart';
 
 OutlineInputBorder textInputBorder = OutlineInputBorder(
   borderRadius: BorderRadius.circular(25.0),
@@ -18,6 +23,7 @@ class _UsernameScreenState extends State<UsernameScreen> {
   final _formKey = GlobalKey<FormState>();
   String _currentUsername;
   //bool checkUsername;
+  bool loading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -28,76 +34,80 @@ class _UsernameScreenState extends State<UsernameScreen> {
         builder: (context, snapshot) {
           UserData userData = snapshot.data;
 
-          return Scaffold(
-            body: Form(
-              key: _formKey,
-              child: SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(height: 30.0),
-                      Text(
-                        'Update your Cibus username',
-                        style: TextStyle(fontSize: 25.0),
-                      ),
-                      SizedBox(height: 200.0),
-                      TextFormField(
-                          initialValue: '',
-                          decoration: InputDecoration(
-                            enabledBorder: textInputBorder,
-                            border: textInputBorder,
-                            labelText: 'Name',
-                          ),
-                          validator: (val) {
-                            if (val.length < 3)
-                              return 'Name must be more than 2 characters';
-                            /*else if (checkUsername == false)
-                              return 'Username is allready taken';*/
-                            return null;
-                          },
-                          onChanged: (val) {
-                            setState(() {
-                              _currentUsername = val;
-                              print(_currentUsername);
-                            });
-                          }),
-                      RaisedButton(
-                        color: kCoral,
-                        child: Text(
-                          'update',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        onPressed: () async {
-                          if (_formKey.currentState.validate()) {
-                            bool checkUsername = await DatabaseService()
-                                .isUsernameTaken(username: _currentUsername);
-                            print(' checkUsername: $checkUsername');
-                            if (!checkUsername) {
-                              await DatabaseService(uid: user.uid)
-                                  .updateUsername(
-                                username: _currentUsername,
-                              );
-                              print('Creating usernamse');
-                              Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return MyPageView();
-                                  },
+          return loading
+              ? LoadingScreen()
+              : Scaffold(
+                  body: Form(
+                    key: _formKey,
+                    child: SafeArea(
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Column(
+                          children: <Widget>[
+                            SizedBox(height: 30.0),
+                            Text(
+                              'Update your Cibus username',
+                              style: TextStyle(fontSize: 25.0),
+                            ),
+                            SizedBox(height: 200.0),
+                            TextFormField(
+                                initialValue: '',
+                                decoration: InputDecoration(
+                                  enabledBorder: textInputBorder,
+                                  border: textInputBorder,
+                                  labelText: 'Name',
                                 ),
-                              );
-                            } else {
-                              _usernameDialog();
-                            }
-                          }
-                        },
-                      )
-                    ],
+                                validator: (val) {
+                                  if (val.length < 3)
+                                    return 'Name must be more than 2 characters';
+                                  /*else if (checkUsername == false)
+                              return 'Username is allready taken';*/
+                                  return null;
+                                },
+                                onChanged: (val) {
+                                  setState(() {
+                                    _currentUsername = val;
+                                    print(_currentUsername);
+                                  });
+                                }),
+                            RaisedButton(
+                              color: kCoral,
+                              child: Text(
+                                'update',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              onPressed: () async {
+                                loading = true;
+                                if (_formKey.currentState.validate()) {
+                                  bool checkUsername = await DatabaseService()
+                                      .isUsernameTaken(
+                                          username: _currentUsername);
+                                  print(' checkUsername: $checkUsername');
+                                  if (!checkUsername) {
+                                    await DatabaseService(uid: user.uid)
+                                        .updateUsername(
+                                      username: _currentUsername,
+                                    );
+                                    print('Creating usernamse');
+                                    Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                        builder: (context) {
+                                          return MyPageView();
+                                        },
+                                      ),
+                                    );
+                                  } else {
+                                    _usernameDialog();
+                                  }
+                                }
+                              },
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ),
-          );
+                );
         });
   }
 
