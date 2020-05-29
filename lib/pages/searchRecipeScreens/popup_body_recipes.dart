@@ -31,7 +31,7 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
 
   Widget foundIngredient({whatToShowenum, ingredientMap}) {
     if (whatToShowenum == WhatToShow.none) {
-      return Text('We could not find a matching ingredient, please try again');
+      return Text('Could not find a matching ingredient, please try again');
     } else if (whatToShowenum == WhatToShow.foundIngredient) {
       return Container();
     }
@@ -68,7 +68,7 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
             TextField(
               controller: searchController,
               decoration: InputDecoration(
-                  hintText: 'Search and find the best recipes in the bizz'),
+                  hintText: 'Search for ingredients to find recipes'),
               onChanged: (toSearch) {
                 ingredientSearch = toSearch.toLowerCase();
                 print(ingredientSearch);
@@ -136,7 +136,7 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                     });
                   }
                 },
-                child: Text('Search')),
+                child: Text('Search', style: TextStyle(fontSize: 16),)),
             foundIngredient(
                 whatToShowenum: whatToShow, ingredientMap: ingredientMap),
             AnimationLimiter(

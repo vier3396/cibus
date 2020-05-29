@@ -40,23 +40,18 @@ class _IngredientChooserTileState extends State<IngredientChooserTile> {
   String dropDownValue = 'kilos';
   @override
   void initState() {
-    // TODO: implement initState
     quantityValueController = TextEditingController();
     super.initState();
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     quantityValueController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    //String dropDownValue = 'kgs';
-    print("dropdownValue i shuno build: $dropDownValue");
-
     return Hero(
       tag: 'ingredient',
       child: AnimatedContainer(
@@ -82,7 +77,7 @@ class _IngredientChooserTileState extends State<IngredientChooserTile> {
               style: TextStyle(fontSize: 20.0),
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Expanded(
                   child: TextField(
@@ -92,14 +87,13 @@ class _IngredientChooserTileState extends State<IngredientChooserTile> {
                       border: OutlineInputBorder(
                           borderSide: BorderSide.none,
                           borderRadius: BorderRadius.circular(5.0)),
-                      hintText: 'Quantitiy',
+                      hintText: 'Quantity',
                     ),
                     onChanged: (String newValue) {
                       quantityValue = int.parse(newValue);
                     },
                   ),
                 ),
-                SizedBox(width: 10.0),
                 Expanded(
                   child: DropdownButton<String>(
                     style: TextStyle(
@@ -131,9 +125,6 @@ class _IngredientChooserTileState extends State<IngredientChooserTile> {
                     value: dropDownValue,
                   ),
                 ),
-                SizedBox(
-                  width: 10.0,
-                ),
                 Expanded(
                     child: Padding(
                   padding: EdgeInsets.symmetric(vertical: 16.0),
@@ -159,7 +150,7 @@ class _IngredientChooserTileState extends State<IngredientChooserTile> {
                           quantityValueController.clear();
                         });
                       },
-                      minWidth: 200.0,
+                      minWidth: 180.0,
                       height: 42.0,
                       child: Text(
                         'Add',

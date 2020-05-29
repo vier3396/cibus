@@ -14,7 +14,6 @@ import 'edit_recipe_button.dart';
 import 'favorite_button.dart';
 import 'navigate_back_button.dart';
 
-//TODO further refactor widgets?
 const kShadowList = [
   Shadow(
     offset: Offset(0.1, 0.0),
@@ -57,6 +56,7 @@ class _RecipePreviewState extends State<RecipePreview> {
                     ),
                     width: MediaQuery.of(context).size.width,
                   ),
+                  /* TITLE ON PICTURE
                   Positioned(
                     bottom: 35.0,
                     left: 20.0,
@@ -67,32 +67,13 @@ class _RecipePreviewState extends State<RecipePreview> {
                       child: Expanded(
                         child: Text(recipe.title ?? 'title',
                             style: TextStyle(
-                                color: Colors.white,
                                 //shadows: kShadowList,
                                 fontSize: 25.0,
                                 fontWeight: FontWeight.bold)),
                       ),
                     ),
                   ),
-                  Positioned(
-                    bottom: 35.0,
-                    right: 20.0,
-                    child: Text(
-                      '${recipe.time ?? '?'} min',
-                      style: TextStyle(
-                          color: Colors.white,
-                          //shadows: kShadowList,
-                          fontSize: 22.0,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  widget.preview
-                      ? Text('')
-                      : Positioned(
-                          top: 65,
-                          right: 10,
-                          child: FavoriteButton(),
-                        ),
+                   */
                   widget.preview
                       ? Text('')
                       : Positioned(
@@ -125,16 +106,105 @@ class _RecipePreviewState extends State<RecipePreview> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
+                    Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Expanded(
+                            child: Column(
+                              children: <Widget>[
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Text(recipe.title ?? 'title'),
+                                    Text(
+                                      '${recipe.time ?? '?'} min',
+                                      style: TextStyle(),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: <Widget>[
+                                    Expanded(
+                                      child: Container(
+                                        padding: EdgeInsets.only(right: 10, top: 5, bottom: 10),
+                                        child: Text(
+                                          recipe.description ??
+                                              'Cannot find description',
+                                        ),
+                                      ),
+                                    ),
+                                    widget.preview
+                                        ? Text('')
+                                        : FavoriteButton(),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            /* Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(recipe.title ?? 'title'),
+                                Text(
+                                  recipe.description ?? 'Cannot find description',
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: <Widget>[
+                              Text(
+                                '${recipe.time ?? '?'} min',
+                                style: TextStyle(),
+                              ),
+                              widget.preview
+                                  ? Text('')
+                                  : FavoriteButton(),
+                            ],
+                            ),
+                             */
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    /*
                     Expanded(
                       flex: 2,
                       child: Container(
-                        child: Text(
-                          recipe.description ?? 'Cannot find description',
-                          style: TextStyle(
-                              fontSize: 18.0, fontWeight: FontWeight.w600),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(recipe.title ?? 'title',
+                                    style: TextStyle()),
+                                Flexible(
+                                  child: Text(
+                                    recipe.description ?? 'Cannot find description',
+                                    style: TextStyle(),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Column(children: <Widget>[
+                              Text(
+                                '${recipe.time ?? '?'} min',
+                                style: TextStyle(),
+                              ),
+                              widget.preview
+                                  ? Text('')
+                                  : FavoriteButton(),
+                            ],)
+                          ],
                         ),
                       ),
                     ),
+
+                     */
                     Expanded(
                       flex: 6,
                       child: Row(
@@ -147,7 +217,6 @@ class _RecipePreviewState extends State<RecipePreview> {
                                 Text(
                                   'Ingredients',
                                   style: TextStyle(
-                                      color: Colors.black,
                                       fontWeight: FontWeight.w700,
                                       fontSize: 20.0),
                                 ),

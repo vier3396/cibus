@@ -22,7 +22,6 @@ class _PopupBodySearchIngredientsState
   String ingredientSearch;
   Map ingredientMap = Map();
   String ingredientId = '';
-  //String dropDownValue = 'kg';
   int quantityValue = 5;
   WhatToShow whatToShow = WhatToShow.notYetSea;
   final TextEditingController searchController = TextEditingController();
@@ -66,14 +65,11 @@ class _PopupBodySearchIngredientsState
               controller: searchController,
               onChanged: (toSearch) {
                 ingredientSearch = toSearch.toLowerCase();
-                print(ingredientSearch);
               },
               onSubmitted: (toSearch) async {
                 ingredientMap = await database.getIngredient(ingredientSearch);
-                print(ingredientMap);
                 if (ingredientMap != null) {
                   setState(() {
-                    print(ingredientMap['ingredientName']);
                     ingredientName = ingredientMap['ingredientName'];
                     ingredientId = ingredientMap['ingredientId'];
                     whatToShow = WhatToShow.foundIngredient;
@@ -91,10 +87,8 @@ class _PopupBodySearchIngredientsState
                 onPressed: () async {
                   ingredientMap =
                       await database.getIngredient(ingredientSearch);
-                  print(ingredientMap);
                   if (ingredientMap != null) {
                     setState(() {
-                      print(ingredientMap['ingredientName']);
                       ingredientName = ingredientMap['ingredientName'];
                       ingredientId = ingredientMap['ingredientId'];
                       whatToShow = WhatToShow.foundIngredient;
@@ -131,17 +125,23 @@ class _PopupBodySearchIngredientsState
                 itemCount: (Provider.of<Recipe>(context).ingredientCount),
               ),
             ),
+            SizedBox(height: 30.0,),
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 80.0),
+              padding: EdgeInsets.symmetric(horizontal: 40.0),
               child: RaisedButton(
-                color: kCoral,
-                child: Text(
-                  'Done',
-                  style: kTextStyleRegisterButton,
+                child: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    'Done',
+                    style: TextStyle(color: Colors.white, fontSize: 18.0),
+                  ),
                 ),
                 onPressed: () {
                   Navigator.pop(context);
                 },
+                color: kCoral,
+                splashColor: kWarmOrange,
+                shape: kButtonShape,
               ),
             ),
           ],

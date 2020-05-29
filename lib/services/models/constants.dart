@@ -37,13 +37,15 @@ Padding(
                               child: Padding(
                                 padding: EdgeInsets.all(8.0),
                                 child: Text(
-                                  'Log out',
+                                  'Done',
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 18.0),
                                 ),
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                               Navigator.pop(context);
+                              },
                               color: kCoral,
                               splashColor: kWarmOrange,
                               shape: kButtonShape,
