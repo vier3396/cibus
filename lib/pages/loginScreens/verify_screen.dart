@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:cibus/services/models/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:cibus/services/database/database.dart';
@@ -17,6 +17,8 @@ class VerifyScreen extends StatefulWidget {
 
 class _VerifyScreenState extends State<VerifyScreen> {
   bool loading = false;
+  String resent = '';
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
@@ -29,106 +31,93 @@ class _VerifyScreenState extends State<VerifyScreen> {
           return loading
               ? LoadingScreen()
               : Scaffold(
-                  body: Column(
-                    children: <Widget>[
-                      SizedBox(height: 50),
-                      SafeArea(
-                        child: Text(
-                          'Check your email and verify it.',
-                          style: TextStyle(fontSize: 28.0),
-                        ),
-                      ),
-                      SizedBox(height: 40.0),
-                      Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Text(
-                          'An email has been sent to your inbox, please check it and click the link to verify. \n'
-                          'Click the verify button when finished',
-                          style: TextStyle(fontSize: 20.0),
-                        ),
-                      ),
-                      SizedBox(height: 10.0),
-                      Column(
+                  body: SafeArea(
+                    child: SingleChildScrollView(
+                      child: Column(
                         children: <Widget>[
+                          SizedBox(height: 40),
+                          Text(
+                            'Check and verify your email.',
+                            style: TextStyle(fontSize: 20.0),
+                          ),
                           Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Row(
-                              children: <Widget>[
-                                Container(
-                                  width: 160,
-                                  child: RaisedButton(
-                                    color: kCoral,
-                                    child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        'Resend verification \n email',
-                                        style: TextStyle(color: Colors.black),
-                                      ),
-                                    ),
-                                    onPressed: () async {
-                                      loading = true;
-                                      FirebaseUser _firebaseUser =
-                                          await FirebaseAuth.instance
-                                              .currentUser();
-                                      await _firebaseUser
-                                          .sendEmailVerification();
-
-                                      Text('Verification email resent');
-                                    },
-                                  ),
+                            padding:
+                                EdgeInsets.only(top: 30.0, left: 20, right: 20),
+                            child: Container(
+                              child: Text(
+                                'An email has been sent to your inbox, please click on the link to verify. \n'
+                                'Then click on the verify button below when finished.',
+                                style: TextStyle(fontSize: 18.0),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 10.0),
+                          Padding(
+                            padding: kButtonPadding,
+                            child: RaisedButton(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 8.0, horizontal: 50),
+                                child: Text(
+                                  "I've verified my email",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 18.0),
                                 ),
-                                SizedBox(width: 20.0),
-                                Container(
-                                  width: 160,
-                                  child: RaisedButton(
-                                    color: kCoral,
-                                    child: Text(
-                                      "I've verified \n my email",
-                                      style: TextStyle(color: Colors.black),
+                              ),
+                              onPressed: () async {
+                                loading = true;
+                                FirebaseUser _firebaseUser =
+                                    await FirebaseAuth.instance.currentUser();
+                                AuthService().isEmailVerified(_firebaseUser);
+                                setState(() {
+                                  user.isEmail = _firebaseUser.isEmailVerified;
+                                  _firebaseUser.reload();
+                                });
+                                if (_firebaseUser.isEmailVerified) {
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                      builder: (context) {
+                                        return MyPageView();
+                                      },
                                     ),
-                                    onPressed: () async {
-                                      //AuthService.isEmailVerified();
-                                      loading = true;
-                                      FirebaseUser _firebaseUser =
-                                          await FirebaseAuth.instance
-                                              .currentUser();
-                                      AuthService()
-                                          .isEmailVerified(_firebaseUser);
-                                      setState(() {
-                                        user.isEmail =
-                                            _firebaseUser.isEmailVerified;
-                                        _firebaseUser.reload();
-                                      });
-                                      //user.isEmail = _firebaseUser.isEmailVerified;
-                                      if (_firebaseUser.isEmailVerified) {
-                                        Navigator.of(context).pushReplacement(
-                                          MaterialPageRoute(
-                                            builder: (context) {
-                                              return MyPageView();
-                                            },
-                                          ),
-                                        );
-                                      } else {
-                                        Timer(Duration(seconds: 3), () {
-                                          print(
-                                              "Yeah, this line is printed after 3 second");
-                                          _verifyDialog();
-                                        });
-                                      }
-                                      print(_firebaseUser.isEmailVerified);
-                                      _firebaseUser
-                                          .reload(); //LÖS DET HÄR MED ATT MAN MÅSTE KLICKA TVÅ GÅNGER!!
-                                      //print(AuthService().isEmailVerified(_firebaseUser));
-                                    },
-                                  ),
+                                  );
+                                } else {
+                                  Timer(Duration(seconds: 3), () {
+                                    _verifyDialog();
+                                  });
+                                }
+                                _firebaseUser.reload();
+                              },
+                              color: kCoral,
+                              splashColor: kWarmOrange,
+                              shape: kButtonShape,
+                            ),
+                          ),
+                          Padding(
+                            padding: kButtonPadding,
+                            child: RaisedButton(
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  'Resend verification email',
+                                  style: TextStyle(fontSize: 16.0),
                                 ),
-                              ],
+                              ),
+                              onPressed: () async {
+                                loading = true;
+                                FirebaseUser _firebaseUser =
+                                    await FirebaseAuth.instance.currentUser();
+                                await _firebaseUser.sendEmailVerification();
+                                _resendDialog();
+                              },
+                              color: Colors.grey[300],
+                              splashColor: kWarmOrange,
+                              shape: kButtonShape,
                             ),
                           ),
                         ],
                       ),
-                      SizedBox(width: 10.0),
-                    ],
+                    ),
                   ),
                 );
         });
@@ -140,18 +129,21 @@ class _VerifyScreenState extends State<VerifyScreen> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Not quite yet!'),
+          title: Text('Not quite there yet!'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
                 Text(
-                    'Sorry the servers are still working on your verification, try again! :)'),
+                    'Sorry the servers are still working on your verification, please try again! :)'),
               ],
             ),
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('OK'),
+              child: Text(
+                'OK',
+                style: TextStyle(color: Colors.black),
+              ),
               onPressed: () {
                 setState(() {
                   loading = false;
@@ -175,13 +167,16 @@ class _VerifyScreenState extends State<VerifyScreen> {
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('The Verification email has been resent'),
+                Text('The verification email has been resent.'),
               ],
             ),
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('OK'),
+              child: Text(
+                'OK',
+                style: TextStyle(color: Colors.black),
+              ),
               onPressed: () {
                 loading = false;
                 Navigator.of(context).pop();

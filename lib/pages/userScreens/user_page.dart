@@ -91,7 +91,6 @@ class UserPage extends StatelessWidget {
                     myOwnUserPage: false,
                   )
                 : Text(kNoRecipeText),
-            //TODO styla denna
           ],
         ),
       ),

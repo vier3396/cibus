@@ -126,6 +126,7 @@ class DatabaseService {
       articleID: articleId,
       title: _result.data['title'],
       subTitle: _result.data['subTitle'],
+      subsubtitle: _result.data['subsubtitle'],
       description: _result.data['description'],
       steps: _result.data['steps'],
       ending: _result.data['ending'],

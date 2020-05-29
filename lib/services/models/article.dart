@@ -2,6 +2,7 @@ class Article {
   final String articleID;
   final String title;
   final String subTitle;
+  final String subsubtitle;
   final String description;
   final List<dynamic> steps;
   final String ending;
@@ -13,6 +14,7 @@ class Article {
       {this.articleID,
       this.title,
       this.subTitle,
+      this.subsubtitle,
       this.description,
       this.steps,
       this.ending,

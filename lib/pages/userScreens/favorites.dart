@@ -29,6 +29,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
               appBar: AppBar(
                 title: Text('Favorites'),
                 centerTitle: true,
+                leading: Container(),
               ),
               body: SafeArea(
                 child: FutureBuilder(
@@ -55,26 +56,29 @@ class _FavoritesPageState extends State<FavoritesPage> {
                                 recipes: favorites,
                               );
                             } else {
-                              return Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Center(
-                                  child: Column(
-                                    children: <Widget>[
-                                      Text(
-                                        'You have no favorites yet',
-                                        style: TextStyle(
-                                          fontSize: 22.0,
-                                          fontWeight: FontWeight.w600,
+                              return Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Center(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Text(
+                                          'You have no favorites yet',
+                                          style: TextStyle(
+                                            fontSize: 22.0,
+                                            fontWeight: FontWeight.w600,
+                                          ),
                                         ),
-                                      ),
-                                      Text(
-                                        'Check out our large database of recipes!',
-                                        style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 20.0,
+                                        Text(
+                                          'Check out our large database of recipes!',
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 20.0,
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                               );

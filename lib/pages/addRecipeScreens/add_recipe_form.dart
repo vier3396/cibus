@@ -1,4 +1,5 @@
 import 'package:cibus/pages/cameraScreens/camera_screen.dart';
+import 'package:cibus/services/models/constants.dart';
 import 'package:cibus/widgets/recipe_preview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,12 +12,6 @@ import 'package:provider/provider.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:cibus/widgets/ingredient_tile.dart';
 import '../cameraScreens/camera_screen.dart';
-
-const kRecipeTitleLength = 40;
-const kRecipeDescLength = 200;
-const kRecipeDescLines = 5;
-const kMaxIngredients = 20;
-const kCookingTimeLength = 10;
 
 class AddRecipeForm extends StatefulWidget {
   @override
@@ -37,27 +32,24 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
         return Scaffold(
           resizeToAvoidBottomPadding: false, // solves keyboard problems
           appBar: AppBar(
-            backgroundColor: Theme.of(context).appBarTheme.color,
-            elevation: Theme.of(context).appBarTheme.elevation,
-            title: Center(
-              child: Text(
-                'Add a recipe',
-                style: TextStyle(
-                  color: kCibusTextColor,
-                ),
+            centerTitle: true,
+            title: Text(
+              'Add a recipe',
+              style: TextStyle(
+                color: kCibusTextColor,
               ),
             ),
+            leading: Container(),
           ),
           body: GestureDetector(
             onTap: () {
-              FocusScope.of(context).requestFocus(new FocusNode());
+              FocusScope.of(context).requestFocus(FocusNode());
             }, //When tapping outside form/text input fields, keyboard disappears
             child: Form(
               key: formKey,
               child: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
-                    //Title
                     Padding(
                       padding: EdgeInsets.all(8.0),
                       child: MyTextFormField(
@@ -205,7 +197,6 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                                     },
                                   ),
                                 );
-                                // showChoiceDialog(context, recipe); TODO: different method
                               },
                             ),
                           ),
@@ -235,15 +226,11 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                             if (formKey.currentState.validate()) {
                               print(recipe.listOfSteps);
                               formKey.currentState.save();
-                              //if (isRecipesListNotNull()) {
-                              //}
-
                               final popProvider =
                               Provider.of<Recipe>(context, listen: false);
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) {
-                                    //TODO fixa navigator till något bättre?
                                     return ChangeNotifierProvider.value(
                                       value: popProvider,
                                       child: RecipePreview(

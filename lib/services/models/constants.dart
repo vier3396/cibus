@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-//Text
+///Text
 const kCibusLogoText = Text(
   'CIBUS',
   style: kCibusLogoTextStyle,
@@ -22,23 +22,50 @@ const TextStyle kCibusLogoTextStyle = TextStyle(
   fontWeight: FontWeight.bold,
 );
 
-//Text decoration
-const textInputDecoration = InputDecoration(
-  fillColor: Colors.white,
-  filled: true,
-  enabledBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.white, width: 2.0)),
-  focusedBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.pink, width: 2.0)),
-);
+///Button
+const RoundedRectangleBorder kButtonShape = RoundedRectangleBorder(
+  borderRadius: BorderRadius.all(
+    Radius.circular(20),),);
+const kButtonPadding = EdgeInsets.symmetric(
+    horizontal: 20.0, vertical: 20.0);
 
-//Pictures
+/*
+
+Padding(
+                            padding: kButtonPadding,
+                            child: RaisedButton(
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  'Log out',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18.0),
+                                ),
+                              ),
+                              onPressed: () {},
+                              color: kCoral,
+                              splashColor: kWarmOrange,
+                              shape: kButtonShape,
+                            ),
+                          ),
+
+ */
+
+///Pictures
 const kDefaultRecipePic =
     'https://firebasestorage.googleapis.com/v0/b/independent-project-7edde.appspot.com/o/recipe_cibus_white_big.png?alt=media&token=538b32e1-69eb-4db6-a3d9-22d844592ab2';
 const kDefaultProfilePic =
     'https://firebasestorage.googleapis.com/v0/b/independent-project-7edde.appspot.com/o/profile_pic_coral_2.png?alt=media&token=5009199a-3810-4fb8-9ecc-b2a1359de101';
 
-//
+///Recipe
+const kRecipeTitleLength = 40;
+const kRecipeDescLength = 200;
+const kRecipeDescLines = 5;
+const kMaxIngredients = 20;
+const kCookingTimeLength = 10;
+
+///Other
 var kAgeList = Iterable<int>.generate(90).toList();
 enum WhatToShow { none, foundIngredient, notYetSea }
 enum loginType { google, facebook }

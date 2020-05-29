@@ -46,7 +46,7 @@ class _UsernameScreenState extends State<UsernameScreen> {
                               'Choose your CIBUS username',
                               style: TextStyle(fontSize: 25.0),
                             ),
-                            SizedBox(height: 30.0),
+                            SizedBox(height: 10.0),
                             TextFormField(
                                 initialValue: '',
                                 decoration: InputDecoration(
@@ -65,40 +65,48 @@ class _UsernameScreenState extends State<UsernameScreen> {
                                     print(_currentUsername);
                                   });
                                 }),
-                            SizedBox(height: 40.0),
-                            /*
-                            RaisedButton(
-                              color: kCoral,
-                              child: Text(
-                                'Done',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              onPressed: () async {
-                                loading = true;
-                                if (_formKey.currentState.validate()) {
-                                  bool checkUsername = await DatabaseService()
-                                      .isUsernameTaken(
-                                          username: _currentUsername);
-                                  if (!checkUsername) {
-                                    await DatabaseService(uid: user.uid)
-                                        .updateUsername(
-                                      username: _currentUsername,
-                                    );
-                                    Navigator.of(context).pushReplacement(
-                                      MaterialPageRoute(
-                                        builder: (context) {
-                                          return MyPageView();
-                                        },
-                                      ),
-                                    );
-                                  } else {
-                                    _usernameDialog();
-                                  }
-                                }
-                              },
-                            ),
 
-                             */
+                            Padding(
+                              padding: kButtonPadding,
+                              child: RaisedButton(
+                                child: Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'Done',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18.0),
+                                  ),
+                                ),
+                                onPressed: () async {
+                                  loading = true;
+                                  if (_formKey.currentState.validate()) {
+                                    bool checkUsername = await DatabaseService()
+                                        .isUsernameTaken(
+                                        username: _currentUsername);
+                                    if (!checkUsername) {
+                                      await DatabaseService(uid: user.uid)
+                                          .updateUsername(
+                                        username: _currentUsername,
+                                      );
+                                      Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(
+                                          builder: (context) {
+                                            return MyPageView();
+                                          },
+                                        ),
+                                      );
+                                    } else {
+                                      _usernameDialog();
+                                    }
+                                  }
+                                },
+                                color: kCoral,
+                                splashColor: kWarmOrange,
+                                shape: kButtonShape,
+                              ),
+                            ),
+                            /*
                             ButtonTheme(
                               height: 52.0,
                               minWidth: 200.0,
@@ -143,7 +151,8 @@ class _UsernameScreenState extends State<UsernameScreen> {
                                 },
                               ),
                             ),
-                            SizedBox(height: 30.0),
+
+                             */
                           ],
                         ),
                       ),

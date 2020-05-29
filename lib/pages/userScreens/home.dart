@@ -36,7 +36,7 @@ class HomePage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          'Hi ${userData.name} !' ?? 'Hi!',
+                          'Hi ${userData.username} !' ?? 'Hi!',
                           style: hiTextStyle,
                         ),
                         homePageDivider,

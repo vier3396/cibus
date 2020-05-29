@@ -1,3 +1,4 @@
+import 'package:cibus/services/models/colors.dart';
 import 'package:cibus/services/models/constants.dart';
 import 'package:cibus/pages/userScreens/settings_screen.dart';
 import 'package:cibus/services/database/database.dart';
@@ -24,83 +25,113 @@ class Profile extends StatelessWidget {
           if (snapshot.hasData) {
             UserData userData = snapshot.data;
             return Scaffold(
-              body: ListView(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.all(20.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        CircleAvatar(
-                          backgroundImage: NetworkImage(
-                              userData.profilePic ?? kDefaultProfilePic),
-                          radius: 50.0,
-                        ),
-                        SizedBox(width: 20.0),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              SizedBox(height: 20.0),
-                              Text(
-                                userData.name ?? "Cannot find name",
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontSize: 20.0,
-                                ),
-                              ),
-                              SizedBox(height: 5.0),
-                              Text(
-                                userData.description ??
-                                    "Cannot find description",
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 5,
-                                style: TextStyle(),
-                              ),
-                            ],
+              body: SafeArea(
+                child: Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.all(20.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          CircleAvatar(
+                            backgroundImage: NetworkImage(
+                                userData.profilePic ?? kDefaultProfilePic),
+                            radius: 50.0,
                           ),
-                        ),
-                        SizedBox(width: 40.0),
-                        SettingsButton(),
-                      ],
+                          SizedBox(width: 20.0),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                SizedBox(height: 20.0),
+                                Text(
+                                  userData.username ?? "Cannot find username",
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 20.0,
+                                  ),
+                                ),
+                                SizedBox(height: 5.0),
+                                Text(
+                                  userData.description ??
+                                      "Cannot find description",
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 5,
+                                  style: TextStyle(),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(width: 40.0),
+                          SettingsButton(),
+                        ],
+                      ),
                     ),
-                  ),
-                  Divider(),
-                  FutureBuilder(
-                    future: getUserRecipes(snapshot.data),
-                    builder: (context, futureSnapshot) {
-                      if (futureSnapshot.hasError)
-                        return Text('Error: ${futureSnapshot.error}');
-                      switch (futureSnapshot.connectionState) {
-                        case ConnectionState.none:
-                          return Center(child: CircularProgressIndicator());
-                        case ConnectionState.waiting:
-                          return Center(child: CircularProgressIndicator());
-                        case ConnectionState.active:
-                          return Center(child: CircularProgressIndicator());
-                        case ConnectionState.done:
-                          {
-                            if (futureSnapshot.hasData) {
-                              List<Recipe> myRecipes = futureSnapshot.data;
-                              if (myRecipes.isNotEmpty) {
-                                return VerticalListView(
-                                  title: 'Your recipes',
-                                  recipes: myRecipes,
-                                  myOwnUserPage: true,
-                                  myFavorites: false,
-                                );
-                              } else {
-                                return Text(
-                                    'Sharing is caring<3 feel free to upload some of your own recipes');
+                    Divider(),
+                    FutureBuilder(
+                      future: getUserRecipes(snapshot.data),
+                      builder: (context, futureSnapshot) {
+                        if (futureSnapshot.hasError)
+                          return Text('Error: ${futureSnapshot.error}');
+                        switch (futureSnapshot.connectionState) {
+                          case ConnectionState.none:
+                            return Center(child: CircularProgressIndicator());
+                          case ConnectionState.waiting:
+                            return Center(child: CircularProgressIndicator());
+                          case ConnectionState.active:
+                            return Center(child: CircularProgressIndicator());
+                          case ConnectionState.done:
+                            {
+                              if (futureSnapshot.hasData) {
+                                List<Recipe> myRecipes = futureSnapshot.data;
+                                if (myRecipes.isNotEmpty) {
+                                  return VerticalListView(
+                                    title: 'Your recipes',
+                                    recipes: myRecipes,
+                                    myOwnUserPage: true,
+                                    myFavorites: false,
+                                  );
+                                } else {
+                                  return Padding(
+                                    padding: EdgeInsets.all(20.0),
+                                    child: Column(
+                                      children: <Widget>[
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            Text(
+                                              'Sharing is caring',
+                                              style: TextStyle(
+                                                fontSize: 22.0,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                            Icon(Icons.favorite_border, color: kCoral,),
+                                          ],
+                                        ),
+                                        Container(
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            'Feel free to upload some of your own recipes',
+                                            style: TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 20.0,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }
                               }
+                              return Text('There\'s no available data.');
                             }
-                            return Text('There\'s no available data.');
-                          }
-                      }
-                      return null;
-                    },
-                  ),
-                ],
+                        }
+                        return null;
+                      },
+                    ),
+                  ],
+                ),
               ),
             );
           } else {

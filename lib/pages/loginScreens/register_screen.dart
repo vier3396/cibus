@@ -107,10 +107,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           onChanged: (val) {
                             setState(() {
                               _currentUsername = val;
-                              print(_currentUsername);
                             });
                           }),
-                      kFormSizedBox,
+                      SizedBox(height: 10,),
                       TextFormField(
                         keyboardType: TextInputType.emailAddress,
                         controller: _emailController,
@@ -197,6 +196,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           border: textInputBorder,
                           labelText: 'Tell us something about yourself!',
                         ),
+                        maxLength: 200,
                         minLines: 5,
                         maxLines: 10,
                         validator: (val) =>
@@ -205,27 +205,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           setState(() => description = val);
                         },
                       ),
-                      kFormSizedBox,
-                      ButtonTheme(
-                        minWidth: kMinButtonWidth,
+                      Padding(
+                        padding: kButtonPadding,
                         child: RaisedButton(
-                          color: kCoral,
-                          child: Text('Register', style: kTextStyleRegisterButton),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 50),
+                            child: Text(
+                              'Register',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18.0),
+                            ),
+                          ),
                           onPressed: () async {
+
                             _formKey.currentState.save();
                             if (_formKey.currentState.validate()) {
                               setState(() => loading = true);
                               bool isUsernameFree = await DatabaseService()
                                   .isUsernameTaken(username: _currentUsername);
-                              print(' checkUsername: $isUsernameFree');
                               if (!isUsernameFree) {
                                 dynamic result =
-                                    await _auth.registerWithEmailAndPassword(
-                                        email,
-                                        password,
-                                        name,
-                                        description,
-                                        _currentUsername);
+                                await _auth.registerWithEmailAndPassword(
+                                    email,
+                                    password,
+                                    name,
+                                    description,
+                                    _currentUsername);
                                 if (result == null) {
                                   setState(() {
                                     error = 'Email is already registered';
@@ -248,6 +254,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               }
                             }
                           },
+                          color: kCoral,
+                          splashColor: kWarmOrange,
+                          shape: kButtonShape,
                         ),
                       ),
                       Text(

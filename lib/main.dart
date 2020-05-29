@@ -10,7 +10,6 @@ import 'package:cibus/pages/loadingScreens/loading_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:cibus/pages/cameraScreens/camera_screen.dart';
-import 'package:cibus/services/models/recipe.dart';
 import 'package:cibus/services/models/colors.dart';
 import 'package:cibus/widgets/recipe_preview.dart';
 
@@ -25,6 +24,7 @@ class MyApp extends StatelessWidget {
       lazy: false,
       create: (context) => AuthService().user,
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           backgroundColor: Colors.white,
           primaryColor: kCoral, //Appbar

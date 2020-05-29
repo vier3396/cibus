@@ -101,48 +101,64 @@ class _EmailSignInState extends State<EmailSignIn> {
                       SizedBox(height: 20.0),
                       Column(
                         children: <Widget>[
-                          ButtonTheme(
-                            minWidth: kMinButtonWidth,
+                          Padding(
+                            padding: kButtonPadding,
                             child: RaisedButton(
-                              color: kCoral,
-                              child: Text(
-                                'Sign in',
-                                style: kTextStyleRegisterButton,
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 50),
+                                child: Text(
+                                  'Sign in',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18.0),
+                                ),
                               ),
                               onPressed: () async {
                                 if (_formKey.currentState.validate()) {
                                   setState(() => loading = true);
                                   dynamic result =
-                                      await _auth.signInWithEmailAndPassword(
-                                          email, password);
+                                  await _auth.signInWithEmailAndPassword(
+                                      email, password);
                                   if (result == null) {
                                     setState(() {
                                       error =
-                                          'Could not sign in with those credentials';
+                                      'Could not sign in with those credentials';
                                       loading = false;
                                     });
                                   } else {
                                     Navigator.of(context).pushAndRemoveUntil(
                                         MaterialPageRoute(
                                             builder: (context) => MyPageView()),
-                                        (Route<dynamic> route) => false);
+                                            (Route<dynamic> route) => false);
                                   }
                                 }
                               },
+                              color: kCoral,
+                              splashColor: kWarmOrange,
+                              shape: kButtonShape,
                             ),
                           ),
-                          SizedBox(height: 50.0),
-                          RaisedButton(
-                            color: Theme.of(context).backgroundColor,
-                            child: Text('Forgot password?',
-                                style: TextStyle(
-                                    color: Theme.of(context).accentColor)),
-                            onPressed: () {
-                              setState(() {
-                                loading = true;
-                              });
-                              _forgotDialog();
-                            },
+                          Padding(
+                            padding: kButtonPadding,
+                            child: RaisedButton(
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  'Forgot password?',
+                                  style: TextStyle(
+                                      fontSize: 15.0),
+                                ),
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  loading = true;
+                                });
+                                _forgotDialog();
+                              },
+                              color: Colors.grey[300],
+                              splashColor: kWarmOrange,
+                              shape: kButtonShape,
+                            ),
                           ),
                         ],
                       ),

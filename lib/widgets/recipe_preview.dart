@@ -1,4 +1,3 @@
-import 'package:cibus/services/models/my_page_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cibus/services/models/constants.dart';
 import 'package:cibus/widgets/submit_recipe_button.dart';
@@ -354,8 +353,8 @@ class _RecipePreviewState extends State<RecipePreview> {
   _displaySnackBar(BuildContext context) {
     final snackBar = SnackBar(
       backgroundColor: kCoral,
-      content: Text("Recipe reported. The Cibus Admins will have a look!"),
-      duration: Duration(seconds: 2),
+      content: Text("Recipe reported. The CIBUS admins will have a look!"),
+      duration: Duration(seconds: 3),
     );
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }

@@ -63,7 +63,7 @@ class ArticleHomePage extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    article.subTitle,
+                    article.subsubtitle,
                     style: TextStyle(
                       color: Colors.white70,
                       fontSize: 20.0,
