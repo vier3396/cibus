@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:provider/provider.dart';
 
-const kStarIconSize = 35.0;
+const kStarIconSize = 30.0;
 
 class AddStarButtons extends StatelessWidget {
   final String recipeID;

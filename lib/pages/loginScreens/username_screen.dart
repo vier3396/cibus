@@ -7,6 +7,8 @@ import 'package:provider/provider.dart';
 import 'package:cibus/services/models/constants.dart';
 import 'package:cibus/services/models/colors.dart';
 
+//TODO: ADD DESCRIPTION
+
 OutlineInputBorder textInputBorder = OutlineInputBorder(
   borderRadius: BorderRadius.circular(25.0),
 );

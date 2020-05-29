@@ -32,7 +32,6 @@ BorderSide loginBorderSide = BorderSide(
 RoundedRectangleBorder loginShape = RoundedRectangleBorder(
   borderRadius: BorderRadius.circular(40),
 );
-
 SignIn signIn = SignIn();
 
 class LoginPage extends StatefulWidget {
@@ -63,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     kCibusLogoText,
                     Padding(
-                      padding: EdgeInsets.all(8.0),
+                      padding: EdgeInsets.only(top: 15, bottom: 8.0, right: 8.0, left: 8.0),
                       child: _signInButtonFacebook(),
                     ),
                     Padding(

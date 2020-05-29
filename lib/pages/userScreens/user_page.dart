@@ -89,6 +89,7 @@ class UserPage extends StatelessWidget {
                     title: "More recipes",
                     recipes: recipes,
                     myOwnUserPage: false,
+                    myFavorites: false,
                   )
                 : Text(kNoRecipeText),
           ],

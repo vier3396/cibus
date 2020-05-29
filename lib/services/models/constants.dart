@@ -13,7 +13,7 @@ const TextStyle kTextStyleRegisterButton =
 
 const kMinButtonWidth = 120.0;
 const EdgeInsets kFormPadding =
-EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0);
+    EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0);
 
 const TextStyle kCibusLogoTextStyle = TextStyle(
   fontSize: 50.0,
@@ -25,9 +25,10 @@ const TextStyle kCibusLogoTextStyle = TextStyle(
 ///Button
 const RoundedRectangleBorder kButtonShape = RoundedRectangleBorder(
   borderRadius: BorderRadius.all(
-    Radius.circular(20),),);
-const kButtonPadding = EdgeInsets.symmetric(
-    horizontal: 20.0, vertical: 20.0);
+    Radius.circular(20),
+  ),
+);
+const kButtonPadding = EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0);
 
 /*
 

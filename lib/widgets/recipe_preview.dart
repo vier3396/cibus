@@ -4,6 +4,7 @@ import 'package:cibus/widgets/submit_recipe_button.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/services/models/colors.dart';
 import 'package:cibus/services/models/recipe.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/database/database.dart';
 import 'package:cibus/services/login/user.dart';
@@ -13,6 +14,8 @@ import 'author_widget.dart';
 import 'edit_recipe_button.dart';
 import 'favorite_button.dart';
 import 'navigate_back_button.dart';
+
+//TODO: OVERFLOW
 
 const kShadowList = [
   Shadow(
@@ -82,7 +85,7 @@ class _RecipePreviewState extends State<RecipePreview> {
                           child: NavigateBackButton(),
                         ),
                   Positioned(
-                    top: 40,
+                    bottom: 35,
                     right: 10,
                     child: widget.preview
                         ? EditButton()
@@ -96,7 +99,7 @@ class _RecipePreviewState extends State<RecipePreview> {
                     EdgeInsets.only(left: 20, bottom: 20, right: 20, top: 20),
                 margin: EdgeInsets.only(top: 220),
                 constraints: BoxConstraints.expand(
-                    height: MediaQuery.of(context).size.height - 200),
+                    height: MediaQuery.of(context).size.height - 210),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
@@ -116,14 +119,14 @@ class _RecipePreviewState extends State<RecipePreview> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
-                                    Text(recipe.title ?? 'title'),
+                                    Expanded(child: Text(recipe.title ?? 'title', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),)),
                                     Text(
                                       '${recipe.time ?? '?'} min',
-                                      style: TextStyle(),
                                     ),
                                   ],
                                 ),
                                 Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Expanded(
                                       child: Container(
@@ -169,7 +172,6 @@ class _RecipePreviewState extends State<RecipePreview> {
                         ],
                       ),
                     ),
-
                     /*
                     Expanded(
                       flex: 2,
@@ -217,23 +219,20 @@ class _RecipePreviewState extends State<RecipePreview> {
                                 Text(
                                   'Ingredients',
                                   style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 20.0),
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 18.0),
                                 ),
                                 Expanded(
                                   child: ListView.builder(
                                     padding: EdgeInsets.only(
-                                      top: 15.0,
+                                      top: 10.0,
                                     ),
                                     itemBuilder: (context, index) {
                                       return Container(
                                         child: Text(
                                           '${recipe.ingredients[index].quantity ?? 'ingredient'} ${recipe.ingredients[index].quantityType} ${recipe.ingredients[index].ingredientName}',
-                                          style: TextStyle(
-                                              fontSize: 20.0,
-                                              fontWeight: FontWeight.w500),
                                         ),
-                                        margin: EdgeInsets.only(bottom: 18.0),
+                                        margin: EdgeInsets.only(bottom: 12.0),
                                       );
                                     },
                                     itemCount: recipe.ingredients.length,
@@ -250,18 +249,17 @@ class _RecipePreviewState extends State<RecipePreview> {
                               children: <Widget>[
                                 Padding(
                                   padding:
-                                      EdgeInsets.only(left: 4.0, bottom: 10.0),
+                                      EdgeInsets.only(left: 10.0, bottom:0.0),
                                   child: Text(
                                     'Recipe steps',
                                     style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 20.0),
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 18.0),
                                   ),
                                 ),
                                 Expanded(
                                   child: ListView.builder(
-                                    padding: EdgeInsets.only(top: 15.0),
+                                    padding: EdgeInsets.only(top: 10.0),
                                     itemBuilder: (context, index) {
                                       return Card(
                                         elevation: 8.0,
@@ -275,10 +273,7 @@ class _RecipePreviewState extends State<RecipePreview> {
                                               padding: EdgeInsets.all(10.0),
                                               child: Text(
                                                 "Step ${index + 1}",
-                                                style: TextStyle(
-                                                  fontSize: 20.0,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
+                                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                                               ),
                                             ),
                                             Padding(
@@ -321,61 +316,59 @@ class _RecipePreviewState extends State<RecipePreview> {
                           )
                         : Expanded(
                             flex: 3,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Column(
-                                  children: <Widget>[
-                                    Text(
-                                      'Did you enjoy the recipe?',
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: <Widget>[
-                                        SizedBox(),
-                                        AddStarButtons(
-                                            recipeID: recipe.recipeId,
-                                            user: user,
-                                            myRating:
-                                                Provider.of<Recipe>(context)
-                                                    .yourRating),
-                                        SizedBox(),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                                InkWell(
-                                  child: Ink(
-                                    color: kCoral,
-                                    child: Text(
-                                      'Report Abuse',
-                                      style: TextStyle(
-                                          color: Theme.of(context).accentColor,
-                                          fontSize: 15.0,
-                                          fontWeight: FontWeight.w600),
-                                    ),
+                            child: Container(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text(
+                                    'Did you enjoy the recipe?',
                                   ),
-                                  onTap: () {
-                                    String recipeId = Provider.of<Recipe>(
-                                            context,
-                                            listen: false)
-                                        .recipeId;
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return ReportRecipeAlertDialog(
-                                            recipeId: recipeId,
-                                            context: context,
-                                            database: database);
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: <Widget>[
+                                      SizedBox(),
+                                      AddStarButtons(
+                                          recipeID: recipe.recipeId,
+                                          user: user,
+                                          myRating:
+                                              Provider.of<Recipe>(context)
+                                                  .yourRating),
+                                      SizedBox(),
+                                    ],
+                                  ),
+                                SizedBox(height: 10,),
+                                  Expanded(
+                                    child: InkWell(
+                                      child: Ink(
+                                        color: kCoral,
+                                        child: Text(
+                                          'Report Abuse',
+                                          style: TextStyle(
+                                              color: Theme.of(context).accentColor,
+                                              fontSize: 15.0,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                      ),
+                                      onTap: () {
+                                        String recipeId = Provider.of<Recipe>(
+                                                context,
+                                                listen: false)
+                                            .recipeId;
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return ReportRecipeAlertDialog(
+                                                recipeId: recipeId,
+                                                context: context,
+                                                database: database);
+                                          },
+                                        );
                                       },
-                                    );
-                                  },
-                                ),
-                              ],
+                                    ),
+                                  ), 
+                                ],
+                              ),
                             ),
                           ),
                   ],

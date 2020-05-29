@@ -11,7 +11,47 @@ class AuthorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return RawMaterialButton(
+      onPressed: () async {
+        UserData userData = await DatabaseService().getUserData(userId);
+        List<Recipe> recipes = await DatabaseService().findUserRecipes(userId);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => UserPage(
+                  recipes: recipes,
+                  userData: userData,
+                )));
+      },
+      elevation: 0.0,
+      fillColor: Colors.grey[500].withOpacity(0.3),
+      child: Container(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: <Widget>[
+            Text(
+              Provider.of<Recipe>(context).username ?? 'username',
+              style: TextStyle(
+                  fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.white),
+            ),
+            Icon(Icons.person, size: 25, color: Colors.white,),
+          ],
+        ),
+      ),
+      padding: EdgeInsets.only(left: 10.0, right: 10, bottom: 2),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(20),
+        ),
+      ),
+    );
+  }
+}
+
+/*
+
+
+InkWell(
       onTap: () async {
         UserData userData = await DatabaseService().getUserData(userId);
         List<Recipe> recipes = await DatabaseService().findUserRecipes(userId);
@@ -24,11 +64,16 @@ class AuthorWidget extends StatelessWidget {
                       userData: userData,
                     )));
       },
-      child: Text(
-        Provider.of<Recipe>(context).username ?? 'username',
-        style: TextStyle(
-            fontSize: 22.0, fontWeight: FontWeight.bold, color: Colors.white),
+      child: Row(
+        children: <Widget>[
+          Text(
+            Provider.of<Recipe>(context).username ?? 'username',
+            style: TextStyle(
+                fontSize: 18.0, fontWeight: FontWeight.bold),
+          ),
+          Icon(Icons.person, size: 25,),
+        ],
       ),
-    );
-  }
-}
+    )
+
+ */
