@@ -9,7 +9,7 @@ import 'package:cibus/services/database/database.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:cibus/widgets/add_Recipe_Form_Add_Provider.dart';
 
-const TextStyle bottomBarTextStyle = TextStyle(fontSize: 18.0);
+const TextStyle bottomBarTextStyle = TextStyle(fontSize: 16.0);
 
 class MyPageView extends StatefulWidget {
   @override

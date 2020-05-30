@@ -132,10 +132,7 @@ class _VerticalListViewState extends State<VerticalListView> {
                                                     index: index,
                                                   );
                                                 });
-                                            //  database.removeRecipe(
-                                            //  currentRecipe.recipeId,
-                                            //  );
-                                          })
+                                          },)
                                       : SizedBox(),
                                 ),
                                 Positioned(
@@ -245,7 +242,6 @@ class _VerticalListViewState extends State<VerticalListView> {
         FlatButton(
             textColor: kCoral,
             onPressed: () {
-              //recipes.removeAt(index);
               database.removeRecipe(recipeId: recipeId);
               Navigator.of(context).pop();
               setState(() {

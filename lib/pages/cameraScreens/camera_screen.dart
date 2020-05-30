@@ -82,7 +82,7 @@ class _ImageCaptureState extends State<ImageCapture> {
     final _random = Random();
     String _happyQuote = happyPhrases[_random.nextInt(happyPhrases.length)];
 
-    final user = Provider.of<User>(context);
+    final urecipePhotoser = Provider.of<User>(context);
     return Scaffold(
       appBar: AppBar(),
       // Select an image from the services.camera or gallery
@@ -106,7 +106,7 @@ class _ImageCaptureState extends State<ImageCapture> {
                 iconSize: 100.0,
                 icon: Icon(
                   Icons.photo_camera,
-                  color: kCoral,
+                  color: kCibusTextColor,
                 ),
                 onPressed: () => _pickImage(ImageSource.camera),
               ),
@@ -114,7 +114,7 @@ class _ImageCaptureState extends State<ImageCapture> {
                 iconSize: 100.0,
                 icon: Icon(
                   Icons.photo_library,
-                  color: kCoral,
+                  color: kCibusTextColor,
                 ),
                 onPressed: () => _pickImage(ImageSource.gallery),
               ),

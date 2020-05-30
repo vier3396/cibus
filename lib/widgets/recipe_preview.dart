@@ -307,7 +307,7 @@ class _RecipePreviewState extends State<RecipePreview> {
                     ),
                     widget.preview
                         ? Expanded(
-                            flex: 1,
+                            flex: 3,
                             child: Container(
                               child: SubmitButton(),
                               alignment: Alignment.topCenter,
@@ -384,17 +384,17 @@ class _RecipePreviewState extends State<RecipePreview> {
   AlertDialog ReportRecipeAlertDialog(
       {String recipeId, DatabaseService database, BuildContext context}) {
     return AlertDialog(
-      title: Text('Report'),
+      title: Text('Report abuse'),
       content: SingleChildScrollView(
         child: ListBody(
           children: <Widget>[
-            Text('Do you want to report this recipe to the CIBUS Police?')
+            Text('Do you want to report this recipe?')
           ],
         ),
       ),
       actions: <Widget>[
         FlatButton(
-          textColor: kCoral,
+          textColor: Colors.black,
           child: Text("Cancel"),
           onPressed: () {
             Navigator.of(context).pop();

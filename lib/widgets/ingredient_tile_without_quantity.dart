@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/models/ingredient_list.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cibus/services/database/database.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:cibus/services/models/recipe_list.dart';
-
-//TODO ändra så att ingredientTile går att använda för båda istället för att ha två
 
 class IngredientTileWithoutQuantity extends StatelessWidget {
   final int index;
@@ -52,11 +49,8 @@ class IngredientTileWithoutQuantity extends StatelessWidget {
                   Provider.of<RecipeList>(parentContext, listen: false)
                       .addEntireRecipeList([]);
                 } else {
-                  //print(recipeListFromDatabase[0].data['title']);
-
                   Provider.of<RecipeList>(parentContext, listen: false)
                       .addEntireRecipeList(recipeListFromDatabase);
-                  //recipeList = recipeListFromDatabase;
                   FocusScope.of(parentContext).requestFocus(FocusNode());
                 }
               })

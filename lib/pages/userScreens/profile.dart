@@ -151,7 +151,7 @@ class SettingsButton extends StatelessWidget {
     return IconButton(
       icon: Icon(Icons.settings),
       iconSize: 50,
-      color: Colors.grey,
+      color: Colors.grey[300],
       onPressed: () {
         Navigator.push(
           context,

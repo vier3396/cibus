@@ -104,6 +104,7 @@ class _UploaderState extends State<Uploader> {
         icon: Icon(
           Icons.cloud_upload,
           color: kCoral,
+          size: 25,
         ),
         onPressed: _startUpload,
       );

@@ -1,4 +1,6 @@
+import 'package:cibus/services/models/colors.dart';
 import 'package:cibus/services/models/my_page_view.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class UploadedRecipeAlert extends StatelessWidget {
@@ -7,7 +9,13 @@ class UploadedRecipeAlert extends StatelessWidget {
     return AlertDialog(
       title: Text('Your recipe is now uploaded!'),
       content: FlatButton(
-        child: Text('Take me to home page'),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Icon(Icons.favorite_border, color: kCoral,),
+            Text('Back to home page', style: TextStyle(color: kCoral),),
+          ],
+        ),
         onPressed: () {
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(builder: (context) => MyPageView()),

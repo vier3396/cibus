@@ -62,62 +62,60 @@ class _SettingsScreenState extends State<SettingsScreen> {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 UserData userData = snapshot.data;
-
                 return Scaffold(
                   resizeToAvoidBottomPadding: false,
                   appBar: AppBar(
                     title: Text('Settings'),
                     centerTitle: true,
                   ),
-                  body: ListView(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          GestureDetector(
-                            child: Stack(
-                              children: <Widget>[
-                                Padding(
-                                  padding: EdgeInsets.all(10.0),
-                                  child: CircleAvatar(
-                                    radius: 70.0,
-                                    backgroundImage: NetworkImage(
-                                        userData.profilePic ??
-                                            kDefaultProfilePic),
+                  body: GestureDetector(
+                    onTap: () {
+                      FocusScope.of(context).requestFocus(FocusNode());
+                    }, //When tapping outside form/text input fields, keyboard disappears
+                    child: ListView(
+                      padding: EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 20.0),
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            GestureDetector(
+                              child: Stack(
+                                children: <Widget>[
+                                  Padding(
+                                    padding: EdgeInsets.all(10.0),
+                                    child: CircleAvatar(
+                                      radius: 70.0,
+                                      backgroundImage: NetworkImage(
+                                          userData.profilePic ??
+                                              kDefaultProfilePic),
+                                    ),
                                   ),
-                                ),
-                                Positioned(
-                                    bottom: 8.0,
-                                    left: 8.0,
-                                    child: Icon(
-                                      Icons.camera_alt,
-                                      size: 30,
-                                      color: Colors.grey[300],
-                                    )),
-                              ],
+                                  Positioned(
+                                      bottom: 8.0,
+                                      left: 8.0,
+                                      child: Icon(
+                                        Icons.camera_alt,
+                                        size: 30,
+                                        color: Colors.grey[300],
+                                      )),
+                                ],
+                              ),
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return ImageCapture(
+                                        recipePhoto: false,
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
                             ),
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return ImageCapture(
-                                      recipePhoto: false,
-                                    );
-                                  },
-                                ),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                      GestureDetector(
-                        //TODO: WHEN PRESS OUTSIDE KEYBOARD DISAPPEARS
-                        onTap: () {
-                          FocusScope.of(context).requestFocus(FocusNode());
-                        }, //When tapping outside form/text input fields, keyboard disappears
-                        child: Form(
+                          ],
+                        ),
+                        Form(
                           key: _formKey,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -126,7 +124,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 padding: EdgeInsets.only(top: 8.0, bottom: 20),
                                 child: Center(
                                     child: Text(userData.username,
-                                        style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600))),
+                                        style: TextStyle(
+                                            fontSize: 18.0,
+                                            fontWeight: FontWeight.w600))),
                               ),
                               TextFormField(
                                 initialValue:
@@ -168,7 +168,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                       padding: kButtonPadding,
                                       child: RaisedButton(
                                         child: Padding(
-                                          padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 50),
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 8.0, horizontal: 50),
                                           child: Text(
                                             'Update',
                                             style: TextStyle(
@@ -177,12 +178,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                           ),
                                         ),
                                         onPressed: () async {
-                                          if (_formKey.currentState.validate()) {
+                                          if (_formKey.currentState
+                                              .validate()) {
                                             await DatabaseService(uid: user.uid)
                                                 .updateUserData(
-                                              name: _currentName ?? userData.name,
-                                              description: _currentDescription ??
-                                                  userData.description,
+                                              name:
+                                                  _currentName ?? userData.name,
+                                              description:
+                                                  _currentDescription ??
+                                                      userData.description,
                                             );
                                             Navigator.pop(context);
                                           }
@@ -192,7 +196,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                         shape: kButtonShape,
                                       ),
                                     ),
-
                                     Padding(
                                       padding: kButtonPadding,
                                       child: RaisedButton(
@@ -200,23 +203,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                           padding: EdgeInsets.all(8.0),
                                           child: Text(
                                             'Log out',
-                                            style: TextStyle(
-                                                fontSize: 15.0),
+                                            style: TextStyle(fontSize: 15.0),
                                           ),
                                         ),
                                         onPressed: () {
-                                          //TODO NÅGOT BLIR KNAS: The getter 'uid' was called on null.
-                                          setState(() {
-                                            loading = true;
-                                          });
-                                          _auth.signOut();
-                                          Navigator.of(context)
-                                              .pushAndRemoveUntil(
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      LoginPage()),
-                                                  (Route<dynamic> route) =>
-                                              false);
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return logOutAlert(
+                                                    context: context);
+                                              });
                                         },
                                         color: Colors.grey[300],
                                         splashColor: kWarmOrange,
@@ -245,13 +241,44 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             ],
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 );
               } else {
                 return LoadingScreen();
               }
             });
+  }
+
+  AlertDialog logOutAlert({BuildContext context}) {
+    return AlertDialog(
+      content: SingleChildScrollView(
+        child: ListBody(
+          children: <Widget>[Text('Do you want to log out from CIBUS?')],
+        ),
+      ),
+      actions: <Widget>[
+        FlatButton(
+          textColor: Colors.black,
+          child: Text("Cancel"),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        FlatButton(
+            textColor: kCoral,
+            onPressed: () {
+              _auth.signOut();
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                  (Route<dynamic> route) => false);
+              setState(() {
+                loading = true;
+              });
+            },
+            child: Text('Log out'))
+      ],
+    );
   }
 }

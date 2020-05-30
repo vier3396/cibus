@@ -24,11 +24,9 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
   @override
   Widget build(BuildContext context) {
     return Consumer<Recipe>(
-      builder: (
-        context,
-        recipe,
-        child,
-      ) {
+      builder: (context,
+          recipe,
+          child,) {
         return Scaffold(
           resizeToAvoidBottomPadding: false, // solves keyboard problems
           appBar: AppBar(
@@ -44,7 +42,8 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
           body: GestureDetector(
             onTap: () {
               FocusScope.of(context).requestFocus(FocusNode());
-            }, //When tapping outside form/text input fields, keyboard disappears
+            },
+            //When tapping outside form/text input fields, keyboard disappears
             child: Form(
               key: formKey,
               child: SingleChildScrollView(
@@ -96,8 +95,9 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                           Expanded(
                             child: MyTextFormField(
                               validator: (String ingredients) {
-                                if (Provider.of<Recipe>(context, listen: false)
-                                        .ingredientCount ==
+                                if (Provider
+                                    .of<Recipe>(context, listen: false)
+                                    .ingredientCount ==
                                     0) {
                                   return 'choose ingredients';
                                 }
@@ -107,18 +107,16 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                               labelText: 'Add ingredient',
                               onTap: () {
                                 final popProvider =
-                                    Provider.of<Recipe>(context, listen: false);
+                                Provider.of<Recipe>(context, listen: false);
                                 showModalBottomSheet(
                                   isScrollControlled: true,
                                   context: context,
                                   builder: (context) =>
                                       ChangeNotifierProvider.value(
-                                    value: popProvider,
-                                    child: SingleChildScrollView(
-                                      child:
-                                        PopupBodySearchIngredients()
-                                    ),
-                                  ),
+                                        value: popProvider,
+                                        child: SingleChildScrollView(
+                                            child: PopupBodySearchIngredients()),
+                                      ),
                                 );
                                 FocusScope.of(context)
                                     .requestFocus(FocusNode());
@@ -147,7 +145,9 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                           );
                         },
                         itemCount:
-                            (Provider.of<Recipe>(context).ingredientCount),
+                        (Provider
+                            .of<Recipe>(context)
+                            .ingredientCount),
                       ),
                     ),
                     Padding(
@@ -172,56 +172,25 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                       formkey: formKey,
                       recipe: recipe,
                     ),
-                    //TODO: IF NOT UPLOADED PICTURE, SHOW THIS:
-                    Padding(
-                      padding: EdgeInsets.only(top: 20.0),
-                      child: Column(
-                        children: <Widget>[
-                          CircleAvatar(
-                            radius: 32.0,
-                            backgroundColor: Colors.grey[300],
-                            child: InkWell(
-                              child: Icon(Icons.add_a_photo, color: Colors.black, size: 30.0,),
-                              onTap: () {
-                                final popProvider =
-                                    Provider.of<Recipe>(context, listen: false);
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return ChangeNotifierProvider.value(
-                                        value: popProvider,
-                                        child: ImageCapture(
-                                          recipePhoto: true,
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text('Upload a picture of your dish', style: TextStyle(fontSize: 16.0),),
-                          ),
-                        ],
-                      ),
-                    ),
+                    picture(recipe),
                     //Submit form button
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 20.0, vertical: 20.0),
                       child: RaisedButton(
-                        color: kCoral,
-                        splashColor: kWarmOrange,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            'Review and submit recipe',
-                            style:
-                            TextStyle(color: Colors.white, fontSize: 18.0),
+                          color: kCoral,
+                          splashColor: kWarmOrange,
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(20))),
+                          child: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              'Review and submit recipe',
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: 18.0),
+                            ),
                           ),
-                        ),
                           onPressed: () {
                             if (formKey.currentState.validate()) {
                               print(recipe.listOfSteps);
@@ -241,8 +210,7 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
                                 ),
                               );
                             }
-                          }
-                      ),
+                          }),
                     ),
                   ],
                 ),
@@ -252,6 +220,122 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
         );
       },
     );
+  }
+
+  Widget picture(Recipe recipe) {
+    //print('recipe.imageURL = ${recipe.imageURL}');
+    if (recipe.imageURL == null) {
+      return Padding(
+        padding: EdgeInsets.only(top: 20.0),
+        child: Column(
+          children: <Widget>[
+            CircleAvatar(
+              radius: 32.0,
+              backgroundColor: Colors.grey[300],
+              child: InkWell(
+                child: Icon(
+                  Icons.add_a_photo,
+                  color: Colors.black,
+                  size: 30.0,
+                ),
+                onTap: () {
+                  final recipeProvider =
+                  Provider.of<Recipe>(context, listen: false);
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return ChangeNotifierProvider.value(
+                          value: recipeProvider,
+                          child: ImageCapture(
+                            recipePhoto: true,
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'Upload a picture of your dish',
+                style: TextStyle(fontSize: 16.0),
+              ),
+            ),
+          ],
+        ),
+      );
+    } else {
+      return Padding(
+        padding: EdgeInsets.only(top: 40.0, bottom: 20.0),
+        child: Stack(
+          children: <Widget>[
+            Image(
+              image: NetworkImage(recipe.imageURL ?? kDefaultProfilePic),
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .width / 1.5,
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width / 1.5,
+              fit: BoxFit.cover,
+            ),
+            Positioned(
+              bottom: 5.0,
+              right: 5.0, //MediaQuery.of(context).size.width / 3.5,
+              child: InkWell(
+                child: CircleAvatar(
+                  radius: 25.0,
+                  backgroundColor: Colors.grey[300],
+                  child: InkWell(
+                    child: Icon(
+                      Icons.add_a_photo,
+                      color: Colors.black,
+                      size: 30.0,
+                    ),
+                    onTap: () {
+                      final recipeProvider =
+                      Provider.of<Recipe>(context, listen: false);
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return ChangeNotifierProvider.value(
+                              value: recipeProvider,
+                              child: ImageCapture(
+                                recipePhoto: true,
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                onTap: () {
+                  final recipeProvider =
+                  Provider.of<Recipe>(context, listen: false);
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return ChangeNotifierProvider.value(
+                          value: recipeProvider,
+                          child: ImageCapture(
+                            recipePhoto: true,
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
+            )
+          ],
+        ),
+      );
+    }
   }
 
   //Column with recipe steps as strings
@@ -265,33 +349,4 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
     }
     return Column(children: list);
   }
-
-  //bool isRecipesListNotNull() {
-//    // behövs nog inte
-//    for (int i = 0; i < recipe.listOfSteps.length; i++) {
-//      if (recipe.listOfSteps[i] != null) {
-//        return true;
-//      }
-//      return false;
-//    }
-//  }
 }
-
-//final popProvider =
-//                                    Provider.of<Recipe>(context);
-//                                showModalBottomSheet(
-//                                  isScrollControlled: true,
-//                                  context: context,
-//                                  builder: (context) =>
-//                                      ChangeNotifierProvider.value(
-//                                    value: popProvider,
-//                                    child: SingleChildScrollView(
-//                                      child: popupBodyRecipeResults(),
-//                                      padding: EdgeInsets.only(
-//                                        bottom: MediaQuery.of(context)
-//                                            .viewInsets
-//                                            .bottom,
-//                                      ),
-//                                    ),
-//                                  ),
-//                                );

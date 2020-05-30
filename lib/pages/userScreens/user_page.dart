@@ -9,14 +9,22 @@ import 'package:cibus/services/database/database.dart';
 const kNoRecipeText =
     'Sharing is caring<3 feel free to upload some of your own recipes';
 
-class UserPage extends StatelessWidget {
+class UserPage extends StatefulWidget {
   final List<Recipe> recipes;
   final UserData userData;
   UserPage({this.userData, this.recipes});
 
   @override
+  _UserPageState createState() => _UserPageState();
+}
+
+class _UserPageState extends State<UserPage> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         elevation: 0.0,
       ),
@@ -30,7 +38,7 @@ class UserPage extends StatelessWidget {
                 children: <Widget>[
                   CircleAvatar(
                     backgroundImage:
-                        NetworkImage(userData.profilePic ?? kDefaultProfilePic),
+                        NetworkImage(widget.userData.profilePic ?? kDefaultProfilePic),
                     radius: 50.0,
                   ),
                   SizedBox(width: 20.0),
@@ -40,7 +48,7 @@ class UserPage extends StatelessWidget {
                       children: <Widget>[
                         SizedBox(height: 20.0),
                         Text(
-                          userData.name ?? "Cannot find name",
+                          widget.userData.name ?? "Cannot find name",
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize: 20.0,
@@ -48,7 +56,7 @@ class UserPage extends StatelessWidget {
                         ),
                         SizedBox(height: 5.0),
                         Text(
-                          userData.description ?? "Cannot find description",
+                          widget.userData.description ?? "Cannot find description",
                           overflow: TextOverflow.ellipsis,
                           maxLines: 5,
                           style: TextStyle(),
@@ -72,7 +80,7 @@ class UserPage extends StatelessWidget {
                           context: context,
                           builder: (context) {
                             return makeAlertDialog(
-                                userId: userData.uid,
+                                userId: widget.userData.uid,
                                 context: context,
                                 database: database);
                           },
@@ -84,10 +92,10 @@ class UserPage extends StatelessWidget {
               ),
             ),
             Divider(),
-            recipes.isNotEmpty
+            widget.recipes.isNotEmpty
                 ? VerticalListView(
                     title: "More recipes",
-                    recipes: recipes,
+                    recipes: widget.recipes,
                     myOwnUserPage: false,
                     myFavorites: false,
                   )
@@ -101,17 +109,17 @@ class UserPage extends StatelessWidget {
   AlertDialog makeAlertDialog(
       {String userId, DatabaseService database, BuildContext context}) {
     return AlertDialog(
-      title: Text('Report'),
+      title: Text('Report abuse'),
       content: SingleChildScrollView(
         child: ListBody(
           children: <Widget>[
-            Text('Do you want to report this user to the CIBUS Police?')
+            Text('Do you want to report this user?')
           ],
         ),
       ),
       actions: <Widget>[
         FlatButton(
-          textColor: kCoral,
+          textColor: Colors.black,
           child: Text("Cancel"),
           onPressed: () {
             Navigator.of(context).pop();
@@ -122,9 +130,19 @@ class UserPage extends StatelessWidget {
             onPressed: () {
               database.reportUser(userId: userId);
               Navigator.of(context).pop();
+              _displaySnackBar(context);
             },
             child: Text('Report'))
       ],
     );
+  }
+
+  _displaySnackBar(BuildContext context) {
+    final snackBar = SnackBar(
+      backgroundColor: kCoral,
+      content: Text("User reported. The CIBUS admins will have a look!"),
+      duration: Duration(seconds: 3),
+    );
+    _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 }
