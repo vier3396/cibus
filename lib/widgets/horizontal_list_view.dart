@@ -2,16 +2,10 @@ import 'package:cibus/services/database/database.dart';
 import 'package:cibus/services/models/colors.dart';
 import 'package:cibus/services/models/constants.dart';
 import 'package:cibus/widgets/recipe_preview.dart';
+import 'package:cibus/widgets/show_rating.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/models/recipe.dart';
-//import 'favorite_button.dart';
-
-TextStyle textStyleTitle = TextStyle(
-  fontSize: 22.0,
-  fontWeight: FontWeight.w600,
-  letterSpacing: 1.2,
-);
 
 class HorizontalListView extends StatefulWidget {
   final String title;
@@ -42,11 +36,7 @@ class _HorizontalListViewState extends State<HorizontalListView> {
             children: <Widget>[
               Text(
                 widget.title,
-                style: TextStyle(
-                  fontSize: 22.0,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 1.2,
-                ),
+                style: kListViewTitle,
               ),
             ],
           ),
@@ -106,7 +96,7 @@ class _HorizontalListViewState extends State<HorizontalListView> {
                                   Text(
                                     currentRecipe.title ??
                                         'Could not find title',
-                                    style: textStyleTitle,
+                                    style: kRecipeTitleListView,
                                   ),
                                   Expanded(
                                     child: Text(
@@ -117,6 +107,14 @@ class _HorizontalListViewState extends State<HorizontalListView> {
                                         color: Colors.grey,
                                       ),
                                     ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(top: 8.0),
+                                    child: ShowRating(
+                                        rating:
+                                        currentRecipe.averageRating ??
+                                            0,
+                                        imageHeight: 25.0),
                                   ),
                                 ],
                               ),

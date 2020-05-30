@@ -22,6 +22,18 @@ const TextStyle kCibusLogoTextStyle = TextStyle(
   fontWeight: FontWeight.bold,
 );
 
+TextStyle kRecipeTitleListView = TextStyle(
+  fontSize: 20.0,
+  fontWeight: FontWeight.w600,
+  letterSpacing: 1.1,
+);
+
+TextStyle kListViewTitle = TextStyle(
+  fontSize: 22.0,
+  fontWeight: FontWeight.w600,
+  letterSpacing: 1.2,
+);
+
 ///Button
 const RoundedRectangleBorder kButtonShape = RoundedRectangleBorder(
   borderRadius: BorderRadius.all(

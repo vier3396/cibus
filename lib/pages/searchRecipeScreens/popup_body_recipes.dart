@@ -68,7 +68,7 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
             TextField(
               controller: searchController,
               decoration: InputDecoration(
-                  hintText: 'Search for ingredients to find recipes'),
+                  hintText: 'Search for your ingredients to find recipes !'),
               onChanged: (toSearch) {
                 ingredientSearch = toSearch.toLowerCase();
                 print(ingredientSearch);
@@ -87,12 +87,10 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                   List<Map> recipeListFromDatabase = await database.findRecipes(
                       Provider.of<IngredientList>(context, listen: false)
                           .ingredientList);
-                  //print(recipeListFromDatabase[0].data['title']);
 
                   setState(() {
                     Provider.of<RecipeList>(context, listen: false)
                         .addEntireRecipeList(recipeListFromDatabase);
-                    //recipeList = recipeListFromDatabase;
                     whatToShow = WhatToShow.foundIngredient;
                     FocusScope.of(context).requestFocus(FocusNode());
                     searchController.clear();
@@ -120,12 +118,10 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                         await database.findRecipes(
                             Provider.of<IngredientList>(context, listen: false)
                                 .ingredientList);
-                    //print(recipeListFromDatabase[0].data['title']);
 
                     setState(() {
                       Provider.of<RecipeList>(context, listen: false)
                           .addEntireRecipeList(recipeListFromDatabase);
-                      //recipeList = recipeListFromDatabase;
                       whatToShow = WhatToShow.foundIngredient;
                       FocusScope.of(context).requestFocus(FocusNode());
                       searchController.clear();
@@ -202,7 +198,6 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) {
-                            //TODO fixa navigator till något bättre?
                             return ChangeNotifierProvider.value(
                               value: recipeListProvider,
                               child: ChangeNotifierProvider.value(
@@ -215,15 +210,15 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                           },
                         ),
                       );
-                      //ta rätt recept från recipeList och hämta ingredienserna
-                      // skapa ett recipeobjekt och skicka till nästa sida
-                      //skicka in recipeList[index] i en funktion och där göra ett nytt recipe
                     },
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         ListTile(
                           leading: Image(
+                            width: 100,
+                            height: 100,
+                            fit: BoxFit.cover,
                             image: NetworkImage(context
                                     .read<RecipeList>()
                                     .recipeList[index]['imageURL'] ??
@@ -238,38 +233,40 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                                   .recipeList[index]['description'] ??
                               '??'),
                         ),
-                        ButtonBar(
-                          alignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            Column(
-                              children: <Widget>[
-                                ShowRating(
-                                    rating: context
-                                                .read<RecipeList>()
-                                                .recipeList[index]
-                                            ['averageRating'] ??
-                                        0,
-                                    imageHeight: 20.0),
-                                Text(context
-                                        .read<RecipeList>()
-                                        .recipeList[index]['averageRating']
-                                        .toStringAsPrecision(2)
-                                        .toString() ??
-                                    '??'),
-                              ],
-                            ),
-                            SizedBox(width: 50),
-                            Column(
-                              children: <Widget>[
-                                Text(context
-                                        .read<RecipeList>()
-                                        .recipeList[index]['time']
-                                        .toString() ??
-                                    '??'),
-                                Text("minutes"),
-                              ],
-                            ),
-                          ],
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.0),
+                          child: ButtonBar(
+                            alignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Column(
+                                children: <Widget>[
+                                  ShowRating(
+                                      rating: context
+                                                  .read<RecipeList>()
+                                                  .recipeList[index]
+                                              ['averageRating'] ??
+                                          0,
+                                      imageHeight: 20.0),
+                                  Text(context
+                                          .read<RecipeList>()
+                                          .recipeList[index]['averageRating']
+                                          .toStringAsPrecision(2)
+                                          .toString() ??
+                                      '??'),
+                                ],
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  Text(context
+                                          .read<RecipeList>()
+                                          .recipeList[index]['time']
+                                          .toString() ??
+                                      '??'),
+                                  Text("min"),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),

@@ -50,10 +50,10 @@ class _FavoritesPageState extends State<FavoritesPage> {
                             List<Recipe> favorites = futureSnapshot.data;
                             if (favorites.isNotEmpty) {
                               return VerticalListView(
-                                myFavorites: true,
-                                myOwnUserPage: false,
                                 title: '',
                                 recipes: favorites,
+                                myOwnUserPage: false,
+                                myFavorites: true,
                               );
                             } else {
                               return Expanded(

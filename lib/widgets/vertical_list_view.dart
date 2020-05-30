@@ -8,18 +8,11 @@ import 'package:cibus/widgets/show_rating.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-TextStyle textStyleTitle = TextStyle(
-  fontSize: 22.0,
-  fontWeight: FontWeight.w600,
-  letterSpacing: 1.2,
-);
-
 class VerticalListView extends StatefulWidget {
   final String title;
-  List<Recipe> recipes;
-  bool myOwnUserPage;
-  bool myFavorites;
-
+  final List<Recipe> recipes;
+  final bool myOwnUserPage;
+  final bool myFavorites;
   VerticalListView({this.title, this.recipes, this.myOwnUserPage, this.myFavorites});
 
   @override
@@ -46,11 +39,7 @@ class _VerticalListViewState extends State<VerticalListView> {
             children: <Widget>[
               Text(
                 widget.title,
-                style: TextStyle(
-                  fontSize: 22.0,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 1.2,
-                ),
+                style: kListViewTitle,
               ),
             ],
           ),
@@ -63,7 +52,6 @@ class _VerticalListViewState extends State<VerticalListView> {
               scrollDirection: Axis.vertical,
               itemCount: recipeCount,
               itemBuilder: (BuildContext context, int index) {
-                //Recipe currentRecipe = recipes[index];
                 return GestureDetector(
                   onTap: () async {
                     int rating = await DatabaseService().getYourRating(
@@ -93,93 +81,97 @@ class _VerticalListViewState extends State<VerticalListView> {
                   },
                   child: Container(
                     margin: EdgeInsets.all(10.0),
-                    width: 210.0,
-                    //height: 200,
+                    width: MediaQuery.of(context).size.width, //200.0,
+                    height: MediaQuery.of(context).size.width/2, //200.0
                     child: Stack(
-                      alignment: Alignment.centerLeft,
+                      //alignment: Alignment.centerLeft,
                       children: <Widget>[
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20.0),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black26,
-                                offset: Offset(0.0, 2.0),
-                                blurRadius: 6.0,
-                              ),
-                            ],
-                          ),
-                          child: Stack(
-                            children: <Widget>[
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(20.0),
-                                child: Image(
-                                  height: 180.0,
-                                  width: 180.0,
-                                  image: NetworkImage(
-                                      widget.recipes[index].imageURL ??
-                                          kDefaultRecipePic),
-                                  fit: BoxFit.cover,
+                        Positioned(
+                          top:0.0,
+                          left: 0.0,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20.0),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black26,
+                                  offset: Offset(0.0, 2.0),
+                                  blurRadius: 6.0,
                                 ),
-                              ),
-                              Positioned(
-                                bottom: 0.0,
-                                left: 0.0,
-                                child: widget.myOwnUserPage
-                                    ? IconButton(
-                                        icon: Icon(Icons.delete, size: 30.0,),
-                                        onPressed: () {
-                                          showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return makeAlertDialog(
-                                                  recipeId: widget
-                                                      .recipes[index].recipeId,
-                                                  context: context,
-                                                  database: database,
-                                                  index: index,
-                                                );
-                                              });
-                                          //  database.removeRecipe(
-                                          //  currentRecipe.recipeId,
-                                          //  );
-                                        })
-                                    : SizedBox(),
-                              ),
-                              Positioned(
-                                bottom: 0.0,
-                                left: 0.0,
-                                child: widget.myFavorites
-                                    ? IconButton(
-                                    icon: Icon(Icons.favorite, color: kCoral, size: 30.0,),
-                                    onPressed: () {
-                                      showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return removeFavoriteAlert(
-                                              recipeId: widget
-                                                  .recipes[index].recipeId,
-                                              context: context,
-                                              database: database,
-                                              index: index,
-                                            );
-                                          });
-                                      //  database.removeRecipe(
-                                      //  currentRecipe.recipeId,
-                                      //  );
-                                    })
-                                    : SizedBox(),
-                              ),
-                            ],
+                              ],
+                            ),
+                            child: Stack(
+                              children: <Widget>[
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  child: Image(
+                                    height: MediaQuery.of(context).size.width/2 - 20, //180.0,
+                                    width: MediaQuery.of(context).size.width/2 - 20, //180.0,
+                                    image: NetworkImage(
+                                        widget.recipes[index].imageURL ??
+                                            kDefaultRecipePic),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                Positioned(
+                                  bottom: 0.0,
+                                  left: 0.0,
+                                  child: widget.myOwnUserPage
+                                      ? IconButton(
+                                          icon: Icon(Icons.delete, size: 30.0, color: kCibusTextColor,),
+                                          onPressed: () {
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return makeAlertDialog(
+                                                    recipeId: widget
+                                                        .recipes[index].recipeId,
+                                                    context: context,
+                                                    database: database,
+                                                    index: index,
+                                                  );
+                                                });
+                                            //  database.removeRecipe(
+                                            //  currentRecipe.recipeId,
+                                            //  );
+                                          })
+                                      : SizedBox(),
+                                ),
+                                Positioned(
+                                  bottom: 0.0,
+                                  left: 0.0,
+                                  child: widget.myFavorites
+                                      ? IconButton(
+                                      icon: Icon(Icons.favorite, color: kCoral, size: 30.0,),
+                                      onPressed: () {
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return removeFavoriteAlert(
+                                                recipeId: widget
+                                                    .recipes[index].recipeId,
+                                                context: context,
+                                                database: database,
+                                                index: index,
+                                              );
+                                            });
+                                        //  database.removeRecipe(
+                                        //  currentRecipe.recipeId,
+                                        //  );
+                                      })
+                                      : SizedBox(),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         Positioned(
                           top: 0.0,
                           right: 0.0,
                           child: Container(
-                            height: 200.0,
-                            width: 200.0,
+                            height: MediaQuery.of(context).size.width/2 - 10,
+                            width: MediaQuery.of(context).size.width/2 - 10,
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(10.0),
@@ -192,7 +184,7 @@ class _VerticalListViewState extends State<VerticalListView> {
                                   Text(
                                     widget.recipes[index].title ??
                                         'Could not find title',
-                                    style: textStyleTitle,
+                                    style: kRecipeTitleListView,
                                   ),
                                   Expanded(
                                     child: Text(
@@ -204,11 +196,14 @@ class _VerticalListViewState extends State<VerticalListView> {
                                       ),
                                     ),
                                   ),
-                                  ShowRating(
-                                      rating:
-                                          widget.recipes[index].averageRating ??
-                                              0,
-                                      imageHeight: 20.0),
+                                  Padding(
+                                    padding: EdgeInsets.only(top: 8.0),
+                                    child: ShowRating(
+                                        rating:
+                                            widget.recipes[index].averageRating ??
+                                                0,
+                                        imageHeight: 25.0),
+                                  ),
                                 ],
                               ),
                             ),

@@ -8,7 +8,7 @@ class DatabaseService {
   final String uid;
   DatabaseService({this.uid});
 
-  //collection reference
+  ///Collection reference
   final CollectionReference userCollection =
       Firestore.instance.collection('Users');
 
@@ -30,6 +30,7 @@ class DatabaseService {
   final CollectionReference reportedUsersCollection =
       Firestore.instance.collection('ReportedUsers');
 
+  ///Database functions
   Future<List<UserData>> getUserDataList() async {
     List<UserData> userDataList = [];
     final userDataDocuments = await reportedUsersCollection.getDocuments();
@@ -119,7 +120,6 @@ class DatabaseService {
   final CollectionReference articleCollection =
       Firestore.instance.collection("Articles");
 
-  //Database functions
   Future<Article> findArticle(String articleId) async {
     final _result = await articleCollection.document(articleId).get();
     Article _article = Article(
@@ -166,9 +166,6 @@ class DatabaseService {
         averageRating = 0.0;
       }
       print(averageRating);
-      //document.data['averageRating'] = averageRating;
-      //print(document.data['averageRating']);
-      //recipeList[0].data['averageRating'] = averageRating;
       var map = document.data;
       if (document.data != null) {
         map['averageRating'] = averageRating ?? 0;
@@ -231,7 +228,7 @@ class DatabaseService {
           .collection('Ratings')
           .getDocuments();
       var ratingDocuments = ratingResult.documents;
-      print(ratingDocuments.isEmpty);
+      //print(ratingDocuments.isEmpty);
       double rating = 0;
       for (DocumentSnapshot ratingDocument in ratingDocuments) {
         rating = rating + ratingDocument.data['rating'];
@@ -251,6 +248,40 @@ class DatabaseService {
     return userRecipes;
   }
 
+  Future<List<Recipe>> findFavoriteRecipes(List<dynamic> recipeList) async {
+    List<Recipe> favoriteRecipeList = [];
+
+    for (dynamic id in recipeList) {
+      var result = await recipeCollection.document(id).get();
+
+      var ratingResult = await recipeCollection
+          .document(result.documentID)
+          .collection('Ratings')
+          .getDocuments();
+      var ratingDocuments = ratingResult.documents;
+      //print(ratingDocuments.isEmpty);
+      double rating = 0;
+      for (DocumentSnapshot ratingDocument in ratingDocuments) {
+        rating = rating + ratingDocument.data['rating'];
+      }
+      double averageRating = rating / ratingDocuments.length;
+      if (averageRating.isNaN) {
+        averageRating = 0.0;
+      }
+
+      Map<String, dynamic> recipeMap = result.data;
+      recipeMap['averageRating'] = averageRating;
+
+      Recipe recipe = Recipe();
+      recipe.addAllPropertiesFromDocument(
+          recipe: recipeMap, recipeID: result.documentID);
+
+      favoriteRecipeList.add(recipe);
+    }
+
+    return favoriteRecipeList;
+  }
+
   Future removeFromUserFavorites(
       {List<dynamic> currentFavorites, String recipeId}) async {
     currentFavorites.remove(recipeId);
@@ -265,24 +296,6 @@ class DatabaseService {
     return await userCollection.document(uid).setData({
       'favoriteList': currentFavorites,
     }, merge: true);
-  }
-
-  Future<List<Recipe>> findFavoriteRecipes(List<dynamic> recipeList) async {
-    //print('Running method findFavoriteRecipes, favorit recept : $recipeList');
-    List<Recipe> favoriteRecipeList = [];
-
-    for (dynamic id in recipeList) {
-      var result = await recipeCollection.document(id).get();
-
-      Map<String, dynamic> recipeMap = result.data;
-      Recipe recipe = Recipe();
-      recipe.addAllPropertiesFromDocument(
-          recipe: recipeMap, recipeID: result.documentID);
-
-      favoriteRecipeList.add(recipe);
-    }
-
-    return favoriteRecipeList;
   }
 
   Future updateRatings({String recipeId, String userId, int rating}) async {

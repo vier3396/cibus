@@ -26,7 +26,7 @@ class Profile extends StatelessWidget {
             UserData userData = snapshot.data;
             return Scaffold(
               body: SafeArea(
-                child: Column(
+                child: ListView(
                   children: <Widget>[
                     Padding(
                       padding: EdgeInsets.all(20.0),

@@ -114,7 +114,7 @@ class _PopupBodySearchIngredientsState
                   return AnimationConfiguration.staggeredGrid(
                     columnCount: 3,
                     position: index,
-                    duration: const Duration(milliseconds: 500),
+                    duration: Duration(milliseconds: 500),
                     child: ScaleAnimation(
                       child: FadeInAnimation(
                         child: IngredientTile(index: index),
