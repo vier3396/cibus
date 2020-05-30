@@ -53,16 +53,21 @@ class ArticleHomePage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(
-                    article.title,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 35.0,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 1.2,
+                  Container(
+                    width: MediaQuery.of(context).size.width - 20,
+                    child: Expanded(
+                      child: Text(
+                        article.title,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 35.0,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 1.2,
+                        ),
+                      ),
                     ),
                   ),
-                  Text(
+                  if (article.subsubtitle != null) Text(
                     article.subsubtitle,
                     style: TextStyle(
                       color: Colors.white70,

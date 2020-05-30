@@ -71,7 +71,7 @@ class _HorizontalListViewState extends State<HorizontalListView> {
                     );
                   },
                   child: Container(
-                    margin: EdgeInsets.all(10.0),
+                    margin: EdgeInsets.only(left: 10.0, bottom: 10.0, top: 10.0),
                     width: 210.0,
                     child: Stack(
                       alignment: Alignment.topCenter,
@@ -198,7 +198,7 @@ class _HorizontalListViewState extends State<HorizontalListView> {
       ),
       actions: <Widget>[
         FlatButton(
-          textColor: kCoral,
+          textColor: Colors.black,
           child: Text("Cancel"),
           onPressed: () {
             Navigator.of(context).pop();

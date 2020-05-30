@@ -33,37 +33,53 @@ class Profile extends StatelessWidget {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          CircleAvatar(
-                            backgroundImage: NetworkImage(
-                                userData.profilePic ?? kDefaultProfilePic),
-                            radius: 50.0,
+                          Container(
+                            height: 140,
+                            width: 140,
+                            child: Stack(
+                              children: <Widget>[
+                                CircleAvatar(
+                                  radius: 60,
+                                  backgroundImage: NetworkImage(
+                                      userData.profilePic ?? kDefaultProfilePic),
+                                ),
+                                Positioned(
+                                  right: 0.0,
+                                    bottom: 0.0,
+                                    child: SettingsButton(),),
+                              ],
+                            ),
                           ),
-                          SizedBox(width: 20.0),
+                          SizedBox(width: 10.0),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 SizedBox(height: 20.0),
-                                Text(
-                                  userData.username ?? "Cannot find username",
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontSize: 20.0,
+                                Padding(
+                                  padding: EdgeInsets.only(right: 8.0),
+                                  child: Text(
+                                    userData.username ?? "Cannot find username",
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontSize: 20.0,
+                                    ),
                                   ),
                                 ),
                                 SizedBox(height: 5.0),
-                                Text(
-                                  userData.description ??
-                                      "Cannot find description",
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 5,
-                                  style: TextStyle(),
+                                Padding(
+                                  padding: EdgeInsets.only(right: 8.0),
+                                  child: Text(
+                                    userData.description ??
+                                        "Cannot find description",
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 5,
+                                    style: TextStyle(),
+                                  ),
                                 ),
                               ],
                             ),
                           ),
-                          SizedBox(width: 40.0),
-                          SettingsButton(),
                         ],
                       ),
                     ),
@@ -97,7 +113,8 @@ class Profile extends StatelessWidget {
                                     child: Column(
                                       children: <Widget>[
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: <Widget>[
                                             Text(
                                               'Sharing is caring',
@@ -106,7 +123,10 @@ class Profile extends StatelessWidget {
                                                 fontWeight: FontWeight.w600,
                                               ),
                                             ),
-                                            Icon(Icons.favorite_border, color: kCoral,),
+                                            Icon(
+                                              Icons.favorite_border,
+                                              color: kCoral,
+                                            ),
                                           ],
                                         ),
                                         Container(

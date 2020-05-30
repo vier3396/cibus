@@ -60,13 +60,13 @@ class ArticlePage extends StatelessWidget {
                     ),
                   ),
                 ),
-                Text(
+                if (article.subTitle != null) Text(
                   article.subTitle,
                   style: TextStyle(
                     fontSize: 20.0,
                   ),
                 ),
-                Padding(
+                if (article.description != null) Padding(
                   padding: EdgeInsets.only(top: 10.0),
                   child: Text(
                     article.description,
@@ -82,7 +82,7 @@ class ArticlePage extends StatelessWidget {
                     color: Colors.black,
                   ),
                 ),
-                Text(
+                if (article.articleID == 'article1') Text(
                   'How to',
                   style: TextStyle(
                     fontSize: 30.0,
@@ -103,7 +103,7 @@ class ArticlePage extends StatelessWidget {
                       )
                   ],
                 ),
-                Text(article.ending,
+                if (article.ending != null) Text(article.ending,
                     style: TextStyle(
                       fontSize: 18.0,
                     )),
@@ -119,8 +119,8 @@ class ArticlePage extends StatelessWidget {
               ],
             ),
           ),
-          Container(
-            height: MediaQuery.of(context).size.width / 1.2,
+          if (article.bottomImage != null) Container(
+            height: MediaQuery.of(context).size.width / 2,
             decoration: BoxDecoration(
               //borderRadius: BorderRadius.circular(30.0),
               boxShadow: [

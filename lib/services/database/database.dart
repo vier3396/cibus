@@ -459,8 +459,6 @@ class DatabaseService {
 
   void uploadRecipe(Recipe recipe) async {
     Map recipeMap = recipe.toMap();
-    print(recipe);
-    print(recipeMap);
 
     var result = await recipeCollection.add(recipeMap);
     for (Ingredient ingredient in recipe.ingredients) {
@@ -479,8 +477,7 @@ class DatabaseService {
         .setData(eMap);
 
     recipe.setRecipeId(result.documentID);
-    print('result');
-    print(result);
+
   }
 
   Future<List<Ingredient>> getIngredientCollectionFromRecipe(

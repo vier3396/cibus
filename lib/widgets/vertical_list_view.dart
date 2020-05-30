@@ -115,7 +115,7 @@ class _VerticalListViewState extends State<VerticalListView> {
                                   ),
                                 ),
                                 Positioned(
-                                  bottom: 0.0,
+                                  top: 0.0,
                                   left: 0.0,
                                   child: widget.myOwnUserPage
                                       ? IconButton(
@@ -233,7 +233,7 @@ class _VerticalListViewState extends State<VerticalListView> {
       ),
       actions: <Widget>[
         FlatButton(
-          textColor: kCoral,
+          textColor: Colors.black,
           child: Text("Cancel"),
           onPressed: () {
             Navigator.of(context).pop();
@@ -267,7 +267,7 @@ class _VerticalListViewState extends State<VerticalListView> {
       ),
       actions: <Widget>[
         FlatButton(
-          textColor: kCoral,
+          textColor: Colors.black,
           child: Text("Cancel"),
           onPressed: () {
             Navigator.of(context).pop();

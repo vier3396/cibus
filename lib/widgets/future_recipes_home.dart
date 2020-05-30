@@ -1,21 +1,21 @@
-import 'package:cibus/services/models/article.dart';
 import 'package:cibus/services/database/database.dart';
+import 'package:cibus/services/models/recipe.dart';
 import 'package:flutter/material.dart';
 
-import 'article_home_page.dart';
+import 'horizontal_list_view.dart';
 
-class FutureBuilderArticle extends StatelessWidget {
-  FutureBuilderArticle({@required this.articleID});
-  final String articleID;
+class RecipesHomePage extends StatelessWidget {
+  final List<dynamic> recipes;
+  final String title;
+  RecipesHomePage({this.recipes, this.title});
 
-  Future<Article> getArticle() async {
-    return await DatabaseService().findArticle(articleID);
+  Future<List<Recipe>> getRecipes() async {
+    return await DatabaseService().findFavoriteRecipes(recipes);
   }
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: getArticle(),
+        future: getRecipes(),
         builder: (context, futureSnapshot) {
           if (futureSnapshot.hasError)
             return Text('Error: ${futureSnapshot.error}');
@@ -28,14 +28,20 @@ class FutureBuilderArticle extends StatelessWidget {
               return Center(child: CircularProgressIndicator());
             case ConnectionState.done:
               if (futureSnapshot.hasData) {
-                Article article = futureSnapshot.data;
-                return ArticleHomePage(
-                  article: article,
-                  heroTag: articleID,
+                List<Recipe> _topRecipes = futureSnapshot.data;
+                return Padding(
+                  padding: EdgeInsets.only(top: 20),
+                  child: HorizontalListView(
+                    title: title,
+                    recipes: _topRecipes,
+                    myFavorites: false,
+                  ),
                 );
               } else {
-                return Text(
-                    'Something went wrong');
+                return Center(
+                  child: Text(
+                      'Something went wrong'),
+                );
               }
           }
           return Text('There\'s no available data.');
