@@ -1,10 +1,10 @@
-import 'package:cibus/services/my_page_view.dart';
+import 'package:cibus/services/models/my_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/services/login/auth.dart';
-import 'package:cibus/pages/loading_screen.dart';
-import 'package:cibus/services/constants.dart';
+import 'package:cibus/pages/loadingScreens/loading_screen.dart';
+import 'package:cibus/services/models/constants.dart';
 import 'package:cibus/pages/loginScreens/register_screen.dart';
-import 'package:cibus/services/colors.dart';
+import 'package:cibus/services/models/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 const TextStyle textStyleErrorMessage =
@@ -39,21 +39,15 @@ class _EmailSignInState extends State<EmailSignIn> {
     return loading
         ? LoadingScreen()
         : Scaffold(
+            resizeToAvoidBottomInset: false,
             appBar: AppBar(
-              elevation: 0.0,
-              title: Text(
-                'Sign in to Cibus',
-                style: TextStyle(color: kCoral),
-              ),
               actions: <Widget>[
                 FlatButton.icon(
                   icon: Icon(
                     Icons.person,
-                    color: kCoral,
                   ),
-                  label: Text('Register', style: TextStyle(color: kCoral)),
+                  label: Text('Register new user'),
                   onPressed: () {
-                    //widget.toggleView();
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                         builder: (context) {
@@ -65,12 +59,19 @@ class _EmailSignInState extends State<EmailSignIn> {
                 ),
               ],
             ),
-            body: Container(
-                color: Colors.white,
-                padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+            body: Padding(
+              padding: kFormPadding,
+              child: SingleChildScrollView(
                 child: Form(
                     key: _formKey,
                     child: Column(children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(top: 8.0),
+                        child: Text(
+                          'Sign in with email',
+                          style: TextStyle(fontSize: 18.0),
+                        ),
+                      ),
                       SizedBox(height: 20.0),
                       TextFormField(
                         keyboardType: TextInputType.emailAddress,
@@ -78,8 +79,7 @@ class _EmailSignInState extends State<EmailSignIn> {
                           border: textInputBorder,
                           labelText: 'Email',
                         ),
-                        validator: (val) =>
-                            val.isEmpty ? 'Enter an email' : null,
+                        validator: (val) => val.isEmpty ? 'Enter an email' : null,
                         onChanged: (val) {
                           setState(() => email = val);
                         },
@@ -91,52 +91,74 @@ class _EmailSignInState extends State<EmailSignIn> {
                           labelText: 'Password',
                         ),
                         obscureText: true,
-                        validator: (val) => val.length < 6
-                            ? 'Enter a password at least 6 chars long'
+                        validator: (val) => val.length < 8
+                            ? 'Enter a password at least 8 characters long'
                             : null,
                         onChanged: (val) {
                           setState(() => password = val);
                         },
                       ),
                       SizedBox(height: 20.0),
-                      Row(
+                      Column(
                         children: <Widget>[
-                          RaisedButton(
-                            color: kCoral,
-                            child: Text('Forgot password',
-                                style: TextStyle(color: Colors.white)),
-                            onPressed: () {
-                              setState(() {
-                                loading = true;
-                              });
-                              _forgotDialog();
-                            },
-                          ),
-                          SizedBox(width: 80.0),
-                          RaisedButton(
-                            color: kCoral,
-                            child: Text('Sign In',
-                                style: TextStyle(color: Colors.white)),
-                            onPressed: () async {
-                              if (_formKey.currentState.validate()) {
-                                setState(() => loading = true);
-                                dynamic result =
-                                    await _auth.signInWithEmailAndPassword(
-                                        email, password);
-                                if (result == null) {
-                                  setState(() {
-                                    error =
-                                        'Could not sign in with those credentials';
-                                    loading = false;
-                                  });
-                                } else {
-                                  Navigator.of(context).pushAndRemoveUntil(
-                                      MaterialPageRoute(
-                                          builder: (context) => MyPageView()),
-                                      (Route<dynamic> route) => false);
+                          Padding(
+                            padding: kButtonPadding,
+                            child: RaisedButton(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 50),
+                                child: Text(
+                                  'Sign in',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18.0),
+                                ),
+                              ),
+                              onPressed: () async {
+                                if (_formKey.currentState.validate()) {
+                                  setState(() => loading = true);
+                                  dynamic result =
+                                  await _auth.signInWithEmailAndPassword(
+                                      email, password);
+                                  if (result == null) {
+                                    setState(() {
+                                      error =
+                                      'Could not sign in with those credentials';
+                                      loading = false;
+                                    });
+                                  } else {
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                            builder: (context) => MyPageView()),
+                                            (Route<dynamic> route) => false);
+                                  }
                                 }
-                              }
-                            },
+                              },
+                              color: kCoral,
+                              splashColor: kWarmOrange,
+                              shape: kButtonShape,
+                            ),
+                          ),
+                          Padding(
+                            padding: kButtonPadding,
+                            child: RaisedButton(
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  'Forgot password?',
+                                  style: TextStyle(
+                                      fontSize: 15.0),
+                                ),
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  loading = true;
+                                });
+                                _forgotDialog();
+                              },
+                              color: Colors.grey[300],
+                              splashColor: kWarmOrange,
+                              shape: kButtonShape,
+                            ),
                           ),
                         ],
                       ),
@@ -145,7 +167,9 @@ class _EmailSignInState extends State<EmailSignIn> {
                         error,
                         style: textStyleErrorMessage,
                       ),
-                    ]))));
+                    ])),
+              ),
+            ));
   }
 
   Future<void> _forgotDialog() async {
@@ -185,24 +209,46 @@ class _EmailSignInState extends State<EmailSignIn> {
           actions: <Widget>[
             Column(
               children: <Widget>[
-                FlatButton(
-                  child: Text('Reset Password'),
-                  onPressed: () async {
-                    setState(() {
-                      loading = false;
-                    });
-                    try {
-                      await _authInstance.sendPasswordResetEmail(
-                          email: forgotEmail);
-                      Navigator.of(context).pop();
-                    } catch (e) {
-                      print(e.message);
-                      //print('runtimeType: $e.runtimeType');
-                      setState(() {
-                        errorMessage = e.message;
-                      });
-                    }
-                  },
+                Row(
+                  children: <Widget>[
+                    FlatButton(
+                      child: Text(
+                        "Close",
+                        style: TextStyle(
+                          color: kCoral,
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        setState(() {
+                          loading = false;
+                        });
+                      },
+                    ),
+                    FlatButton(
+                      child: Text(
+                        'Reset Password',
+                        style: TextStyle(
+                          color: kCoral,
+                        ),
+                      ),
+                      onPressed: () async {
+                        setState(() {
+                          loading = false;
+                        });
+                        try {
+                          await _authInstance.sendPasswordResetEmail(
+                              email: forgotEmail);
+                          Navigator.of(context).pop();
+                        } catch (e) {
+                          print(e.message);
+                          setState(() {
+                            errorMessage = e.message;
+                          });
+                        }
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),

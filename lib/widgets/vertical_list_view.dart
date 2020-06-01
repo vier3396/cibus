@@ -1,24 +1,19 @@
-import 'package:cibus/services/recipe.dart';
+import 'package:cibus/services/database/database.dart';
+import 'package:cibus/services/login/user.dart';
+import 'package:cibus/services/models/colors.dart';
+import 'package:cibus/services/models/constants.dart';
+import 'package:cibus/services/models/recipe.dart';
 import 'package:cibus/widgets/recipe_preview.dart';
+import 'package:cibus/widgets/show_rating.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cibus/services/colors.dart';
-import 'package:cibus/services/database.dart';
-import 'package:cibus/services/constants.dart';
-import 'package:cibus/widgets/show_rating.dart';
-
-TextStyle textStyleTitle = TextStyle(
-  fontSize: 22.0,
-  fontWeight: FontWeight.w600,
-  letterSpacing: 1.2,
-);
 
 class VerticalListView extends StatefulWidget {
   final String title;
-  List<Recipe> recipes;
-  bool myOwnUserPage;
-
-  VerticalListView({this.title, this.recipes, this.myOwnUserPage});
+  final List<Recipe> recipes;
+  final bool myOwnUserPage;
+  final bool myFavorites;
+  VerticalListView({this.title, this.recipes, this.myOwnUserPage, this.myFavorites});
 
   @override
   _VerticalListViewState createState() => _VerticalListViewState();
@@ -33,7 +28,8 @@ class _VerticalListViewState extends State<VerticalListView> {
 
   @override
   Widget build(BuildContext context) {
-    //print(widget.recipes[0].title);
+    User user = Provider.of<User>(context);
+
     return Column(
       children: <Widget>[
         Padding(
@@ -43,11 +39,7 @@ class _VerticalListViewState extends State<VerticalListView> {
             children: <Widget>[
               Text(
                 widget.title,
-                style: TextStyle(
-                  fontSize: 22.0,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 1.2,
-                ),
+                style: kListViewTitle,
               ),
             ],
           ),
@@ -60,9 +52,15 @@ class _VerticalListViewState extends State<VerticalListView> {
               scrollDirection: Axis.vertical,
               itemCount: recipeCount,
               itemBuilder: (BuildContext context, int index) {
-                //Recipe currentRecipe = recipes[index];
                 return GestureDetector(
-                  onTap: () {
+                  onTap: () async {
+                    int rating = await DatabaseService().getYourRating(
+                        recipeId: widget.recipes[index].recipeId,
+                        userId: user.uid);
+
+                    Provider.of<Recipe>(context, listen: false)
+                        .addYourRating(rating: rating);
+
                     Provider.of<Recipe>(context, listen: false)
                         .addRecipeProperties(widget.recipes[index]);
 
@@ -83,44 +81,71 @@ class _VerticalListViewState extends State<VerticalListView> {
                   },
                   child: Container(
                     margin: EdgeInsets.all(10.0),
-                    width: 210.0,
-                    //height: 200,
+                    width: MediaQuery.of(context).size.width, //200.0,
+                    height: MediaQuery.of(context).size.width/2, //200.0
                     child: Stack(
-                      alignment: Alignment.centerLeft,
+                      //alignment: Alignment.centerLeft,
                       children: <Widget>[
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20.0),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black26,
-                                offset: Offset(0.0, 2.0),
-                                blurRadius: 6.0,
-                              ),
-                            ],
-                          ),
-                          child: Stack(
-                            children: <Widget>[
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(20.0),
-                                child: Image(
-                                  height: 180.0,
-                                  width: 180.0,
-                                  image: NetworkImage(
-                                      widget.recipes[index].imageURL ??
-                                          kDefaultRecipePic),
-                                  fit: BoxFit.cover,
+                        Positioned(
+                          top:0.0,
+                          left: 0.0,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20.0),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black26,
+                                  offset: Offset(0.0, 2.0),
+                                  blurRadius: 6.0,
                                 ),
-                              ),
-                              widget.myOwnUserPage
-                                  ? IconButton(
-                                      icon: Icon(Icons.delete),
+                              ],
+                            ),
+                            child: Stack(
+                              children: <Widget>[
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  child: Image(
+                                    height: MediaQuery.of(context).size.width/2 - 20, //180.0,
+                                    width: MediaQuery.of(context).size.width/2 - 20, //180.0,
+                                    image: NetworkImage(
+                                        widget.recipes[index].imageURL ??
+                                            kDefaultRecipePic),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 0.0,
+                                  left: 0.0,
+                                  child: widget.myOwnUserPage
+                                      ? IconButton(
+                                          icon: Icon(Icons.delete, size: 30.0, color: kCibusTextColor,),
+                                          onPressed: () {
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return makeAlertDialog(
+                                                    recipeId: widget
+                                                        .recipes[index].recipeId,
+                                                    context: context,
+                                                    database: database,
+                                                    index: index,
+                                                  );
+                                                });
+                                          },)
+                                      : SizedBox(),
+                                ),
+                                Positioned(
+                                  bottom: 0.0,
+                                  left: 0.0,
+                                  child: widget.myFavorites
+                                      ? IconButton(
+                                      icon: Icon(Icons.favorite, color: kCoral, size: 30.0,),
                                       onPressed: () {
                                         showDialog(
                                             context: context,
                                             builder: (context) {
-                                              return makeAlertDialog(
+                                              return removeFavoriteAlert(
                                                 recipeId: widget
                                                     .recipes[index].recipeId,
                                                 context: context,
@@ -132,25 +157,18 @@ class _VerticalListViewState extends State<VerticalListView> {
                                         //  currentRecipe.recipeId,
                                         //  );
                                       })
-                                  : SizedBox(),
-                              //TODO fixa denna knapp
-                              /*
-                              Positioned(
-                                right: 2.0,
-                                bottom: 2.0,
-                                child: FavoriteButton(),
-                              ),
-
-                               */
-                            ],
+                                      : SizedBox(),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         Positioned(
                           top: 0.0,
                           right: 0.0,
                           child: Container(
-                            height: 200.0,
-                            width: 200.0,
+                            height: MediaQuery.of(context).size.width/2 - 10,
+                            width: MediaQuery.of(context).size.width/2 - 10,
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(10.0),
@@ -163,7 +181,7 @@ class _VerticalListViewState extends State<VerticalListView> {
                                   Text(
                                     widget.recipes[index].title ??
                                         'Could not find title',
-                                    style: textStyleTitle,
+                                    style: kRecipeTitleListView,
                                   ),
                                   Expanded(
                                     child: Text(
@@ -175,12 +193,14 @@ class _VerticalListViewState extends State<VerticalListView> {
                                       ),
                                     ),
                                   ),
-                                  //TODO: funkar inte
-                                  ShowRating(
-                                      rating:
-                                          widget.recipes[index].averageRating ??
-                                              0,
-                                      imageHeight: 20.0),
+                                  Padding(
+                                    padding: EdgeInsets.only(top: 8.0),
+                                    child: ShowRating(
+                                        rating:
+                                            widget.recipes[index].averageRating ??
+                                                0,
+                                        imageHeight: 25.0),
+                                  ),
                                 ],
                               ),
                             ),
@@ -213,7 +233,7 @@ class _VerticalListViewState extends State<VerticalListView> {
       ),
       actions: <Widget>[
         FlatButton(
-          textColor: kCoral,
+          textColor: Colors.black,
           child: Text("Cancel"),
           onPressed: () {
             Navigator.of(context).pop();
@@ -222,7 +242,6 @@ class _VerticalListViewState extends State<VerticalListView> {
         FlatButton(
             textColor: kCoral,
             onPressed: () {
-              //recipes.removeAt(index);
               database.removeRecipe(recipeId: recipeId);
               Navigator.of(context).pop();
               setState(() {
@@ -233,4 +252,39 @@ class _VerticalListViewState extends State<VerticalListView> {
       ],
     );
   }
+
+  AlertDialog removeFavoriteAlert({
+    String recipeId,
+    DatabaseService database,
+    BuildContext context,
+    int index,
+  }) {
+    return AlertDialog(
+      content: SingleChildScrollView(
+        child: ListBody(
+          children: <Widget>[Text('Do you want to remove this recipe from favorites?')],
+        ),
+      ),
+      actions: <Widget>[
+        FlatButton(
+          textColor: Colors.black,
+          child: Text("Cancel"),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        FlatButton(
+            textColor: kCoral,
+            onPressed: () {
+              database.removeFromUserFavorites(recipeId: recipeId, currentFavorites: widget.recipes);
+              Navigator.of(context).pop();
+              setState(() {
+                widget.recipes.removeAt(index);
+              });
+            },
+            child: Text('Remove'))
+      ],
+    );
+  }
+
 }

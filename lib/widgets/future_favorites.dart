@@ -1,6 +1,6 @@
-import 'package:cibus/services/database.dart';
+import 'package:cibus/services/database/database.dart';
 import 'package:cibus/services/login/user.dart';
-import 'package:cibus/services/recipe.dart';
+import 'package:cibus/services/models/recipe.dart';
 import 'package:flutter/material.dart';
 
 import 'horizontal_list_view.dart';
@@ -35,12 +35,13 @@ class FutureBuilderFavorites extends StatelessWidget {
                   return HorizontalListView(
                     title: 'Your favorites',
                     recipes: favorites,
+                    myFavorites: true,
                   );
                 } else {
                   return Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20.0),
                     child: Text(
-                      'Checkout our large database of recipes',
+                      'Check out our large database of recipes',
                       style: TextStyle(
                         fontSize: 22.0,
                         fontWeight: FontWeight.w600,

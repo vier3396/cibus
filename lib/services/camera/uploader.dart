@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:cibus/services/database.dart';
+import 'package:cibus/services/database/database.dart';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/widgets.dart';
 import 'dart:core';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/login/user.dart';
-import 'package:cibus/services/recipe.dart';
-import 'package:cibus/services/colors.dart';
+import 'package:cibus/services/models/recipe.dart';
+import 'package:cibus/services/models/colors.dart';
 
 class Uploader extends StatefulWidget {
   final File file;
@@ -37,9 +37,7 @@ class _UploaderState extends State<Uploader> {
   }
 
   void getuRL(String filePath, BuildContext context) async {
-    //print('kompis');
     var uRL = await _storage.ref().child(filePath).getDownloadURL();
-    //print(uRL);
     final user = Provider.of<User>(context, listen: false);
     DatabaseService(uid: user.uid)
         .updateUserPicture(pictureURL: uRL)
@@ -47,17 +45,13 @@ class _UploaderState extends State<Uploader> {
   }
 
   void getuRLRecipe(String filePath, BuildContext context) async {
-    //print('kompis recipe');
     var uRL = await _storage.ref().child(filePath).getDownloadURL();
-    //print(uRL);
     Provider.of<Recipe>(context, listen: false).addImage(uRL);
 
     if (uRL != null &&
         Provider.of<Recipe>(context, listen: false).imageURL != null) {
-      //print('kom hit');
       urlResult = true;
       Navigator.of(context).pop();
-      //print("vi poppar");
     }
   }
 
@@ -110,6 +104,7 @@ class _UploaderState extends State<Uploader> {
         icon: Icon(
           Icons.cloud_upload,
           color: kCoral,
+          size: 25,
         ),
         onPressed: _startUpload,
       );

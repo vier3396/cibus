@@ -1,9 +1,13 @@
-import 'package:cibus/services/my_page_view.dart';
+import 'package:cibus/pages/loadingScreens/loading_screen.dart';
+import 'package:cibus/services/models/my_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/services/login/user.dart';
-import 'package:cibus/services/database.dart';
+import 'package:cibus/services/database/database.dart';
 import 'package:provider/provider.dart';
-import 'package:cibus/services/colors.dart';
+import 'package:cibus/services/models/constants.dart';
+import 'package:cibus/services/models/colors.dart';
+
+//TODO: ADD DESCRIPTION
 
 OutlineInputBorder textInputBorder = OutlineInputBorder(
   borderRadius: BorderRadius.circular(25.0),
@@ -17,7 +21,7 @@ class UsernameScreen extends StatefulWidget {
 class _UsernameScreenState extends State<UsernameScreen> {
   final _formKey = GlobalKey<FormState>();
   String _currentUsername;
-  //bool checkUsername;
+  bool loading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -28,76 +32,135 @@ class _UsernameScreenState extends State<UsernameScreen> {
         builder: (context, snapshot) {
           UserData userData = snapshot.data;
 
-          return Scaffold(
-            body: Form(
-              key: _formKey,
-              child: SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(height: 30.0),
-                      Text(
-                        'Update your Cibus username',
-                        style: TextStyle(fontSize: 25.0),
-                      ),
-                      SizedBox(height: 200.0),
-                      TextFormField(
-                          initialValue: '',
-                          decoration: InputDecoration(
-                            enabledBorder: textInputBorder,
-                            border: textInputBorder,
-                            labelText: 'Name',
-                          ),
-                          validator: (val) {
-                            if (val.length < 3)
-                              return 'Name must be more than 2 characters';
-                            /*else if (checkUsername == false)
-                              return 'Username is allready taken';*/
-                            return null;
-                          },
-                          onChanged: (val) {
-                            setState(() {
-                              _currentUsername = val;
-                              print(_currentUsername);
-                            });
-                          }),
-                      RaisedButton(
-                        color: kCoral,
-                        child: Text(
-                          'update',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        onPressed: () async {
-                          if (_formKey.currentState.validate()) {
-                            bool checkUsername = await DatabaseService()
-                                .isUsernameTaken(username: _currentUsername);
-                            print(' checkUsername: $checkUsername');
-                            if (!checkUsername) {
-                              await DatabaseService(uid: user.uid)
-                                  .updateUsername(
-                                username: _currentUsername,
-                              );
-                              print('Creating usernamse');
-                              Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return MyPageView();
-                                  },
+          return loading
+              ? LoadingScreen()
+              : Scaffold(
+                  resizeToAvoidBottomInset: false,
+                  body: Form(
+                    key: _formKey,
+                    child: SafeArea(
+                      child: Padding(
+                        padding: EdgeInsets.all(15.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              'Choose your CIBUS username',
+                              style: TextStyle(fontSize: 25.0),
+                            ),
+                            SizedBox(height: 10.0),
+                            TextFormField(
+                                initialValue: '',
+                                decoration: InputDecoration(
+                                  enabledBorder: textInputBorder,
+                                  border: textInputBorder,
+                                  labelText: 'Name',
                                 ),
-                              );
-                            } else {
-                              _usernameDialog();
-                            }
-                          }
-                        },
-                      )
-                    ],
+                                validator: (val) {
+                                  if (val.length < 3)
+                                    return 'Name must be more than 2 characters';
+                                  return null;
+                                },
+                                onChanged: (val) {
+                                  setState(() {
+                                    _currentUsername = val;
+                                    print(_currentUsername);
+                                  });
+                                }),
+
+                            Padding(
+                              padding: kButtonPadding,
+                              child: RaisedButton(
+                                child: Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'Done',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18.0),
+                                  ),
+                                ),
+                                onPressed: () async {
+                                  loading = true;
+                                  if (_formKey.currentState.validate()) {
+                                    bool checkUsername = await DatabaseService()
+                                        .isUsernameTaken(
+                                        username: _currentUsername);
+                                    if (!checkUsername) {
+                                      await DatabaseService(uid: user.uid)
+                                          .updateUsername(
+                                        username: _currentUsername,
+                                      );
+                                      Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(
+                                          builder: (context) {
+                                            return MyPageView();
+                                          },
+                                        ),
+                                      );
+                                    } else {
+                                      _usernameDialog();
+                                    }
+                                  }
+                                },
+                                color: kCoral,
+                                splashColor: kWarmOrange,
+                                shape: kButtonShape,
+                              ),
+                            ),
+                            /*
+                            ButtonTheme(
+                              height: 52.0,
+                              minWidth: 200.0,
+                              child: FlatButton(
+                                child: Text(
+                                  'Done',
+                                  style: kTextStyleRegisterButton,
+                                  /* TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.w600,
+                                      letterSpacing: 1.1),
+                                      */
+                                ),
+                                color: kCoral,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(25.0)),
+                                ),
+                                onPressed: () async {
+                                  loading = true;
+                                  if (_formKey.currentState.validate()) {
+                                    bool checkUsername = await DatabaseService()
+                                        .isUsernameTaken(
+                                            username: _currentUsername);
+                                    if (!checkUsername) {
+                                      await DatabaseService(uid: user.uid)
+                                          .updateUsername(
+                                        username: _currentUsername,
+                                      );
+                                      Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(
+                                          builder: (context) {
+                                            return MyPageView();
+                                          },
+                                        ),
+                                      );
+                                    } else {
+                                      _usernameDialog();
+                                    }
+                                  }
+                                },
+                              ),
+                            ),
+
+                             */
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ),
-          );
+                );
         });
   }
 
@@ -134,19 +197,22 @@ class _UsernameScreenState extends State<UsernameScreen> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Username is already taken'),
+          title: Text('Username already taken'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
                 Text(
-                    'Unfortunately it seems like your username is allready taken. Please try another one'),
+                    'Unfortunately the username is already taken. Please try another one'),
               ],
             ),
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('OK'),
+              child: Text('Ok'),
               onPressed: () {
+                setState(() {
+                  loading = false;
+                });
                 Navigator.of(context).pop();
               },
             ),

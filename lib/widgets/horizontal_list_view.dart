@@ -1,23 +1,21 @@
-import 'package:cibus/services/constants.dart';
+import 'package:cibus/services/database/database.dart';
+import 'package:cibus/services/models/colors.dart';
+import 'package:cibus/services/models/constants.dart';
 import 'package:cibus/widgets/recipe_preview.dart';
+import 'package:cibus/widgets/show_rating.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cibus/services/recipe.dart';
-//import 'favorite_button.dart';
-
-TextStyle textStyleTitle = TextStyle(
-  fontSize: 22.0,
-  fontWeight: FontWeight.w600,
-  letterSpacing: 1.2,
-);
+import 'package:cibus/services/models/recipe.dart';
 
 class HorizontalListView extends StatefulWidget {
   final String title;
   final List<Recipe> recipes;
+  final bool myFavorites;
 
   HorizontalListView({
     this.title,
     this.recipes,
+    this.myFavorites,
   });
 
   @override
@@ -25,6 +23,8 @@ class HorizontalListView extends StatefulWidget {
 }
 
 class _HorizontalListViewState extends State<HorizontalListView> {
+  final DatabaseService database = DatabaseService();
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -36,11 +36,7 @@ class _HorizontalListViewState extends State<HorizontalListView> {
             children: <Widget>[
               Text(
                 widget.title,
-                style: TextStyle(
-                  fontSize: 22.0,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 1.2,
-                ),
+                style: kListViewTitle,
               ),
             ],
           ),
@@ -75,7 +71,7 @@ class _HorizontalListViewState extends State<HorizontalListView> {
                     );
                   },
                   child: Container(
-                    margin: EdgeInsets.all(10.0),
+                    margin: EdgeInsets.only(left: 10.0, bottom: 10.0, top: 10.0),
                     width: 210.0,
                     child: Stack(
                       alignment: Alignment.topCenter,
@@ -93,14 +89,14 @@ class _HorizontalListViewState extends State<HorizontalListView> {
                             child: Padding(
                               padding: EdgeInsets.all(10.0),
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,//MainAxisAlignment.end,
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment:
                                 CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
                                     currentRecipe.title ??
                                         'Could not find title',
-                                    style: textStyleTitle,
+                                    style: kRecipeTitleListView,
                                   ),
                                   Expanded(
                                     child: Text(
@@ -111,6 +107,14 @@ class _HorizontalListViewState extends State<HorizontalListView> {
                                         color: Colors.grey,
                                       ),
                                     ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(top: 8.0),
+                                    child: ShowRating(
+                                        rating:
+                                        currentRecipe.averageRating ??
+                                            0,
+                                        imageHeight: 25.0),
                                   ),
                                 ],
                               ),
@@ -141,14 +145,30 @@ class _HorizontalListViewState extends State<HorizontalListView> {
                                   fit: BoxFit.cover,
                                 ),
                               ),
-                              //TODO fixa denna knapp
-                              /*
                               Positioned(
-                                right: 10.0,
-                                top: 10.0,
-                                child: FavoriteButton(),
+                                bottom: 0.0,
+                                left: 0.0,
+                                child: widget.myFavorites
+                                    ? IconButton(
+                                    icon: Icon(Icons.favorite, color: kCoral, size: 30.0,),
+                                    onPressed: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return removeFavoriteAlert(
+                                              recipeId: widget
+                                                  .recipes[index].recipeId,
+                                              context: context,
+                                              database: database,
+                                              index: index,
+                                            );
+                                          });
+                                      //  database.removeRecipe(
+                                      //  currentRecipe.recipeId,
+                                      //  );
+                                    })
+                                    : SizedBox(),
                               ),
-                               */
                             ],
                           ),
                         )
@@ -163,5 +183,40 @@ class _HorizontalListViewState extends State<HorizontalListView> {
       ],
     );
   }
+
+  AlertDialog removeFavoriteAlert({
+    String recipeId,
+    DatabaseService database,
+    BuildContext context,
+    int index,
+  }) {
+    return AlertDialog(
+      content: SingleChildScrollView(
+        child: ListBody(
+          children: <Widget>[Text('Do you want to remove this recipe from favorites?')],
+        ),
+      ),
+      actions: <Widget>[
+        FlatButton(
+          textColor: Colors.black,
+          child: Text("Cancel"),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        FlatButton(
+            textColor: kCoral,
+            onPressed: () {
+              database.removeFromUserFavorites(recipeId: recipeId, currentFavorites: widget.recipes);
+              Navigator.of(context).pop();
+              setState(() {
+                widget.recipes.removeAt(index);
+              });
+            },
+            child: Text('Remove'))
+      ],
+    );
+  }
+
 
 }

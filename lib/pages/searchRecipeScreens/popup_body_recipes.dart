@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
-import '../../services/recipe.dart';
-import 'package:cibus/services/database.dart';
-import 'package:cibus/services/constants.dart';
-import 'package:cibus/widgets/ingredientChooserTile.dart';
+import '../../services/models/recipe.dart';
+import 'package:cibus/services/database/database.dart';
+import 'package:cibus/services/models/constants.dart';
+import 'package:cibus/widgets/ingredient_chooser_tile.dart';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:cibus/services/ingredients.dart';
-import 'package:cibus/services/ingredientList.dart';
-import 'package:cibus/widgets/ingredientTileWithoutQuantity.dart';
-import 'package:cibus/services/recipeList.dart';
+import 'package:cibus/services/models/ingredients.dart';
+import 'package:cibus/services/models/ingredient_list.dart';
+import 'package:cibus/widgets/ingredient_tile_without_quantity.dart';
+import 'package:cibus/services/models/recipe_list.dart';
 import 'package:cibus/widgets/recipe_preview.dart';
 import 'package:cibus/widgets/show_rating.dart';
-
-const topMarginPopupIndividualRecipe = 0.0;
 
 class PopupBodyRecipes extends StatefulWidget {
   @override
@@ -25,16 +23,15 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
   String ingredientSearch;
   Map ingredientMap = Map();
   String ingredientId = '';
-  List<String> quantityTypeList = ['gram', 'kg', 'liters'];
-  int quantityValue = 5;
   WhatToShow whatToShow = WhatToShow.foundIngredient;
   List<Ingredient> ingredientList = [];
   List<Map> recipeList = [];
   List<Recipe> recipeClassList = [];
+  final TextEditingController searchController = TextEditingController();
 
   Widget foundIngredient({whatToShowenum, ingredientMap}) {
     if (whatToShowenum == WhatToShow.none) {
-      return Text('We could not find a matching ingredient, please try again');
+      return Text('Could not find a matching ingredient, please try again');
     } else if (whatToShowenum == WhatToShow.foundIngredient) {
       return Container();
     }
@@ -45,8 +42,6 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
 
   @override
   void dispose() {
-    print('nu disposas');
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -71,12 +66,40 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
           padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
           children: <Widget>[
             TextField(
+              controller: searchController,
               decoration: InputDecoration(
-                  hintText:
-                      'Enter your ingredient to find the best recipes in the bizz'),
+                  hintText: 'Search for your ingredients to find recipes !'),
               onChanged: (toSearch) {
                 ingredientSearch = toSearch.toLowerCase();
                 print(ingredientSearch);
+              },
+              onSubmitted: (toSearch) async {
+                Map ingredientMapFromDatabase =
+                    await database.getIngredient(ingredientSearch);
+
+                if (ingredientMapFromDatabase != null) {
+                  Provider.of<IngredientList>(context, listen: false)
+                      .addIngredient(Ingredient(
+                          ingredientId:
+                              ingredientMapFromDatabase['ingredientId'],
+                          ingredientName:
+                              ingredientMapFromDatabase['ingredientName']));
+                  List<Map> recipeListFromDatabase = await database.findRecipes(
+                      Provider.of<IngredientList>(context, listen: false)
+                          .ingredientList);
+
+                  setState(() {
+                    Provider.of<RecipeList>(context, listen: false)
+                        .addEntireRecipeList(recipeListFromDatabase);
+                    whatToShow = WhatToShow.foundIngredient;
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    searchController.clear();
+                  });
+                } else if (ingredientMap == null) {
+                  setState(() {
+                    whatToShow = WhatToShow.none;
+                  });
+                }
               },
             ),
             FlatButton(
@@ -95,14 +118,13 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                         await database.findRecipes(
                             Provider.of<IngredientList>(context, listen: false)
                                 .ingredientList);
-                    //print(recipeListFromDatabase[0].data['title']);
 
                     setState(() {
                       Provider.of<RecipeList>(context, listen: false)
                           .addEntireRecipeList(recipeListFromDatabase);
-                      //recipeList = recipeListFromDatabase;
                       whatToShow = WhatToShow.foundIngredient;
                       FocusScope.of(context).requestFocus(FocusNode());
+                      searchController.clear();
                     });
                   } else if (ingredientMap == null) {
                     setState(() {
@@ -110,7 +132,7 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                     });
                   }
                 },
-                child: Text('Search')),
+                child: Text('Search', style: TextStyle(fontSize: 16),)),
             foundIngredient(
                 whatToShowenum: whatToShow, ingredientMap: ingredientMap),
             AnimationLimiter(
@@ -176,7 +198,6 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) {
-                            //TODO fixa navigator till något bättre?
                             return ChangeNotifierProvider.value(
                               value: recipeListProvider,
                               child: ChangeNotifierProvider.value(
@@ -189,15 +210,15 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                           },
                         ),
                       );
-                      //ta rätt recept från recipeList och hämta ingredienserna
-                      // skapa ett recipeobjekt och skicka till nästa sida
-                      //skicka in recipeList[index] i en funktion och där göra ett nytt recipe
                     },
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         ListTile(
                           leading: Image(
+                            width: 100,
+                            height: 100,
+                            fit: BoxFit.cover,
                             image: NetworkImage(context
                                     .read<RecipeList>()
                                     .recipeList[index]['imageURL'] ??
@@ -212,38 +233,40 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                                   .recipeList[index]['description'] ??
                               '??'),
                         ),
-                        ButtonBar(
-                          alignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            Column(
-                              children: <Widget>[
-                                ShowRating(
-                                    rating: context
-                                                .read<RecipeList>()
-                                                .recipeList[index]
-                                            ['averageRating'] ??
-                                        0,
-                                    imageHeight: 20.0),
-                                Text(context
-                                        .read<RecipeList>()
-                                        .recipeList[index]['averageRating']
-                                        .toStringAsPrecision(2)
-                                        .toString() ??
-                                    '??'),
-                              ],
-                            ),
-                            SizedBox(width: 50),
-                            Column(
-                              children: <Widget>[
-                                Text(context
-                                        .read<RecipeList>()
-                                        .recipeList[index]['time']
-                                        .toString() ??
-                                    '??'),
-                                Text("minutes"),
-                              ],
-                            ),
-                          ],
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.0),
+                          child: ButtonBar(
+                            alignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Column(
+                                children: <Widget>[
+                                  ShowRating(
+                                      rating: context
+                                                  .read<RecipeList>()
+                                                  .recipeList[index]
+                                              ['averageRating'] ??
+                                          0,
+                                      imageHeight: 20.0),
+                                  Text(context
+                                          .read<RecipeList>()
+                                          .recipeList[index]['averageRating']
+                                          .toStringAsPrecision(2)
+                                          .toString() ??
+                                      '??'),
+                                ],
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  Text(context
+                                          .read<RecipeList>()
+                                          .recipeList[index]['time']
+                                          .toString() ??
+                                      '??'),
+                                  Text("min"),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
