@@ -1,17 +1,13 @@
 import 'package:cibus/services/colors.dart';
-import 'package:cibus/services/database.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:core';
 import 'package:provider/provider.dart';
-import 'package:cibus/main.dart';
 import 'package:cibus/services/login/user.dart';
 import 'package:cibus/services/camera/uploader.dart';
-import 'package:cibus/services/camera/cameraservices.dart';
 import 'dart:math';
 
 /// Widget to capture and crop the image

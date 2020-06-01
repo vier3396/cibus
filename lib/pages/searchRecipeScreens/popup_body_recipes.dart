@@ -72,7 +72,8 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
           children: <Widget>[
             TextField(
               decoration: InputDecoration(
-                  hintText: 'Search and find the best recipes in the bizz'),
+                  hintText:
+                      'Enter your ingredient to find the best recipes in the bizz'),
               onChanged: (toSearch) {
                 ingredientSearch = toSearch.toLowerCase();
                 print(ingredientSearch);
