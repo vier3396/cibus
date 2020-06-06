@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/services/models/colors.dart';
 import '../../services/models/recipe.dart';
-import '../../services/models/my_text_form_field.dart';
+import '../../widgets/my_text_form_field.dart';
 import '../searchRecipeScreens/popup_body_search_ingredients.dart';
 import 'recipe_steps.dart';
 import 'package:provider/provider.dart';
@@ -33,9 +33,6 @@ class _AddRecipeFormState extends State<AddRecipeForm> {
             centerTitle: true,
             title: Text(
               'Add a recipe',
-              style: TextStyle(
-                color: kCibusTextColor,
-              ),
             ),
             leading: Container(),
           ),

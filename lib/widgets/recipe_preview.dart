@@ -7,15 +7,13 @@ import 'package:cibus/services/models/recipe.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/database/database.dart';
-import 'package:cibus/services/login/user.dart';
+import 'file:///C:/cibus/lib/services/models/user.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'add_start_buttons.dart';
 import 'author_widget.dart';
 import 'edit_recipe_button.dart';
 import 'favorite_button.dart';
 import 'navigate_back_button.dart';
-
-//TODO: OVERFLOW
 
 const kShadowList = [
   Shadow(

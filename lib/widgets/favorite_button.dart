@@ -1,4 +1,4 @@
-import 'package:cibus/services/login/user.dart';
+import 'file:///C:/cibus/lib/services/models/user.dart';
 import 'package:cibus/services/models/colors.dart';
 import 'package:flutter/material.dart';
 import '../services/database/database.dart';

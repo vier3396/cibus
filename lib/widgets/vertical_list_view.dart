@@ -1,5 +1,5 @@
 import 'package:cibus/services/database/database.dart';
-import 'package:cibus/services/login/user.dart';
+import 'file:///C:/cibus/lib/services/models/user.dart';
 import 'package:cibus/services/models/colors.dart';
 import 'package:cibus/services/models/constants.dart';
 import 'package:cibus/services/models/recipe.dart';
@@ -119,7 +119,7 @@ class _VerticalListViewState extends State<VerticalListView> {
                                   left: 0.0,
                                   child: widget.myOwnUserPage
                                       ? IconButton(
-                                          icon: Icon(Icons.delete, size: 30.0, color: kCibusTextColor,),
+                                          icon: Icon(Icons.delete, size: 30.0, color: kDarkGrey,),
                                           onPressed: () {
                                             showDialog(
                                                 context: context,

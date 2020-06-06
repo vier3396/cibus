@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/services/database/database.dart';
 import 'package:provider/provider.dart';
-import 'package:cibus/services/login/user.dart';
+import 'file:///C:/cibus/lib/services/models/user.dart';
 import 'package:cibus/services/models/constants.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:cibus/widgets/ingredient_tile.dart';

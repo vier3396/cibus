@@ -1,4 +1,4 @@
-import 'package:cibus/services/login/user.dart';
+import 'file:///C:/cibus/lib/services/models/user.dart';
 import 'package:cibus/services/database/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cibus/services/models/constants.dart';
@@ -41,8 +41,7 @@ class AuthService {
       FirebaseUser user = result.user;
 
       user.sendEmailVerification();
-      user.isEmailVerified; //vill komma åt på annat ställe för att kolla om det stämmer
-      print('Email verification sent?');
+      user.isEmailVerified;
 
       //create a new document for the user with the uid
       await DatabaseService(uid: user.uid).updateUserData(
@@ -68,9 +67,7 @@ class AuthService {
   //sign out
   Future signOut() async {
     try {
-      print('innan utlogg: ' + user.toString());
       return await _auth.signOut().whenComplete(() {
-        print('efter utlogg: ' + user.toString());
       });
     } catch (e) {
       print(e.toString());

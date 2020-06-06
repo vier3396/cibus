@@ -5,7 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/widgets.dart';
 import 'dart:core';
 import 'package:provider/provider.dart';
-import 'package:cibus/services/login/user.dart';
+import 'file:///C:/cibus/lib/services/models/user.dart';
 import 'package:cibus/services/models/recipe.dart';
 import 'package:cibus/services/models/colors.dart';
 

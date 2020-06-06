@@ -2,13 +2,13 @@ import 'package:cibus/pages/loginScreens/username_screen.dart';
 import 'package:cibus/pages/loginScreens/verify_screen.dart';
 import 'package:cibus/pages/userScreens/settings_screen.dart';
 import 'package:cibus/services/login/auth.dart';
-import 'package:cibus/services/models/my_page_view.dart';
+import 'file:///C:/cibus/lib/widgets/my_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/pages/loginScreens/login_screen.dart';
 import 'package:cibus/pages/userScreens/profile.dart';
 import 'package:cibus/pages/loadingScreens/loading_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:cibus/services/login/user.dart';
+import 'file:///C:/cibus/lib/services/models/user.dart';
 import 'package:cibus/pages/cameraScreens/camera_screen.dart';
 import 'package:cibus/services/models/colors.dart';
 import 'package:cibus/widgets/recipe_preview.dart';
@@ -37,7 +37,6 @@ class MyApp extends StatelessWidget {
         initialRoute: '/loginPage',
         routes: {
           '/': (context) => LoadingScreen(),
-          //'/add': (context) => AddRecipe(),
           '/profile': (context) => Profile(),
           '/loginPage': (context) => LoginPage(),
           '/firstScreen': (context) => MyPageView(),
@@ -46,7 +45,6 @@ class MyApp extends StatelessWidget {
           '/recipePreview': (context) => RecipePreview(),
           '/verifyscreen': (context) => VerifyScreen(),
           '/usernamescreen': (context) => UsernameScreen(),
-          //'/adminscreen': (context) => AdminScreen(),
         },
       ),
     );

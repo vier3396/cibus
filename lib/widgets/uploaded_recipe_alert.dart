@@ -1,7 +1,7 @@
 import 'package:cibus/services/models/colors.dart';
-import 'package:cibus/services/models/my_page_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:cibus/widgets/my_page_view.dart';
 
 class UploadedRecipeAlert extends StatelessWidget {
   @override

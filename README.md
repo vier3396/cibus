@@ -17,9 +17,25 @@ For windows: https://flutter.dev/docs/get-started/install/windows
 For macOS: https://flutter.dev/docs/get-started/install/macos
 For Linux: https://flutter.dev/docs/get-started/install/linux
 
-## Code
+## Code structure
 
-EXPLAIN CODE HERE
+C:\cibus\lib\pages
+In the pages folder, you will find all screens of the app.
+
+C:\cibus\lib\services
+In services we have places the following folders; camera, database, login and models.
+
+The camera folder consists of three files that provides the functionality of uploading photos from your phone.
+%%%%%% THIS IS WHERE WE DO THE REFERENCE %%%%%%
+
+The database folder contains all database service. This is where firebase instances and database functionality is provided.
+
+The login folder provides the signing in and authentication functionality.
+
+In the models folder, you will find constants, colors and customized classes, such as; recipe, ingredients and articles.
+
+C:\cibus\lib\widgets
+In the widgets folder, you will find all customized Flutter widgets for the Cibus project.
 
 ## Versioning
 

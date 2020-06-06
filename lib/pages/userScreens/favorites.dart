@@ -1,5 +1,5 @@
 import 'package:cibus/services/database/database.dart';
-import 'package:cibus/services/login/user.dart';
+import 'file:///C:/cibus/lib/services/models/user.dart';
 import 'package:cibus/services/models/recipe.dart';
 import 'package:cibus/widgets/spin_kit_ripple.dart';
 import 'package:cibus/widgets/vertical_list_view.dart';

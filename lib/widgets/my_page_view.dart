@@ -6,7 +6,7 @@ import 'package:cibus/pages/userScreens/favorites.dart';
 import 'package:cibus/services/models/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/database/database.dart';
-import 'package:cibus/services/login/user.dart';
+import 'file:///C:/cibus/lib/services/models/user.dart';
 import 'package:cibus/widgets/add_Recipe_Form_Add_Provider.dart';
 
 const TextStyle bottomBarTextStyle = TextStyle(fontSize: 16.0);
@@ -24,7 +24,6 @@ class _MyPageViewState extends State<MyPageView> {
   PageController _pageController;
   int _currentPage = 0;
 
-  //this is for page animation-not necessary
   Duration pageChanging = Duration(milliseconds: 300);
   Curve animationCurve = Curves.linear;
 

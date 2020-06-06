@@ -7,7 +7,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:core';
 import 'package:provider/provider.dart';
-import 'package:cibus/services/login/user.dart';
+import 'file:///C:/cibus/lib/services/models/user.dart';
 import 'package:cibus/services/camera/uploader.dart';
 import 'dart:math';
 
@@ -106,7 +106,7 @@ class _ImageCaptureState extends State<ImageCapture> {
                 iconSize: 100.0,
                 icon: Icon(
                   Icons.photo_camera,
-                  color: kCibusTextColor,
+                  color: kDarkGrey,
                 ),
                 onPressed: () => _pickImage(ImageSource.camera),
               ),
@@ -114,7 +114,7 @@ class _ImageCaptureState extends State<ImageCapture> {
                 iconSize: 100.0,
                 icon: Icon(
                   Icons.photo_library,
-                  color: kCibusTextColor,
+                  color: kDarkGrey,
                 ),
                 onPressed: () => _pickImage(ImageSource.gallery),
               ),

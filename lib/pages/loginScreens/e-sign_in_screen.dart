@@ -1,4 +1,4 @@
-import 'package:cibus/services/models/my_page_view.dart';
+import 'file:///C:/cibus/lib/widgets/my_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/services/login/auth.dart';
 import 'package:cibus/pages/loadingScreens/loading_screen.dart';

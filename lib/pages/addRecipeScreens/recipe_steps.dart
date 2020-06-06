@@ -2,7 +2,7 @@
 import 'package:cibus/services/models/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../../services/models/my_text_form_field.dart';
+import '../../widgets/my_text_form_field.dart';
 import '../../services/models/recipe.dart';
 import 'package:provider/provider.dart';
 
@@ -77,25 +77,6 @@ class _RecipeStepsState extends State<RecipeSteps> {
               //widget.formkey.currentState.save();
               return null;
             }
-            //TODO: make this check of step work...
-            //if (step.isEmpty) {
-            //              print(controllers.length);
-            //              print(controllers);
-            //              return 'Enter a step';
-            //            } else if (controllers.length < 1) {
-            //              print(controllers.length);
-            //              print(controllers);
-            //              return "Please add a step";
-            //            } else if (controllers.length > 20) {
-            //              print(controllers.length);
-            //              print(controllers);
-            //              return "You've reached maximum nrOfsteps, bitch";
-            //            } else {
-            //              print(controllers.length);
-            //              print(controllers);
-            //              //widget.formkey.currentState.save();
-            //              return null;
-            //            }
           },
           //when pressing submit button to save form
           onSaved: (String step) {
@@ -103,11 +84,6 @@ class _RecipeStepsState extends State<RecipeSteps> {
             //widget.recipe.listOfSteps[displayNumber - 1] = step;
             Provider.of<Recipe>(context, listen: false)
                 .addSteps(step, displayNumber - 1);
-
-            //widget.formkey.currentState.reset();
-            /* for (i=0; i < controllers.length; i++) {
-              controllers[i].clear();
-            } */
           },
         ),
       );
@@ -121,17 +97,6 @@ class _RecipeStepsState extends State<RecipeSteps> {
 
     // append an 'add step' button to the end of the list
     children.add(
-      /*
-      GestureDetector(
-        onTap: () {
-          // when adding a step, we only need to inc the fieldCount, because the _buildList()
-          // will handle the creation of the new TextEditingController
-          setState(() {
-            fieldCount++;
-          });
-        },
-        child:
-        */
       Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.0),
         child: RaisedButton(

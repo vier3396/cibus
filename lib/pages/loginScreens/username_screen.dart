@@ -1,13 +1,11 @@
 import 'package:cibus/pages/loadingScreens/loading_screen.dart';
-import 'package:cibus/services/models/my_page_view.dart';
+import 'package:cibus/widgets/my_page_view.dart';
 import 'package:flutter/material.dart';
-import 'package:cibus/services/login/user.dart';
+import 'file:///C:/cibus/lib/services/models/user.dart';
 import 'package:cibus/services/database/database.dart';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/models/constants.dart';
 import 'package:cibus/services/models/colors.dart';
-
-//TODO: ADD DESCRIPTION
 
 OutlineInputBorder textInputBorder = OutlineInputBorder(
   borderRadius: BorderRadius.circular(25.0),
@@ -30,8 +28,6 @@ class _UsernameScreenState extends State<UsernameScreen> {
     return StreamBuilder<UserData>(
         stream: DatabaseService(uid: user.uid).userData,
         builder: (context, snapshot) {
-          UserData userData = snapshot.data;
-
           return loading
               ? LoadingScreen()
               : Scaffold(

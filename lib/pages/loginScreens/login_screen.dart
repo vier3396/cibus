@@ -2,7 +2,7 @@ import 'package:cibus/pages/loadingScreens/loading_screen.dart';
 import 'package:cibus/pages/loginScreens/register_screen.dart';
 import 'package:cibus/services/models/constants.dart';
 import 'package:cibus/pages/loginScreens/e-sign_in_screen.dart';
-import 'package:cibus/services/models/my_page_view.dart';
+import 'package:cibus/widgets/my_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/services/login/sign_in.dart';
 import 'package:cibus/pages/loginScreens/username_screen.dart';
@@ -73,15 +73,6 @@ class _LoginPageState extends State<LoginPage> {
                       padding: EdgeInsets.all(8.0),
                       child: _signInEmailButton(),
                     ),
-                    /*
-                    SizedBox(height: 20.0),
-                    Text('New to CIBUS?', style: newUserTextStyle),
-                    Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: _registerButton(),
-                    ),
-
-                     */
                   ],
                 ),
               ),
@@ -224,8 +215,6 @@ class _LoginPageState extends State<LoginPage> {
       splashColor: loginSplashColor,
       highlightedBorderColor: loginHighlightedBorderColor,
       onPressed: () {
-        /* Navigator.of(context).pushNamedAndRemoveUntil(
-            '/loginPage', (Route<dynamic> route) => false); */
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) {

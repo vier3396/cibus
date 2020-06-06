@@ -1,4 +1,4 @@
-import 'package:cibus/services/login/user.dart';
+import 'file:///C:/cibus/lib/services/models/user.dart';
 import 'package:cibus/widgets/future_article.dart';
 import 'package:cibus/widgets/future_favorites.dart';
 import 'package:cibus/widgets/future_recipes_home.dart';

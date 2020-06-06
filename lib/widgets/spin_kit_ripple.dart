@@ -6,7 +6,7 @@ class MySpinKitRipple extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SpinKitRipple(
-      color: kDarkerkBackgroundColor,
+      color: kSpinKitColor,
       size: 90.0,
       duration: Duration(milliseconds: 2000),
     );

@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'package:cibus/services/models/constants.dart';
+import 'package:cibus/widgets/my_page_view.dart';
 import 'package:flutter/material.dart';
-import 'package:cibus/services/login/user.dart';
+import 'file:///C:/cibus/lib/services/models/user.dart';
 import 'package:cibus/services/database/database.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cibus/services/login/auth.dart';
 import 'package:cibus/pages/loadingScreens/loading_screen.dart';
-import 'package:cibus/services/models/my_page_view.dart';
 import 'package:cibus/services/models/colors.dart';
 
 class VerifyScreen extends StatefulWidget {
@@ -26,8 +26,6 @@ class _VerifyScreenState extends State<VerifyScreen> {
     return StreamBuilder<UserData>(
         stream: DatabaseService(uid: user.uid).userData,
         builder: (context, snapshot) {
-          UserData userData = snapshot.data;
-
           return loading
               ? LoadingScreen()
               : Scaffold(
