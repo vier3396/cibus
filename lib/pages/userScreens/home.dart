@@ -20,7 +20,7 @@ class HomePage extends StatelessWidget {
   final String secondArticleID = 'article2';
   final List<dynamic> topRecipes = [
     'Q2wXfXgAHKI7H3WEhkB6',
-    'XtSYp4Lgjk8kL4eVzrD1',
+    'IzJhqGWLQIzTKPpuSl6T',
     '927OAWKNK5OV6X0jfaFz'
   ];
   final String topRecipesTitle = 'Top rated recipes';
