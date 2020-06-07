@@ -26,7 +26,8 @@ C:\cibus\lib\services
 In services we have places the following folders; camera, database, login and models.
 
 The camera folder consists of three files that provides the functionality of uploading photos from your phone.
-%%%%%% THIS IS WHERE WE DO THE REFERENCE %%%%%%
+The code for the camera screens and functionality was taken and tweaked from
+https://fireship.io/lessons/flutter-file-uploads-cloud-storage/
 
 The database folder contains all database service. This is where firebase instances and database functionality is provided.
 

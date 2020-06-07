@@ -2,7 +2,7 @@ import 'package:cibus/services/models/colors.dart';
 import 'package:cibus/services/models/constants.dart';
 import 'package:cibus/pages/userScreens/settings_screen.dart';
 import 'package:cibus/services/database/database.dart';
-import 'file:///C:/cibus/lib/services/models/user.dart';
+import 'package:cibus/services/models/user.dart';
 import 'package:cibus/widgets/vertical_list_view.dart';
 import 'package:flutter/material.dart';
 import 'settings_screen.dart';
@@ -41,12 +41,14 @@ class Profile extends StatelessWidget {
                                 CircleAvatar(
                                   radius: 60,
                                   backgroundImage: NetworkImage(
-                                      userData.profilePic ?? kDefaultProfilePic),
+                                      userData.profilePic ??
+                                          kDefaultProfilePic),
                                 ),
                                 Positioned(
                                   right: 0.0,
-                                    bottom: 0.0,
-                                    child: SettingsButton(),),
+                                  bottom: 0.0,
+                                  child: SettingsButton(),
+                                ),
                               ],
                             ),
                           ),

@@ -7,7 +7,7 @@ import 'package:cibus/services/models/recipe.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/database/database.dart';
-import 'file:///C:/cibus/lib/services/models/user.dart';
+import 'package:cibus/services/models/user.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'add_start_buttons.dart';
 import 'author_widget.dart';
@@ -115,9 +115,16 @@ class _RecipePreviewState extends State<RecipePreview> {
                             child: Column(
                               children: <Widget>[
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
-                                    Expanded(child: Text(recipe.title ?? 'title', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),)),
+                                    Expanded(
+                                        child: Text(
+                                      recipe.title ?? 'title',
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w500),
+                                    )),
                                     Text(
                                       '${recipe.time ?? '?'} min',
                                     ),
@@ -128,7 +135,8 @@ class _RecipePreviewState extends State<RecipePreview> {
                                   children: <Widget>[
                                     Expanded(
                                       child: Container(
-                                        padding: EdgeInsets.only(right: 10, top: 5, bottom: 10),
+                                        padding: EdgeInsets.only(
+                                            right: 10, top: 5, bottom: 10),
                                         child: Text(
                                           recipe.description ??
                                               'Cannot find description',
@@ -247,7 +255,7 @@ class _RecipePreviewState extends State<RecipePreview> {
                               children: <Widget>[
                                 Padding(
                                   padding:
-                                      EdgeInsets.only(left: 10.0, bottom:0.0),
+                                      EdgeInsets.only(left: 10.0, bottom: 0.0),
                                   child: Text(
                                     'Recipe steps',
                                     style: TextStyle(
@@ -271,7 +279,10 @@ class _RecipePreviewState extends State<RecipePreview> {
                                               padding: EdgeInsets.all(10.0),
                                               child: Text(
                                                 "Step ${index + 1}",
-                                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.w500),
                                               ),
                                             ),
                                             Padding(
@@ -316,7 +327,8 @@ class _RecipePreviewState extends State<RecipePreview> {
                             flex: 3,
                             child: Container(
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   Text(
                                     'Did you enjoy the recipe?',
@@ -329,13 +341,14 @@ class _RecipePreviewState extends State<RecipePreview> {
                                       AddStarButtons(
                                           recipeID: recipe.recipeId,
                                           user: user,
-                                          myRating:
-                                              Provider.of<Recipe>(context)
-                                                  .yourRating),
+                                          myRating: Provider.of<Recipe>(context)
+                                              .yourRating),
                                       SizedBox(),
                                     ],
                                   ),
-                                SizedBox(height: 10,),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
                                   Expanded(
                                     child: InkWell(
                                       child: Ink(
@@ -343,7 +356,8 @@ class _RecipePreviewState extends State<RecipePreview> {
                                         child: Text(
                                           'Report Abuse',
                                           style: TextStyle(
-                                              color: Theme.of(context).accentColor,
+                                              color:
+                                                  Theme.of(context).accentColor,
                                               fontSize: 15.0,
                                               fontWeight: FontWeight.w600),
                                         ),
@@ -364,7 +378,7 @@ class _RecipePreviewState extends State<RecipePreview> {
                                         );
                                       },
                                     ),
-                                  ), 
+                                  ),
                                 ],
                               ),
                             ),
@@ -385,9 +399,7 @@ class _RecipePreviewState extends State<RecipePreview> {
       title: Text('Report abuse'),
       content: SingleChildScrollView(
         child: ListBody(
-          children: <Widget>[
-            Text('Do you want to report this recipe?')
-          ],
+          children: <Widget>[Text('Do you want to report this recipe?')],
         ),
       ),
       actions: <Widget>[

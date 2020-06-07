@@ -1,4 +1,4 @@
-import 'file:///C:/cibus/lib/services/models/user.dart';
+import 'package:cibus/services/models/user.dart';
 import 'package:cibus/widgets/future_article.dart';
 import 'package:cibus/widgets/future_favorites.dart';
 import 'package:cibus/widgets/future_recipes_home.dart';
@@ -69,7 +69,9 @@ class HomePage extends StatelessWidget {
                       title: topRecipesTitle,
                     ),
                   ),
-                  FutureBuilderArticle(articleID: secondArticleID,),
+                  FutureBuilderArticle(
+                    articleID: secondArticleID,
+                  ),
                   RecipesHomePage(
                     recipes: seasonalRecipes,
                     title: seasonalTitle,

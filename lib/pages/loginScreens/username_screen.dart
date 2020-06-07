@@ -1,7 +1,7 @@
 import 'package:cibus/pages/loadingScreens/loading_screen.dart';
 import 'package:cibus/widgets/my_page_view.dart';
 import 'package:flutter/material.dart';
-import 'file:///C:/cibus/lib/services/models/user.dart';
+import 'package:cibus/services/models/user.dart';
 import 'package:cibus/services/database/database.dart';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/models/constants.dart';
@@ -63,7 +63,6 @@ class _UsernameScreenState extends State<UsernameScreen> {
                                     print(_currentUsername);
                                   });
                                 }),
-
                             Padding(
                               padding: kButtonPadding,
                               child: RaisedButton(
@@ -72,8 +71,7 @@ class _UsernameScreenState extends State<UsernameScreen> {
                                   child: Text(
                                     'Done',
                                     style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18.0),
+                                        color: Colors.white, fontSize: 18.0),
                                   ),
                                 ),
                                 onPressed: () async {
@@ -81,7 +79,7 @@ class _UsernameScreenState extends State<UsernameScreen> {
                                   if (_formKey.currentState.validate()) {
                                     bool checkUsername = await DatabaseService()
                                         .isUsernameTaken(
-                                        username: _currentUsername);
+                                            username: _currentUsername);
                                     if (!checkUsername) {
                                       await DatabaseService(uid: user.uid)
                                           .updateUsername(

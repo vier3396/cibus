@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/services/database/database.dart';
 import 'package:provider/provider.dart';
-import 'file:///C:/cibus/lib/services/models/user.dart';
+import 'package:cibus/services/models/user.dart';
 import 'package:cibus/services/models/constants.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:cibus/widgets/ingredient_tile.dart';
@@ -125,7 +125,9 @@ class _PopupBodySearchIngredientsState
                 itemCount: (Provider.of<Recipe>(context).ingredientCount),
               ),
             ),
-            SizedBox(height: 30.0,),
+            SizedBox(
+              height: 30.0,
+            ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 40.0),
               child: RaisedButton(

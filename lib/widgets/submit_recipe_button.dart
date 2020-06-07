@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:cibus/services/models/recipe.dart';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/database/database.dart';
-import 'file:///C:/cibus/lib/services/models/user.dart';
+import 'package:cibus/services/models/user.dart';
 
 /*
 class SubmitButton extends StatelessWidget {
@@ -46,9 +46,7 @@ class SubmitButton extends StatelessWidget {
           padding: EdgeInsets.all(8.0),
           child: Text(
             'Submit',
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 18.0),
+            style: TextStyle(color: Colors.white, fontSize: 18.0),
           ),
         ),
         onPressed: () async {
@@ -67,10 +65,5 @@ class SubmitButton extends StatelessWidget {
         },
       ),
     );
-
-
   }
-
-
-
 }

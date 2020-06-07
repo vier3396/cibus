@@ -7,7 +7,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:core';
 import 'package:provider/provider.dart';
-import 'file:///C:/cibus/lib/services/models/user.dart';
+import 'package:cibus/services/models/user.dart';
 import 'package:cibus/services/camera/uploader.dart';
 import 'dart:math';
 
@@ -127,11 +127,17 @@ class _ImageCaptureState extends State<ImageCapture> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 FlatButton(
-                  child: Icon(Icons.crop, size: 25.0,),
+                  child: Icon(
+                    Icons.crop,
+                    size: 25.0,
+                  ),
                   onPressed: _cropImage,
                 ),
                 FlatButton(
-                  child: Icon(Icons.delete_outline, size: 25.0,),
+                  child: Icon(
+                    Icons.delete_outline,
+                    size: 25.0,
+                  ),
                   onPressed: _clear,
                 ),
               ],

@@ -1,6 +1,6 @@
 import 'package:cibus/pages/userScreens/user_page.dart';
 import 'package:cibus/services/database/database.dart';
-import 'file:///C:/cibus/lib/services/models/user.dart';
+import 'package:cibus/services/models/user.dart';
 import 'package:cibus/services/models/recipe.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,9 +19,9 @@ class AuthorWidget extends StatelessWidget {
             context,
             MaterialPageRoute(
                 builder: (context) => UserPage(
-                  recipes: recipes,
-                  userData: userData,
-                )));
+                      recipes: recipes,
+                      userData: userData,
+                    )));
       },
       elevation: 0.0,
       fillColor: Colors.grey[500].withOpacity(0.3),
@@ -32,9 +32,15 @@ class AuthorWidget extends StatelessWidget {
             Text(
               Provider.of<Recipe>(context).username ?? 'username',
               style: TextStyle(
-                  fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.white),
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
             ),
-            Icon(Icons.person, size: 25, color: Colors.white,),
+            Icon(
+              Icons.person,
+              size: 25,
+              color: Colors.white,
+            ),
           ],
         ),
       ),

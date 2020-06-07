@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cibus/services/models/ingredient_list.dart';
 import 'package:cibus/services/database/database.dart';
-import 'file:///C:/cibus/lib/services/models/user.dart';
+import 'package:cibus/services/models/user.dart';
 import 'package:cibus/services/models/recipe_list.dart';
 
 class IngredientTileWithoutQuantity extends StatelessWidget {

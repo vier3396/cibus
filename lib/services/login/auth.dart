@@ -1,4 +1,4 @@
-import 'file:///C:/cibus/lib/services/models/user.dart';
+import 'package:cibus/services/models/user.dart';
 import 'package:cibus/services/database/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cibus/services/models/constants.dart';
@@ -67,8 +67,7 @@ class AuthService {
   //sign out
   Future signOut() async {
     try {
-      return await _auth.signOut().whenComplete(() {
-      });
+      return await _auth.signOut().whenComplete(() {});
     } catch (e) {
       print(e.toString());
       return null;

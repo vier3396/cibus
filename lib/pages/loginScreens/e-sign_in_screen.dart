@@ -1,4 +1,4 @@
-import 'file:///C:/cibus/lib/widgets/my_page_view.dart';
+import 'package:cibus/widgets/my_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/services/login/auth.dart';
 import 'package:cibus/pages/loadingScreens/loading_screen.dart';
@@ -79,7 +79,8 @@ class _EmailSignInState extends State<EmailSignIn> {
                           border: textInputBorder,
                           labelText: 'Email',
                         ),
-                        validator: (val) => val.isEmpty ? 'Enter an email' : null,
+                        validator: (val) =>
+                            val.isEmpty ? 'Enter an email' : null,
                         onChanged: (val) {
                           setState(() => email = val);
                         },
@@ -105,31 +106,31 @@ class _EmailSignInState extends State<EmailSignIn> {
                             padding: kButtonPadding,
                             child: RaisedButton(
                               child: Padding(
-                                padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 50),
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 8.0, horizontal: 50),
                                 child: Text(
                                   'Sign in',
                                   style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18.0),
+                                      color: Colors.white, fontSize: 18.0),
                                 ),
                               ),
                               onPressed: () async {
                                 if (_formKey.currentState.validate()) {
                                   setState(() => loading = true);
                                   dynamic result =
-                                  await _auth.signInWithEmailAndPassword(
-                                      email, password);
+                                      await _auth.signInWithEmailAndPassword(
+                                          email, password);
                                   if (result == null) {
                                     setState(() {
                                       error =
-                                      'Could not sign in with those credentials';
+                                          'Could not sign in with those credentials';
                                       loading = false;
                                     });
                                   } else {
                                     Navigator.of(context).pushAndRemoveUntil(
                                         MaterialPageRoute(
                                             builder: (context) => MyPageView()),
-                                            (Route<dynamic> route) => false);
+                                        (Route<dynamic> route) => false);
                                   }
                                 }
                               },
@@ -145,8 +146,7 @@ class _EmailSignInState extends State<EmailSignIn> {
                                 padding: EdgeInsets.all(8.0),
                                 child: Text(
                                   'Forgot password?',
-                                  style: TextStyle(
-                                      fontSize: 15.0),
+                                  style: TextStyle(fontSize: 15.0),
                                 ),
                               ),
                               onPressed: () {

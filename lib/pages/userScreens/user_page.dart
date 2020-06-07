@@ -3,7 +3,7 @@ import 'package:cibus/services/models/constants.dart';
 import 'package:cibus/widgets/vertical_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:cibus/services/models/recipe.dart';
-import 'file:///C:/cibus/lib/services/models/user.dart';
+import 'package:cibus/services/models/user.dart';
 import 'package:cibus/services/database/database.dart';
 
 const kNoRecipeText =
@@ -37,8 +37,8 @@ class _UserPageState extends State<UserPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   CircleAvatar(
-                    backgroundImage:
-                        NetworkImage(widget.userData.profilePic ?? kDefaultProfilePic),
+                    backgroundImage: NetworkImage(
+                        widget.userData.profilePic ?? kDefaultProfilePic),
                     radius: 50.0,
                   ),
                   SizedBox(width: 20.0),
@@ -56,7 +56,8 @@ class _UserPageState extends State<UserPage> {
                         ),
                         SizedBox(height: 5.0),
                         Text(
-                          widget.userData.description ?? "Cannot find description",
+                          widget.userData.description ??
+                              "Cannot find description",
                           overflow: TextOverflow.ellipsis,
                           maxLines: 5,
                           style: TextStyle(),
@@ -112,9 +113,7 @@ class _UserPageState extends State<UserPage> {
       title: Text('Report abuse'),
       content: SingleChildScrollView(
         child: ListBody(
-          children: <Widget>[
-            Text('Do you want to report this user?')
-          ],
+          children: <Widget>[Text('Do you want to report this user?')],
         ),
       ),
       actions: <Widget>[

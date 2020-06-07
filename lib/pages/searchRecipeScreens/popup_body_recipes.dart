@@ -4,7 +4,7 @@ import 'package:cibus/services/database/database.dart';
 import 'package:cibus/services/models/constants.dart';
 import 'package:cibus/widgets/ingredient_chooser_tile.dart';
 import 'package:provider/provider.dart';
-import 'file:///C:/cibus/lib/services/models/user.dart';
+import 'package:cibus/services/models/user.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:cibus/services/models/ingredients.dart';
 import 'package:cibus/services/models/ingredient_list.dart';
@@ -132,7 +132,10 @@ class _PopupBodyRecipesState extends State<PopupBodyRecipes> {
                     });
                   }
                 },
-                child: Text('Search', style: TextStyle(fontSize: 16),)),
+                child: Text(
+                  'Search',
+                  style: TextStyle(fontSize: 16),
+                )),
             foundIngredient(
                 whatToShowenum: whatToShow, ingredientMap: ingredientMap),
             AnimationLimiter(
